@@ -5,3 +5,10 @@ def post_list(request):
 
 def post_cursos(request):
     return render(request,'blog/cursos.html', {})
+
+
+def post_evaluadores(request):
+    return render(request,'blog/evaluadores.html', {})
+
+def post_rubricas(request):
+    return render(request,'blog/rubricas.html', {})
