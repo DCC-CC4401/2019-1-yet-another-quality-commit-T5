@@ -25,3 +25,11 @@ class Evaluador(models.Model):
 
     def get_name(self):
         return str(self.name + " " + self.lastname)
+
+
+class Course(models.Model):
+    name = models.CharField(40)
+    code = models.CharField(6)
+    section = models.CharField(1)
+    year = models.PositiveSmallIntegerField()
+    semester = models.CharField(9) #Otoño o Primavera
