@@ -1,28 +1,36 @@
 from django.db import models
 from django.utils import timezone
+from django.conf.urls import url
+from django.contrib import admin
 
 
-class Post(models.Model):
-    author = models.ForeignKey('auth.User', on_delete=models.CASCADE)
-    title = models.CharField(max_length=200)
-    text = models.TextField()
-    created_date = models.DateTimeField(
-            default=timezone.now)
-    published_date = models.DateTimeField(
-            blank=True, null=True)
+class Evaluador(models.Model):
+    nombre = models.CharField(max_length=50)
+    apellido = models.CharField(max_length=50)
+    correo = models.CharField(max_length=50)
 
-    def publish(self):
-        self.published_date = timezone.now()
-        self.save()
+    def get_name(self):
+        return str(self.nombre + " " + self.correo)
 
-    def __str__(self):
-        return self.title
+
+class Course(models.Model):
+    name = models.CharField(max_length=40)
+    code = models.CharField(max_length=6)
+    section = models.CharField(max_length=1)
+    year = models.PositiveSmallIntegerField()
+    semester = models.CharField(max_length=9) #Otoño o Primavera
 
 class Evaluacion(models.Model):
     tiempo_min = models.IntegerField(default=5)
-    tiempo_max = models.CharField(default=8)
+    tiempo_max = models.IntegerField(default=8)
     rubrica = models.ForeignKey(Rubrica, on_delete=models.CASCADE)
     fecha_inicio = models.DateTimeField(default=timezone.now)
     fecha_fin = models.DateTimeField(default=timezone)
-    curso = models.ForeignKey(Curso, onde_delete=models.CASCADE)
+    curso = models.ForeignKey(Course, onde_delete=models.CASCADE)
     estado = models.BooleanField(default=False)
+    nombre = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.nombre
+
+    
