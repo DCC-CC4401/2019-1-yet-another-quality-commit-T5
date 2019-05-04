@@ -12,13 +12,18 @@ class Evaluador(models.Model):
     def get_name(self):
         return str(self.nombre + " " + self.correo)
 
-
 class Course(models.Model):
     name = models.CharField(max_length=40)
     code = models.CharField(max_length=6)
     section = models.CharField(max_length=1)
     year = models.PositiveSmallIntegerField()
     semester = models.CharField(max_length=9) #Otoño o Primavera
+
+class Rubrica(models.Model):
+    name = models.CharField(max_length=50)
+    score=models.CharField(max_length=50)
+    aspects=models.CharField(max_length=100)
+    description=models.TextField()
 
 class Evaluacion(models.Model):
     tiempo_min = models.IntegerField(default=5)
@@ -33,8 +38,6 @@ class Evaluacion(models.Model):
     def __str__(self):
         return self.nombre
 
-class Rubrica(models.Model):
-    name = models.CharField(max_length=50)
-    score=models.CharField(max_length=50)
-    aspects=models.CharField(max_length=100)
-    description=models.TextField()
+
+
+
