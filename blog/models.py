@@ -21,3 +21,8 @@ class Course(models.Model):
     year = models.PositiveSmallIntegerField()
     semester = models.CharField(max_length=9) #Otoño o Primavera
 
+class Rubrica(models.Model):
+    name = models.CharField(max_length=50)
+    score=models.CharField(max_length=50)
+    aspects=models.CharField(max_length=100)
+    description=models.TextField()
