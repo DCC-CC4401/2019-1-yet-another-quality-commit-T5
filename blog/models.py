@@ -4,14 +4,13 @@ from django.conf.urls import url
 from django.contrib import admin
 
 
-
 class Evaluador(models.Model):
-    name = models.CharField(max_length=50)
-    lastname = models.CharField(max_length=50)
-    mail = models.CharField(max_length=50)
+    nombre = models.CharField(max_length=50)
+    apellido = models.CharField(max_length=50)
+    correo = models.CharField(max_length=50)
 
     def get_name(self):
-        return str(self.name + " " + self.lastname)
+        return str(self.nombre + " " + self.correo)
 
 
 class Course(models.Model):
