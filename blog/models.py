@@ -17,3 +17,12 @@ class Post(models.Model):
 
     def __str__(self):
         return self.title
+
+class Evaluacion(models.Model):
+    tiempo_min = models.IntegerField(default=5)
+    tiempo_max = models.CharField(default=8)
+    rubrica = models.ForeignKey(Rubrica, on_delete=models.CASCADE)
+    fecha_inicio = models.DateTimeField(default=timezone.now)
+    fecha_fin = models.DateTimeField(default=timezone)
+    curso = models.ForeignKey(Curso, onde_delete=models.CASCADE)
+    estado = models.BooleanField(default=False)
