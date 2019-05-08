@@ -15,3 +15,9 @@ def post_rubricas(request):
 
 def post_evaluaciones(request):
     return render(request,'blog/evaluaciones.html',{})
+
+def post_evaluacion(request):
+    return render(request, 'blog/evaluacion.html',{})
+def post_postevaluacion(request):
+    return render(request, 'blog/postevaluacion.html',{})
+

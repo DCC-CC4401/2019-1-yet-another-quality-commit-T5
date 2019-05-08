@@ -31,12 +31,19 @@ class Evaluacion(models.Model):
     rubrica = models.ForeignKey(Rubrica, on_delete=models.CASCADE)
     fecha_inicio = models.DateTimeField(default=timezone.now)
     fecha_fin = models.DateTimeField(default=timezone)
-    curso = models.ForeignKey(Course, onde_delete=models.CASCADE)
+    curso = models.ForeignKey(Course, on_delete=models.CASCADE)
     estado = models.BooleanField(default=False)
     nombre = models.CharField(max_length=100)
 
     def __str__(self):
         return self.nombre
+
+class Grupo(models.Model):
+    nombre = models.CharField(max_length=100)
+    curso = models.ForeignKey(Course, on_delete=models.CASCADE)
+    
+
+
 
 
 
