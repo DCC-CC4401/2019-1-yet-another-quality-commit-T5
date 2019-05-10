@@ -21,9 +21,16 @@ class Course(models.Model):
 
 class Rubrica(models.Model):
     name = models.CharField(max_length=50)
-    score=models.CharField(max_length=50)
-    aspects=models.CharField(max_length=100)
-    description=models.TextField()
+    descripcion = models.CharField(default="", max_length=50)
+
+class AspectoRubrica(models.Model):
+    rubrica = models.ForeignKey(Rubrica, on_delete=models.CASCADE)
+    fila = models.IntegerField(default=0)
+    columna = models.IntegerField(default=0)
+    puntaje = models.DecimalField(default=0, max_digits=1, decimal_places=1)
+    nombreFila = models.CharField(max_length=30)
+    descripcion = models.CharField(max_length=50)
+
 
 class Evaluacion(models.Model):
     tiempo_min = models.IntegerField(default=5)
@@ -58,6 +65,7 @@ class FichaEvaluacion(models.Model):
     estado_evaluacion = models.CharField(max_length=15)
     tiempo = models.IntegerField(default=0)
     presentador = models.ForeignKey(Alumno, on_delete=models.CASCADE)
+    rubrica = models.ForeignKey(AspectoRubrica, on_delete=models.CASCADE)
 
 
     
