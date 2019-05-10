@@ -41,6 +41,25 @@ class Evaluacion(models.Model):
 class Grupo(models.Model):
     nombre = models.CharField(max_length=100)
     curso = models.ForeignKey(Course, on_delete=models.CASCADE)
+
+
+class Alumno(models.Model):
+    curso = models.ForeignKey(Course, on_delete=models.CASCADE)
+    rut = models.CharField(max_length=12)
+    grupo = models.ForeignKey(Grupo, on_delete=models.CASCADE)
+    nombre = models.CharField(max_length=30)
+
+
+class FichaEvaluacion(models.Model):
+    evaluacion = models.ForeignKey(Evaluacion, on_delete=models.CASCADE)
+    evaluador = models.ForeignKey(Evaluador, on_delete=models.CASCADE)
+    grupo = models.ForeignKey(Grupo, on_delete=models.CASCADE)
+    estado_grupo = models.CharField(max_length=15)
+    estado_evaluacion = models.CharField(max_length=15)
+    tiempo = models.IntegerField(default=0)
+    presentador = models.ForeignKey(Alumno, on_delete=models.CASCADE)
+
+
     
 
 
