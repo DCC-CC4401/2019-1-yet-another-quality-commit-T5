@@ -15,12 +15,12 @@ class Evaluador(models.Model):
     def get_email(self):
         return str(self.correo)
 
-class Course(models.Model):
-    name = models.CharField(max_length=40)
-    code = models.CharField(max_length=6)
-    section = models.CharField(max_length=1)
-    year = models.PositiveSmallIntegerField()
-    semester = models.CharField(max_length=9) #Otoño o Primavera
+class Curso(models.Model):
+    nombre = models.CharField(max_length=40)
+    código = models.CharField(max_length=6)
+    sección = models.CharField(max_length=1)
+    año = models.PositiveSmallIntegerField()
+    semestre = models.CharField(max_length=9) #Otoño o Primavera
 
 class Rubrica(models.Model):
     name = models.CharField(max_length=50)
@@ -34,7 +34,7 @@ class Evaluacion(models.Model):
     rubrica = models.ForeignKey(Rubrica, on_delete=models.CASCADE)
     fecha_inicio = models.DateTimeField(timezone.now())
     fecha_fin = models.DateTimeField(timezone.now())
-    curso = models.ForeignKey(Course, on_delete=models.CASCADE)
+    curso = models.ForeignKey(Curso, on_delete=models.CASCADE)
     estado = models.BooleanField(default=False)
     nombre = models.CharField(max_length=100)
 
@@ -43,11 +43,11 @@ class Evaluacion(models.Model):
 
 class Grupo(models.Model):
     nombre = models.CharField(max_length=100)
-    curso = models.ForeignKey(Course, on_delete=models.CASCADE)
+    curso = models.ForeignKey(Curso, on_delete=models.CASCADE)
 
 
 class Alumno(models.Model):
-    curso = models.ForeignKey(Course, on_delete=models.CASCADE)
+    curso = models.ForeignKey(Curso, on_delete=models.CASCADE)
     rut = models.CharField(max_length=12)
     grupo = models.ForeignKey(Grupo, on_delete=models.CASCADE)
     nombre = models.CharField(max_length=30)
