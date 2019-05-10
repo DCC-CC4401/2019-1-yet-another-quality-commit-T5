@@ -10,7 +10,10 @@ class Evaluador(models.Model):
     correo = models.CharField(max_length=50)
 
     def get_name(self):
-        return str(self.nombre + " " + self.correo)
+        return str(self.nombre + " " + self.apellido)
+
+    def get_email(self):
+        return str(self.correo)
 
 class Course(models.Model):
     name = models.CharField(max_length=40)
@@ -29,8 +32,8 @@ class Evaluacion(models.Model):
     tiempo_min = models.IntegerField(default=5)
     tiempo_max = models.IntegerField(default=8)
     rubrica = models.ForeignKey(Rubrica, on_delete=models.CASCADE)
-    fecha_inicio = models.DateTimeField(default=timezone.now)
-    fecha_fin = models.DateTimeField(default=timezone)
+    fecha_inicio = models.DateTimeField(timezone.now())
+    fecha_fin = models.DateTimeField(timezone.now())
     curso = models.ForeignKey(Course, on_delete=models.CASCADE)
     estado = models.BooleanField(default=False)
     nombre = models.CharField(max_length=100)
