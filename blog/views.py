@@ -25,7 +25,6 @@ def post_evaluacion(request):
 def post_postevaluacion(request):
     return render(request, 'blog/postevaluacion.html',{})
 
-
 def add_evaluador(request):
     if request.method == 'POST':
         form = AddEvaluador(request.POST)
