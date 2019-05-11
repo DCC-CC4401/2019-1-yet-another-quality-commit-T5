@@ -28,7 +28,7 @@ class Rubrica(models.Model):
     aspects=models.CharField(max_length=100)
     description=models.TextField()
 
-class Evaluacion(models.Model):
+class Evaluación(models.Model):
     tiempo_min = models.IntegerField(default=5)
     tiempo_max = models.IntegerField(default=8)
     rubrica = models.ForeignKey(Rubrica, on_delete=models.CASCADE)
@@ -54,7 +54,7 @@ class Alumno(models.Model):
 
 
 class FichaEvaluacion(models.Model):
-    evaluacion = models.ForeignKey(Evaluacion, on_delete=models.CASCADE)
+    evaluacion = models.ForeignKey(Evaluación, on_delete=models.CASCADE)
     evaluador = models.ForeignKey(Evaluador, on_delete=models.CASCADE)
     grupo = models.ForeignKey(Grupo, on_delete=models.CASCADE)
     estado_grupo = models.CharField(max_length=15)
