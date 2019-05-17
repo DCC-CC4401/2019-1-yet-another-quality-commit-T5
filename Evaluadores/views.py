@@ -22,6 +22,7 @@ def add_evaluador(request):
 
     return render(request, 'evaluadores/evaluadores_admin.html', {'form': form})
 
+
 def all_evaluadores(request):
     evaluadores = Evaluador.objects.all()
     evaluadores_list = []
@@ -31,4 +32,4 @@ def all_evaluadores(request):
 
     form = AddEvaluador()
 
-    return render(request, 'evaluadores/evaluadores.html', {'evaluadores': evaluadores_list, 'form':form})
+    return render(request, 'evaluadores/evaluadores_admin.html', {'evaluadores': evaluadores_list, 'form':form})

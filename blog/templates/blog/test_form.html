@@ -1,0 +1,7 @@
+{% extends 'blog/base.html' %}
+
+<form action="/add_evaluador" method="post">
+    {% csrf_token %}
+    {{ form.as_table }}
+    <input type="submit" value="Submit">
+</form>
