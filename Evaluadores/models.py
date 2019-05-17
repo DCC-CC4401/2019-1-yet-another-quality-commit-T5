@@ -10,3 +10,7 @@ class Evaluador(models.Model):
 
     def get_email(self):
         return str(self.correo)
+
+    def __str__(self):
+        return str(self.nombre + " " + self.apellido)
+    

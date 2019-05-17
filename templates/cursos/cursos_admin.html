@@ -29,28 +29,17 @@
   <i class="fas fa-plus" style="font-size:100px;text-align: center; padding:50px"></i>
   </button>
 </div>
+    <!-- Caja de agregar -->
     <div id="agregar" class="w3-modal">
     <div class="w3-modal-content w3-card-4 w3-animate-zoom" style="max-width:600px">
         <div class="w3-center"><br>
             <span onclick="document.getElementById('agregar').style.display='none'" class="w3-button w3-xlarge w3-transparent w3-display-topright" title="Close Modal">×</span>
-            <form class="w3-container" action="/action_page.php">
-        <div class="w3-section">
-          <label><b>Curso</b></label>
-          <input class="w3-input w3-border w3-margin-bottom" type="text" placeholder="Ingrese nombre del curso" name="usrname" required>
-          <label><b>Código</b></label>
-          <input class="w3-input w3-border" type="text" placeholder="Ingrese código del curso" name="psw" required>
-            <label><b>Sección</b></label>
-          <input class="w3-input w3-border" type="text" placeholder="Ingrese número de sección" name="secc" required>
-            <label><b>Año</b></label>
-          <input class="w3-input w3-border" type="text" placeholder="Ingrese año" name="year" required>
-            <label><b>Semestre</b></label>
-          <div class="semester"><select id="semester" name="semester">
-              <option value="priv">Primavera</option>
-              <option value="oto">Otoño</option>
-          </select>
-          </div>
-          <button class="w3-button w3-block w3-red w3-section w3-padding" type="submit">Agregar</button>
-        </div>
+            <form class="w3-container" action="{% url 'cursos:add_curso' %}" method="post">
+                {% csrf_token %}
+                <table class="w3-table">
+                    {{ form.as_table }}
+                </table>
+            <button class="w3-button w3-block w3-red w3-section w3-padding" type="submit">Agregar</button>
       </form>
       </div>
     <!--cierre de cajas de cursos-->

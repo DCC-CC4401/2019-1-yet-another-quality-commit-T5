@@ -17,6 +17,6 @@ def add_evaluador(request):
             form.save()
             return HttpResponseRedirect('evaluadores')
         else:
-            form = AddEvaluador()
+            form = AddEvaluador
 
     return render(request, 'evaluadores/evaluadores_admin.html', {'form': form})
