@@ -1,40 +1,29 @@
 <!--Evaluadores-->
 {% extends 'base.html' %}
 {% block content %}
-  <!-- Portada -->
-  <div class="w3-container" id="portada" style="margin-top:80px; margin-bottom:10px">
-    <h1 class="w3-xxxlarge w3-text-red"><b>Evaluadores</b></h1>
-    <hr style="width:50px;border:5px solid red" class="w3-round">
-    <p><h3>Seleccione un evaluador</p></h2>
-  </div>
+    <!-- Titulo -->
+    <div class="w3-container" id="portada" style="margin-top:80px; margin-bottom:10px">
+        <h1 class="w3-xxxlarge w3-text-red"><b>Evaluadores</b></h1>
+        <hr style="width:50px;border:5px solid red" class="w3-round">
+        <p class="w3-col"><h3>Seleccione un evaluador</h3>
+        <button onclick="document.getElementById('agregar').style.display='block'" class="w3-col w3-round w3-button w3-red w3-right">
+            <i class="fas fa-user-plus" style="text-align: center"></i>
+            Agregar evaluador</button>
+    </div>
 
-<!--Cajas evaluadores-->
-<div class="w3-row-padding w3-center w3-margin-top">
-<div class="w3-quarter w3-margin-top">
-    <button onclick="document.getElementById('gestionar').style.display='block'" class="w3-card w3-container w3-hover-shadow" style="max-height:380px;min-height: 317px; max-width: 300px">
-  <h3>Nombre y apellido</h3><br>
-  <i class="fas fa-user-alt" style="font-size:100px"></i>
-  <p>Correo</p>
-  </button>
-</div>
-    <div id="gestionar" class="w3-modal">
-    <div class="w3-modal-content w3-card-4 w3-animate-zoom" style="width:300px">
-        <div class="w3-center"><br>
-            <span onclick="document.getElementById('gestionar').style.display='none'" class="w3-button w3-xlarge w3-transparent w3-display-topright" title="Close Modal">×</span>
-        <div class="w3-margin">
-          <button class="w3-button w3-red w3-section w3-padding:10px" type="submit">Modificar</button><br>
-          <button class="w3-button w3-red w3-section w3-padding:10px" type="submit">Eliminar</button>
-        </div>
-      </div>
+    <!-- Evaluadores registrados -->
+    <div class="w3-margin-top w3-container w3-center">
+        {% for evaluador in evaluadores_list %}
+            <button class="w3-card w3-container">
+            <h5>{{ evaluador.get_name }}</h5>
+                <i class="fas fa-user" style="font-size:50px"></i>
+                <p class="w3-small"> {{ evaluador.get_email }} </p>
+            </button>
+        {% endfor %}
     </div>
     </div>
-    <!--Caja de agregar-->
-<div class="w3-quarter w3-margin-top">
-  <button onclick="document.getElementById('agregar').style.display='block'" class="w3-card w3-container w3-light-gray w3-hover-shadow" style="min-height: 317px; max-width: 300px">
-  <h3>Agregar evaluador nuevo</h3><br>
-  <i class="fas fa-user-plus" style="font-size:80px;text-align: center; padding: 10px"></i>
-  </button>
-</div>
+
+    <!-- Formulario de agregar -->
     <div id="agregar" class="w3-modal">
     <div class="w3-modal-content w3-card-4 w3-animate-zoom" style="max-width:600px">
         <div class="w3-center"><br>
@@ -48,11 +37,7 @@
             </form>
       </div>
     </div>
-    <!--cierre de cajas de cursos-->
-</div>
-<!--cierre de contenido-->
-    {% endblock %}
-</div>
+    </div>
+    <!-- Cierre de formulario de agregar -->
 
-
-</body>
+{% endblock %}

@@ -8,7 +8,15 @@ from .forms import AddEvaluador
 
 def post_evaluadores(request):
     form = AddEvaluador()
-    return render(request, 'evaluadores/evaluadores_admin.html', {'form': form})
+    evaluadores = Evaluador.objects.all()
+    evaluadores_list = []
+
+    for evaluador in evaluadores:
+        evaluadores_list.append(evaluador)
+
+    form = AddEvaluador()
+    print(evaluadores_list)
+    return render(request, 'evaluadores/evaluadores_admin.html', {'form': form, 'evaluadores_list': evaluadores_list})
 
 
 def add_evaluador(request):
