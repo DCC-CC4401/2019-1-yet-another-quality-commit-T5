@@ -9,7 +9,7 @@ class AddEvaluacion(forms.Form):
                              required=True)
 
     rubrica = forms.ModelChoiceField(queryset=Rubrica.objects,
-                                        widget=forms.Select(attrs={'class': 'form-control'}),
+                                        widget=forms.Select(attrs={'class': 'form-control'}),required=False,
                                         label='Rubrica')
 
     fecha_inicio= forms.DateField(widget=forms.SelectDateWidget(years=YEARS))

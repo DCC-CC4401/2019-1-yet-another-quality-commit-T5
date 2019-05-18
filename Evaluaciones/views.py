@@ -3,7 +3,14 @@ from django.http import HttpResponseRedirect
 from Evaluaciones.forms import *
 
 def post_evaluaciones(request):
-    return render(request,'evaluacion/evaluacion_admin.html',{})
+    form = AddEvaluacion()
+    evaluaciones = Evaluacion.objects.all()
+    evaluacion_list = []
+
+    for evaluacion in evaluaciones:
+        evaluacion_list.append(evaluacion)
+
+    return render(request, 'evaluacion/evaluacion_admin.html', {'form': form, 'evaluacion_list': evaluacion_list})
 
 def post_evaluacion(request):
     return render(request, 'evaluacion/evaluacion_post.html',{})
@@ -16,7 +23,7 @@ def add_evaluacion(request):
         form = AddEvaluacion(request.POST)
         if form.is_valid():
             form.save()
-            return HttpResponseRedirect('add_evaluacion')
+            return HttpResponseRedirect('evaluacion')
         else:
             form = AddEvaluacion()
 
