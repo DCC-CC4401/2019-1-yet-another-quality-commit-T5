@@ -6,23 +6,96 @@
         <h1 class="w3-xxxlarge w3-text-red"><b>Evaluadores</b></h1>
         <hr style="width:50px;border:5px solid red" class="w3-round">
         <p class="w3-col"><h3>Seleccione un evaluador</h3>
-        <button onclick="document.getElementById('agregar').style.display='block'" class="w3-col w3-round w3-button w3-red w3-right">
-            <i class="fas fa-user-plus" style="text-align: center"></i>
-            Agregar evaluador</button>
+
+    <input id='buscar'  type='text' placeholder="Busque algún evaluador">    
     </div>
 
     <!-- Evaluadores registrados -->
+    
     <div class="w3-margin-top w3-container w3-center">
-        {% for evaluador in evaluadores_list %}
-            <button class="w3-card w3-container">
-            <h5>{{ evaluador.get_name }}</h5>
-                <i class="fas fa-user" style="font-size:50px"></i>
-                <p class="w3-small"> {{ evaluador.get_email }} </p>
-            </button>
-        {% endfor %}
-    </div>
-    </div>
+        <table class="w3-table">
+            <thead>
+                <tr>
+                    <th> Nombre </th>
+                    <th> Email </th>
+                </tr>
+            </thead>
+            <script>
+                var evaluadoresJs= new Array();
+                var evaluadorJs= new Array();
+            </script>
+            <tbody id='evaluadores'>
+            {% for evaluador in evaluadores_list %}
+            <tr>
+                <td>{{evaluador}}</td>
+                <td class="w3-small"> {{ evaluador.get_email }} </td>
+                <!-- Javascript scan for evaluadores with format {(name,lastname,email),(name,lastname,email)...}-->
+                <script>
+                    evaluadorJs=[];
+                    evaluadorJs.push('{{evaluador.get_name}}');
+                    evaluadorJs.push('{{evaluador.get_lastname}}');
+                    evaluadorJs.push('{{evaluador.get_email}}');
 
+                    evaluadoresJs.push(evaluadorJs);
+                </script>
+
+            
+            </tr>
+            {% endfor %}
+            </tbody>
+           
+            
+            
+            <script>
+                function buscarEvaluador(){
+                    let busqueda = document.getElementById('buscar').value;
+
+                    let filtered = evaluadoresJs.filter((x)=>{
+                        if(busqueda==""){
+                            return true;}
+                        
+                        let raw_palabras = x[0]+" "+x[1]+" "+x[2];
+                        
+                        let palabras = raw_palabras.split(" ");
+                        for(let i=0; i<palabras.length; i++){
+                            if(palabras[i].toLowerCase()==busqueda.toLowerCase()){
+                                return true;
+                            }
+
+                        }
+                        return false;
+                        
+                    });
+                    texto="";
+                    for(i=0; i<filtered.length; i++){
+                        texto+="<tr>";
+                        texto+=("<td>"+filtered[i][0]+" ");
+                        texto+=(filtered[i][1]+"</td>");
+                        texto+=("<td class='w3-small'>"+filtered[i][2]+"</td>");
+                        texto+="</tr>";
+                    }
+                    
+                    document.getElementById('evaluadores').innerHTML=texto;
+                }
+                document.getElementById('buscar').addEventListener('keydown',event=>{
+                    if(event.key=='Enter'){
+                        buscarEvaluador();
+                    }
+                });
+            </script>
+            
+        </table>
+    </div>
+    
+    
+
+
+    <div class="w3-margin-top w3-container w3-center">
+    <button onclick="document.getElementById('agregar').style.display='block'" class="w3-col w3-round w3-button w3-red w3-right">
+            <i class="fas fa-user-plus" style="text-align: center"></i>
+            Agregar evaluador</button>
+    </div>
+   
     <!-- Formulario de agregar -->
     <div id="agregar" class="w3-modal">
     <div class="w3-modal-content w3-card-4 w3-animate-zoom" style="max-width:600px">

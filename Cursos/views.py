@@ -8,7 +8,13 @@ from .models import Curso
 
 def post_cursos(request):
     form = AddCurso()
-    return render(request,'cursos/cursos_admin.html', {'form': form})
+    cursos = Curso.objects.all()
+    cursos_list=[]
+
+    for curso in cursos:
+        cursos_list.append(curso)
+
+    return render(request,'cursos/cursos_admin.html', {'form': form, 'cursos_list': cursos_list})
 
 def add_curso(request):
     if request.POST:

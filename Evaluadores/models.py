@@ -7,7 +7,10 @@ class Evaluador(models.Model):
     creado = models.DateTimeField(auto_now=True)
 
     def get_name(self):
-        return str(self.nombre + " " + self.apellido)
+        return str(self.nombre)
+
+    def get_lastname(self):
+        return str(self.apellido)
 
     def get_email(self):
         return str(self.correo)

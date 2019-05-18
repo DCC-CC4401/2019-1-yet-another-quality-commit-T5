@@ -6,29 +6,152 @@
     <h1 class="w3-xxxlarge w3-text-red"><b>Cursos</b></h1>
     <hr style="width:50px;border:5px solid red" class="w3-round">
     <p><h3>Seleccione un curso</h3></p>
+  
+ 
+  <input id='buscarNombre' type='text' placeholder="Busque algún curso por su nombre"> 
+  <select id='buscarSemestre'>
+    <option value="None"> Semestre</option>
+    <option value="Otoño">Otoño</option>
+    <option value="Primavera">Primavera</option>
+  </select>
+  <select id="buscarSeccion">
+    <option value="None"> Seccion </option>
+    <option value="1">1</option>
+    <option value="2">2</option>
+    <option value="3">3</option>
+    <option value="4">4</option>
+    <option value="5">5</option>
+    <option value="6">6</option>
+    <option value="7">7</option>
+    <option value="8">8</option>
+    <option value="9">9</option>
+  </select> 
+  <input id="buscarAño" type='text' placeholder="Año" size='4' maxlength=4> 
+  <button class="w3-btn w3-red w3-round-large" onclick='buscar()'>Buscar</button>
+
   </div>
 
 <!--Cajas cursos-->
-<div class="w3-row-padding w3-center w3-margin-top">
-<div class="w3-quarter w3-margin-top">
-    <button onclick="document.getElementById('gestionar').style.display='block'" class="w3-card w3-container w3-hover-shadow w3-light-gray" style="max-height:380px;min-height: 317px">
+<div class="w3-container w3-center w3-margin-top">
 
-      <h3>Nombre de curso</h3><br>
-  <i class="fas fa-book" style="font-size:100px"></i>
-  <p>Código</p>
-  <p>Sección</p>
-  <p>Semestre y año </p>
-      <button class="w3-btn w3-red">Modificar</button>
-      <button class="w3-btn w3-red">Eliminar</button>
-    </button>
-</div>
+
+<table class="w3-table">
+            <thead>
+                <tr>
+                    <th> Código </th>
+                    
+                    <th> Semestre y año </th>
+
+                    <th> Nombre </th>
+                </tr>
+            </thead>
+            <script>
+                var cursosJs= new Array();
+                var cursoJs= new Array();
+            </script>
+            <tbody id='cursos'>
+            {% for curso in cursos_list %}
+            <tr>
+                <td>{{curso}}</td>
+                <td >{{curso.get_date}}</td>
+                <td class="w3-small"> {{ curso.get_name }} </td>
+                
+                <!-- Javascript scan for cursos with format {(codigo,seccion,nombre,semestre,año), ....}-->
+                <script>
+                    cursoJs=[];
+                    cursoJs.push('{{curso.get_code}}');
+                    cursoJs.push('{{curso.get_section}}');
+                    cursoJs.push('{{curso.get_name}}');
+                    cursoJs.push('{{curso.get_semester}}');
+                    cursoJs.push('{{curso.get_year}}');
+
+                    cursosJs.push(cursoJs);
+                </script>
+
+            
+            </tr>
+            {% endfor %}
+            </tbody>
+           
+            
+            
+            <script>
+                function buscar(){
+                    let buscarNombre = document.getElementById('buscarNombre').value;
+                    let buscarSemestre = document.getElementById('buscarSemestre').value;
+                    let buscarSeccion = document.getElementById('buscarSeccion').value;
+                    let buscarAño = document.getElementById('buscarAño').value;
+                    //filter by name first
+                    let filtered = cursosJs.filter((x)=>{
+                        if(buscarNombre==""){
+                          return true;
+                        }
+                        else{
+                          let palabras= x[2].split(" ");
+                          for(let i=0; i<palabras.length; i++){
+                            if(palabras[i].toLowerCase()==buscarNombre.toLowerCase()){
+                              return true;
+                            }
+                          }
+                          return false;
+                        }
+                    });
+                    //filter by semestre
+                    filtered = filtered.filter((x)=>{
+                      if(buscarSemestre=="None"){
+                        return true;
+                      }
+                      else{
+                        return buscarSemestre==x[3];
+                      }
+
+                    });
+                    //filter by Seccion
+                    filtered = filtered.filter((x)=>{
+                      if(buscarSeccion=="None"){
+                        return true;
+                      }
+                      else{
+                        return buscarSeccion==x[1];
+                      }
+
+                    });
+                    //filter by Año
+                    filtered = filtered.filter((x)=>{
+                      if(buscarAño==""){
+                        return true;
+                      }
+                      else{
+                        return buscarAño==x[4];
+                      }
+
+                    });
+
+        
+
+                    texto="";
+                    for(i=0; i<filtered.length; i++){
+                        texto+="<tr>";
+                        texto+=("<td>"+filtered[i][0]+"-");
+                        texto+=(filtered[i][1]+"</td>");
+                        texto+=("<td>"+filtered[i][3]+ " "+ filtered[i][4]+"</td>");
+                        texto+=("<td class='w3-small'>"+filtered[i][2]+"</td>");
+                        
+                        texto+="</tr>";
+                    }
+                    
+                    document.getElementById('cursos').innerHTML=texto;
+                }
+                
+            </script>
+            
+        </table>
     <!--Caja de agregar-->
-<div class="w3-quarter w3-margin-top">
-  <button onclick="document.getElementById('agregar').style.display='block'" class="w3-card w3-container w3-light-gray w3-hover-shadow" style="min-height: 317px">
-  <h3>Agregar curso nuevo</h3><br>
-  <i class="fas fa-plus" style="font-size:100px;text-align: center; padding:50px"></i>
-  </button>
-</div>
+<div class="w3-margin-top w3-container w3-center">
+    <button onclick="document.getElementById('agregar').style.display='block'" class="w3-col w3-round w3-button w3-red w3-right">
+            <i class="fas fa-plus" style="text-align: center"></i>
+            Agregar curso</button>
+    </div>
     <!-- Caja de agregar -->
     <div id="agregar" class="w3-modal">
     <div class="w3-modal-content w3-card-4 w3-animate-zoom" style="max-width:600px">
