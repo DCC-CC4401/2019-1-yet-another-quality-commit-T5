@@ -35,14 +35,14 @@
 <div class="w3-container w3-center w3-margin-top">
 
 
-<table class="w3-table">
+<table class="w3-table w3-bordered w3-border-black">
             <thead>
                 <tr>
-                    <th> Código </th>
+                    <th class="w3-red" style="border: 1px solid #ddd; border-collapse: collapse"> Código </th>
                     
-                    <th> Semestre y año </th>
+                    <th class="w3-red" style="border: 1px solid #ddd; border-collapse: collapse"> Semestre y año </th>
 
-                    <th> Nombre </th>
+                    <th class="w3-red" style="border: 1px solid #ddd; border-collapse: collapse"> Nombre </th>
                 </tr>
             </thead>
             <script>
@@ -52,9 +52,9 @@
             <tbody id='cursos'>
             {% for curso in cursos_list %}
             <tr>
-                <td>{{curso}}</td>
-                <td >{{curso.get_date}}</td>
-                <td class="w3-small"> {{ curso.get_name }} </td>
+                <td class="w3-light-gray"style="border: 1px solid #ddd; border-collapse: collapse">{{curso}}</td>
+                <td class="w3-light-gray"style="border: 1px solid #ddd; border-collapse: collapse">{{curso.get_date}}</td>
+                <td class="w3-small w3-light-gray" style="border: 1px solid #ddd; border-collapse: collapse"> {{ curso.get_name }} </td>
                 
                 <!-- Javascript scan for cursos with format {(codigo,seccion,nombre,semestre,año), ....}-->
                 <script>
