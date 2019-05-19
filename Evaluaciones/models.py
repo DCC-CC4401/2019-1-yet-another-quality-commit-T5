@@ -19,6 +19,22 @@ class Evaluacion(models.Model):
     def __str__(self):
         return self.nombre
 
+    def get_rank(self):
+        return str(self.tiempo_min) + " " + str(self.tiempo_max)
+
+    def get_startdate(self):
+        return str(self.fecha_inicio)
+
+    def get_enddate(self):
+        return str(self.fecha_fin)
+
+    def get_course(self):
+        return str(self.curso)
+
+    def get_state(self):
+        return str(self.estado)
+
+
 class FichaEvaluacion(models.Model):
     evaluacion = models.ForeignKey(Evaluacion, on_delete=models.CASCADE)
     evaluador = models.ForeignKey(Evaluador, on_delete=models.CASCADE)
@@ -28,3 +44,24 @@ class FichaEvaluacion(models.Model):
     tiempo = models.IntegerField(default=0)
     presentador = models.ForeignKey(Alumno, on_delete=models.CASCADE)
     rubrica = models.ForeignKey(AspectoRubrica, on_delete=models.CASCADE)
+
+    def get_evaluation(self):
+        return str(self.evaluacion)
+
+    def get_evaluator(self):
+        return str(self.evaluador)
+
+    def get_group(self):
+        return str(self.grupo)
+
+    def get_groupstatus(self):
+        return str(self.estado_grupo)
+
+    def get_evaluationstatus(self):
+        return str(self.estado_evaluacion)
+
+    def get_time(self):
+        return str(self.tiempo)
+
+    def get_presenter(self):
+        return str(self.presentador)
