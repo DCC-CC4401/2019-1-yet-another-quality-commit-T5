@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
-from django.views.generic.edit import UpdateView
+#from django.views.generic.edit import UpdateView
 
 from .forms import AddCurso
 from .models import Curso
@@ -37,4 +37,4 @@ def all_cursos(request):
 
     form = AddCurso()
 
-    return render(request, 'blog/cursos.html', {'cursos': cursos_list, 'form':form})
+    return render(request, 'cursos/cursos_admin.html', {'cursos': cursos_list, 'form':form})

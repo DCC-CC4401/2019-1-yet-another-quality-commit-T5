@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
-from django.views.generic.edit import UpdateView
+#from django.views.generic.edit import UpdateView
 
 from .models import Evaluador
 from .forms import AddEvaluador
@@ -14,8 +14,8 @@ def post_evaluadores(request):
     for evaluador in evaluadores:
         evaluadores_list.append(evaluador)
 
-    form = AddEvaluador()
-    print(evaluadores_list)
+    #form = AddEvaluador()
+    #print(evaluadores_list)
     return render(request, 'evaluadores/evaluadores_admin.html', {'form': form, 'evaluadores_list': evaluadores_list})
 
 
