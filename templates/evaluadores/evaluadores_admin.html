@@ -13,11 +13,11 @@
     <!-- Evaluadores registrados -->
     
     <div class="w3-margin-top w3-container w3-center">
-        <table class="w3-table">
+        <table class="w3-table w3-bordered w3-border-black">
             <thead>
                 <tr>
-                    <th> Nombre </th>
-                    <th> Email </th>
+                    <th class="w3-red tabla-elemento"> Nombre </th>
+                    <th class="w3-red tabla-elemento"> Email </th>
                 </tr>
             </thead>
             <script>
@@ -27,8 +27,8 @@
             <tbody id='evaluadores'>
             {% for evaluador in evaluadores_list %}
             <tr>
-                <td>{{evaluador}}</td>
-                <td class="w3-small"> {{ evaluador.get_email }} </td>
+                <td class="w3-light-gray tabla-elemento">{{evaluador}}</td>
+                <td class="w3-light-gray tabla-elemento w3-small"> {{ evaluador.get_email }} </td>
                 <!-- Javascript scan for evaluadores with format {(name,lastname,email),(name,lastname,email)...}-->
                 <script>
                     evaluadorJs=[];
@@ -69,9 +69,9 @@
                     texto="";
                     for(i=0; i<filtered.length; i++){
                         texto+="<tr>";
-                        texto+=("<td>"+filtered[i][0]+" ");
+                        texto+=("<td class='w3-light-gray tabla-elemento'>"+filtered[i][0]+" ");
                         texto+=(filtered[i][1]+"</td>");
-                        texto+=("<td class='w3-small'>"+filtered[i][2]+"</td>");
+                        texto+=("<td class='w3-small w3-light-gray tabla-elemento'>"+filtered[i][2]+"</td>");
                         texto+="</tr>";
                     }
                     

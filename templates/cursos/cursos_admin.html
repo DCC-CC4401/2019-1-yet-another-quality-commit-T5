@@ -38,11 +38,11 @@
 <table class="w3-table w3-bordered w3-border-black">
             <thead>
                 <tr>
-                    <th class="w3-red" style="border: 1px solid #ddd; border-collapse: collapse"> Código </th>
+                    <th class="w3-red tabla-elemento" > Código </th>
                     
-                    <th class="w3-red" style="border: 1px solid #ddd; border-collapse: collapse"> Semestre y año </th>
+                    <th class="w3-red tabla-elemento" style="border: 1px solid #ddd; border-collapse: collapse"> Semestre y año </th>
 
-                    <th class="w3-red" style="border: 1px solid #ddd; border-collapse: collapse"> Nombre </th>
+                    <th class="w3-red tabla-elemento" style="border: 1px solid #ddd; border-collapse: collapse"> Nombre </th>
                 </tr>
             </thead>
             <script>
@@ -52,9 +52,9 @@
             <tbody id='cursos'>
             {% for curso in cursos_list %}
             <tr>
-                <td class="w3-light-gray"style="border: 1px solid #ddd; border-collapse: collapse">{{curso}}</td>
-                <td class="w3-light-gray"style="border: 1px solid #ddd; border-collapse: collapse">{{curso.get_date}}</td>
-                <td class="w3-small w3-light-gray" style="border: 1px solid #ddd; border-collapse: collapse"> {{ curso.get_name }} </td>
+                <td class="w3-light-gray tabla-elemento" >{{curso}}</td>
+                <td class="w3-light-gray tabla-elemento">{{curso.get_date}}</td>
+                <td class="w3-small w3-light-gray tabla-elemento" style="border: 1px solid #ddd; border-collapse: collapse"> {{ curso.get_name }} </td>
                 
                 <!-- Javascript scan for cursos with format {(codigo,seccion,nombre,semestre,año), ....}-->
                 <script>
@@ -132,10 +132,10 @@
                     texto="";
                     for(i=0; i<filtered.length; i++){
                         texto+="<tr>";
-                        texto+=("<td>"+filtered[i][0]+"-");
+                        texto+=("<td class='w3-light-gray tabla-elemento'>"+filtered[i][0]+"-");
                         texto+=(filtered[i][1]+"</td>");
-                        texto+=("<td>"+filtered[i][3]+ " "+ filtered[i][4]+"</td>");
-                        texto+=("<td class='w3-small'>"+filtered[i][2]+"</td>");
+                        texto+=("<td class='w3-light-gray tabla-elemento'>"+filtered[i][3]+ " "+ filtered[i][4]+"</td>");
+                        texto+=("<td class='w3-small w3-light-gray tabla-elemento'>"+filtered[i][2]+"</td>");
                         
                         texto+="</tr>";
                     }
