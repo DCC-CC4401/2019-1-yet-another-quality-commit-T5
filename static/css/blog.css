@@ -21,5 +21,5 @@ body {font-size:16px;}
 .w3-half img:hover{opacity:1}
 
 .tabla-elemento{
-    border: 1px solid #ddd; border-collapse: collapse
+    border: 1px solid #ddd; border-collapse: collapse; width: 33%;
 }
