@@ -4,10 +4,12 @@ from django.http import HttpResponseRedirect
 
 from .models import Evaluador
 from .forms import AddEvaluador
+from .forms import UpdateEvaluador
 
 
 def post_evaluadores(request):
-    form = AddEvaluador()
+    updateForm = UpdateEvaluador()
+    addForm = AddEvaluador()
     evaluadores = Evaluador.objects.all()
     evaluadores_list = []
 
@@ -16,7 +18,7 @@ def post_evaluadores(request):
 
     #form = AddEvaluador()
     #print(evaluadores_list)
-    return render(request, 'evaluadores/evaluadores_admin.html', {'form': form, 'evaluadores_list': evaluadores_list})
+    return render(request, 'evaluadores/evaluadores_admin.html', {'updateForm': updateForm ,'addForm': addForm, 'evaluadores_list': evaluadores_list})
 
 
 def add_evaluador(request):
@@ -31,13 +33,15 @@ def add_evaluador(request):
     return render(request, 'evaluadores/evaluadores_admin.html', {'form': form})
 
 
-def all_evaluadores(request):
-    evaluadores = Evaluador.objects.all()
-    evaluadores_list = []
 
-    for evaluador in evaluadores:
-        evaluadores_list.append(evaluador)
+def update_evaluador(request):
+    if request.POST:
+        addForm = AddEvaluador()
+        form = UpdateEvaluador(request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect('evaluadores')
+        else:
+            form = UpdateEvaluador()
 
-    form = AddEvaluador()
-
-    return render(request, 'evaluadores/evaluadores_admin.html', {'evaluadores': evaluadores_list, 'form':form})
+    return render(request, 'evaluadores/evaluadores_admin.html', {'addForm': addForm, 'updateForm': form})

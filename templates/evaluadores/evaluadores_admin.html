@@ -71,7 +71,7 @@
             <form class="w3-container" action="{% url 'evaluadores:add_evaluador' %}" method="post">
                 {% csrf_token %}
                 <table class="w3-table">
-                    {{ form.as_table }}
+                    {{ addForm.as_table }}
                 </table>
             <button class="w3-button w3-block w3-red w3-section w3-padding" type="submit">Agregar</button>
             </form>
@@ -85,26 +85,10 @@
     <div class="w3-modal-content w3-card-4 w3-animate-zoom" style="max-width:600px">
         <div class="w3-center"><br>
             <span onclick="document.getElementById('modificar').style.display='none'" class="w3-button w3-xlarge w3-transparent w3-display-topright" title="Close Modal">×</span>
-            <form class="w3-container" action="" method="post">
+            <form class="w3-container" action="{% url 'evaluadores:update_evaluador' %}" method="post">
                 {% csrf_token %}
                 <table class="w3-table">
-                    <tr>
-                        <th>ID:</th>
-                        <td><input type='text' id='editId' readonly></td> 
-                    </tr>
-                    <tr>    
-                        <th>Nombre:</th> 
-                        <td><input type='text' id='editNombre'></td> 
-                    </tr>
-                    <tr>
-                        <th>Apellido:</th>
-                        <td><input type='text' id='editApellido'> </td>
-                    </tr>
-                    <tr>
-                    
-                    <th>    Email:</th>
-                    <td>    <input type='text' id='editEmail'> </td> 
-                    </tr>
+                    {{ updateForm.as_table }}
                 </table>
 
             <button class="w3-button w3-block w3-red w3-section w3-padding" type="submit">Agregar</button>
@@ -134,30 +118,25 @@ function buscarEvaluador(){
         return false;
         
     });
-    texto="";
-    for(i=0; i<filtered.length; i++){
-        texto+="<tr class='w3-light-gray opcion' id='"+filtered[i][0]+"'>";
-        texto+=("<td class='tabla-elemento w3-center'>"+filtered[i][0]+"</td>")
-        texto+=("<td class='tabla-elemento'>"+filtered[i][1]+" ");
-        texto+=(filtered[i][2]+"</td>");
-        texto+=("<td class='w3-small tabla-elemento'>"+filtered[i][3]+"</td>");
-        texto+="</tr>";
+    for(i=0;i<evaluadoresJs.length;i++){
+        document.getElementById(evaluadoresJs[i][0]).style.display='none';
+        
     }
-    
-    document.getElementById('evaluadores').innerHTML=texto;
+    for(i=0;i<filtered.length;i++){
+        document.getElementById(filtered[i][0]).style.display='';
+    }
 }
-
 function showEditar(id){
     console.log(id);
     return ()=>{
-    document.getElementById('editId').value=id;
+    document.getElementById('id_ID').value=id;
     let filtered=evaluadoresJs.filter((x)=>{
         return id==x[0];
     });
     let evaluador=filtered[0];
-    document.getElementById('editNombre').value=evaluador[1];
-    document.getElementById('editApellido').value=evaluador[2];
-    document.getElementById('editEmail').value=evaluador[3];
+    document.getElementById('id_nombre').value=evaluador[1];
+    document.getElementById('id_apellido').value=evaluador[2];
+    document.getElementById('id_correo').value=evaluador[3];
     document.getElementById('modificar').style.display='block';
     };
 }

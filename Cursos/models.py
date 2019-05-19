@@ -6,7 +6,10 @@ class Curso(models.Model):
     sección = models.PositiveSmallIntegerField()
     año = models.PositiveSmallIntegerField()
     semestre = models.CharField(max_length=9) #Otoño o Primavera
-    
+
+    def get_pk(self):
+        return str(self.pk)
+
     def get_name(self):
         return str(self.nombre)
     
