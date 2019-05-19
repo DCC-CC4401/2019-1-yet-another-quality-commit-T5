@@ -18,7 +18,15 @@
     <!--Profile image -->
   <div class="w3-container">
       <p class="w3-center"><img src="{% static 'images/avatar.png'%}" class="w3-circle" style="height:200px;width:200px" alt="Avatar"></p>
-    <h3 class="w3-padding-64"><center><b>Usuario</b></center></h3>
+      {% if user.is_authenticated %}
+        <h3 class="w3-center"><b>
+            {{ user.first_name }}
+            <br>
+            {{ user.last_name }}</b>
+        </h3>
+      {% else %}
+          <h3 class="w3-center"><a href="{% url 'login'%}?next={{request.path}}">Accede</a></h3>
+      {% endif %}
   </div>
   <div class="w3-bar-block">
     <a href="/cursos" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">Cursos</a>
