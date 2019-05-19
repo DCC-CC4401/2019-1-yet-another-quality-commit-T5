@@ -13,9 +13,10 @@
     <!-- Evaluadores registrados -->
     
     <div class="w3-margin-top w3-container w3-center">
-        <table class="w3-table w3-bordered w3-border-black">
+        <table class="w3-table w3-card-4 w3-bordered w3-border-black">
             <thead>
                 <tr>
+                    <th class="w3-red tabla-elemento w3-center"> ID </th>
                     <th class="w3-red tabla-elemento"> Nombre </th>
                     <th class="w3-red tabla-elemento"> Email </th>
                 </tr>
@@ -26,12 +27,14 @@
             </script>
             <tbody id='evaluadores'>
             {% for evaluador in evaluadores_list %}
-            <tr>
-                <td class="w3-light-gray tabla-elemento">{{evaluador}}</td>
-                <td class="w3-light-gray tabla-elemento w3-small"> {{ evaluador.get_email }} </td>
+            <tr class='w3-light-gray opcion' id='{{evaluador.get_pk}}'>
+                <td class='tabla-elemento w3-center'>{{evaluador.get_pk}} </td>
+                <td class='tabla-elemento'>{{evaluador}}</td>
+                <td class='tabla-elemento w3-small'> {{ evaluador.get_email }} </td>
                 <!-- Javascript scan for evaluadores with format {(name,lastname,email),(name,lastname,email)...}-->
                 <script>
                     evaluadorJs=[];
+                    evaluadorJs.push('{{evaluador.get_pk}}');
                     evaluadorJs.push('{{evaluador.get_name}}');
                     evaluadorJs.push('{{evaluador.get_lastname}}');
                     evaluadorJs.push('{{evaluador.get_email}}');
@@ -46,43 +49,7 @@
            
             
             
-            <script>
-                function buscarEvaluador(){
-                    let busqueda = document.getElementById('buscar').value;
-
-                    let filtered = evaluadoresJs.filter((x)=>{
-                        if(busqueda==""){
-                            return true;}
-                        
-                        let raw_palabras = x[0]+" "+x[1]+" "+x[2];
-                        
-                        let palabras = raw_palabras.split(" ");
-                        for(let i=0; i<palabras.length; i++){
-                            if(palabras[i].toLowerCase()==busqueda.toLowerCase()){
-                                return true;
-                            }
-
-                        }
-                        return false;
-                        
-                    });
-                    texto="";
-                    for(i=0; i<filtered.length; i++){
-                        texto+="<tr>";
-                        texto+=("<td class='w3-light-gray tabla-elemento'>"+filtered[i][0]+" ");
-                        texto+=(filtered[i][1]+"</td>");
-                        texto+=("<td class='w3-small w3-light-gray tabla-elemento'>"+filtered[i][2]+"</td>");
-                        texto+="</tr>";
-                    }
-                    
-                    document.getElementById('evaluadores').innerHTML=texto;
-                }
-                document.getElementById('buscar').addEventListener('keydown',event=>{
-                    if(event.key=='Enter'){
-                        buscarEvaluador();
-                    }
-                });
-            </script>
+            
             
         </table>
     </div>
@@ -112,5 +79,102 @@
     </div>
     </div>
     <!-- Cierre de formulario de agregar -->
+
+     <!-- Formulario de modificar o eliminar -->
+    <div id="modificar" class="w3-modal">
+    <div class="w3-modal-content w3-card-4 w3-animate-zoom" style="max-width:600px">
+        <div class="w3-center"><br>
+            <span onclick="document.getElementById('modificar').style.display='none'" class="w3-button w3-xlarge w3-transparent w3-display-topright" title="Close Modal">×</span>
+            <form class="w3-container" action="" method="post">
+                {% csrf_token %}
+                <table class="w3-table">
+                    <tr>
+                        <th>ID:</th>
+                        <td><input type='text' id='editId' readonly></td> 
+                    </tr>
+                    <tr>    
+                        <th>Nombre:</th> 
+                        <td><input type='text' id='editNombre'></td> 
+                    </tr>
+                    <tr>
+                        <th>Apellido:</th>
+                        <td><input type='text' id='editApellido'> </td>
+                    </tr>
+                    <tr>
+                    
+                    <th>    Email:</th>
+                    <td>    <input type='text' id='editEmail'> </td> 
+                    </tr>
+                </table>
+
+            <button class="w3-button w3-block w3-red w3-section w3-padding" type="submit">Agregar</button>
+            </form>
+      </div>
+    </div>
+    </div>
+    <!-- Cierre de formulario de modificar o eliminar -->
+
+<script>
+function buscarEvaluador(){
+    let busqueda = document.getElementById('buscar').value;
+
+    let filtered = evaluadoresJs.filter((x)=>{
+        if(busqueda==""){
+            return true;}
+        
+        let raw_palabras = x[0]+" "+x[1]+" "+x[2]+" "+x[3];
+        
+        let palabras = raw_palabras.split(" ");
+        for(let i=0; i<palabras.length; i++){
+            if(palabras[i].toLowerCase()==busqueda.toLowerCase()){
+                return true;
+            }
+
+        }
+        return false;
+        
+    });
+    texto="";
+    for(i=0; i<filtered.length; i++){
+        texto+="<tr class='w3-light-gray opcion' id='"+filtered[i][0]+"'>";
+        texto+=("<td class='tabla-elemento w3-center'>"+filtered[i][0]+"</td>")
+        texto+=("<td class='tabla-elemento'>"+filtered[i][1]+" ");
+        texto+=(filtered[i][2]+"</td>");
+        texto+=("<td class='w3-small tabla-elemento'>"+filtered[i][3]+"</td>");
+        texto+="</tr>";
+    }
+    
+    document.getElementById('evaluadores').innerHTML=texto;
+}
+
+function showEditar(id){
+    console.log(id);
+    return ()=>{
+    document.getElementById('editId').value=id;
+    let filtered=evaluadoresJs.filter((x)=>{
+        return id==x[0];
+    });
+    let evaluador=filtered[0];
+    document.getElementById('editNombre').value=evaluador[1];
+    document.getElementById('editApellido').value=evaluador[2];
+    document.getElementById('editEmail').value=evaluador[3];
+    document.getElementById('modificar').style.display='block';
+    };
+}
+
+//prepare document for buscar
+document.getElementById('buscar').addEventListener('keydown',event=>{
+    if(event.key=='Enter'){
+        buscarEvaluador();
+    }
+});
+
+//prepare document for editar evaluador
+let idPrepare="";
+for(let i=0;i<evaluadoresJs.length; i++){
+    idPrepare=evaluadoresJs[i][0];
+    document.getElementById(idPrepare).addEventListener("click",showEditar(idPrepare));
+}
+</script>
 
 {% endblock %}

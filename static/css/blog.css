@@ -5,9 +5,12 @@ h1 a {
 li{
     cursor:pointer;
 }
+.opcion{
+    cursor:pointer;
+}
+
 .opcion:hover{
     opacity:0.5;
-    color: rgb(0, 110, 255);
 }
 .selected{
     background-color:rgba(10, 202, 10, 0.534);

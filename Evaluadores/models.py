@@ -15,6 +15,9 @@ class Evaluador(models.Model):
     def get_email(self):
         return str(self.correo)
 
+    def get_pk(self):
+        return str(self.pk)
+
     def __str__(self):
         return str(self.nombre + " " + self.apellido)
     
