@@ -15,7 +15,7 @@ class AddEvaluacion(forms.Form):
     fecha_inicio= forms.DateField(widget=forms.SelectDateWidget(years=YEARS))
     fecha_fin=forms.DateField(widget=forms.SelectDateWidget(years=YEARS))
     curso=forms.ModelChoiceField(queryset=Curso.objects, widget=forms.Select(attrs={'class':'form-control'}), label='Curso')
-    estado=forms.ChoiceField(choices=(("En curso", "En curso"), ("Finalizada", "Finalizada")), widget=forms.Select({'class':'form-control'}))
+    estado=forms.ChoiceField(choices=((True, "En curso"), (False, "Finalizada")), widget=forms.Select({'class':'form-control'}))
     nombre=forms.CharField(max_length=40, widget=forms.TextInput(attrs={'class':'form-control'}))
 
     def is_valid(self):

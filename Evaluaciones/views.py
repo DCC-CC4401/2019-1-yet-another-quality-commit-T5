@@ -28,3 +28,14 @@ def add_evaluacion(request):
             form = AddEvaluacion()
 
         return render(request, 'evaluacion/evaluacion_admin.html', {'form': form})
+
+def all_evaluaciones(request):
+    evaluaciones = Evaluacion.objects.all()
+    evaluacion_list = []
+
+    for evaluacion in evaluaciones:
+        evaluacion_list.append(evaluacion)
+
+    form = AddEvaluacion()
+
+    return render(request, 'evaluacion/evaluacion_admin.html', {'evaluacion': evaluacion_list, 'form':form})
