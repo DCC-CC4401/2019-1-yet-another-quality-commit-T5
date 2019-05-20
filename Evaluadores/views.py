@@ -59,3 +59,7 @@ def delete_evaluador(request):
         if(deleted!=None):
             return HttpResponseRedirect('evaluadores')
     return render(request, 'evaluadores/evaluadores_admin.html', {'addForm': addForm, 'updateForm': updateForm})
+
+def get_evaluador_profile(request):
+    form = UpdateEvaluador()
+    return render(request, 'evaluadores/profile.html', {'form' : form})
