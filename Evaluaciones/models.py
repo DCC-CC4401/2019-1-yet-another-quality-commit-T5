@@ -7,20 +7,20 @@ from Evaluadores.models import Evaluador
 
 
 class Evaluacion(models.Model):
-    tiempo_min = models.IntegerField(default=5)
-    tiempo_max = models.IntegerField(default=8)
-    rubrica = models.ForeignKey(Rubrica, on_delete=models.CASCADE)
-    fecha_inicio = models.DateTimeField(default=timezone.now)
-    fecha_fin = models.DateTimeField(default=timezone.now)
+    tiempo_min = models.PositiveSmallIntegerField(default=5)
+    tiempo_max = models.PositiveSmallIntegerField(default=8)
+    #rubrica = models.ForeignKey(Rubrica, on_delete=models.CASCADE)
+    fecha_inicio = models.DateField(default=timezone.now)
+    fecha_fin = models.DateField(default=timezone.now)
     curso = models.ForeignKey(Curso, on_delete=models.CASCADE)
-    estado = models.BooleanField(default=False)
+    estado = models.CharField(max_length=7) # Abierta o Cerrada
     nombre = models.CharField(max_length=100)
 
     def __str__(self):
         return self.nombre
 
     def get_rank(self):
-        return str(self.tiempo_min) + " " + str(self.tiempo_max)
+        return str(self.tiempo_min) + "-" + str(self.tiempo_max) + " min"
 
     def get_startdate(self):
         return str(self.fecha_inicio)
