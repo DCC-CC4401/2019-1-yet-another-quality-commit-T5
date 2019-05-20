@@ -44,8 +44,8 @@ class Evaluador(models.Model):
         user.first_name = self.nombre
         user.last_name = self.apellido
         # Agrega usuario al grupo Evaluadores
-        #evaluadores = Group.objects.get(name='Evaluadores')
-        #evaluadores.user_set.add(user)
+        evaluadores, created = Group.objects.get_or_create(name='Evaluadores')
+        evaluadores.user_set.add(user)
         # Guarda usuario
         user.save()
         send_mail('Bienvenido!', 'Tu usuario es: ' + user.username + '\n Tu contraseña es: ' + password, 'djangotesting052@gmail.com',  [self.correo,])
