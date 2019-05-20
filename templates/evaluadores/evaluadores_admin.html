@@ -7,9 +7,12 @@
         <hr style="width:50px;border:5px solid red" class="w3-round">
         <p class="w3-col"><h3>Seleccione un evaluador</h3>
 
-    <input id='buscar'  type='text' placeholder="Busque algún evaluador">    
     </div>
 
+{% if user.is_authenticated %}
+    <div class="w3-container">
+    <input id='buscar'  type='text' placeholder="Busque algún evaluador">
+    </div>
     <!-- Evaluadores registrados -->
     
     <div class="w3-margin-top w3-container w3-center">
@@ -161,5 +164,10 @@ for(let i=0;i<evaluadoresJs.length; i++){
     document.getElementById(idPrepare).addEventListener("click",showEditar(idPrepare));
 }
 </script>
+{% else %}
+    <div class="w3-container">
+        <a href="{% url 'login'%}?next={{request.path}}">Entra a tu cuenta.</a></li>
+    </div>
+{% endif %}
 
 {% endblock %}
