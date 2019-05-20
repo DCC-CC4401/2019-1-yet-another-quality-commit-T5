@@ -6,7 +6,8 @@
     <h1 class="w3-xxxlarge w3-text-red"><b>Cursos</b></h1>
     <hr style="width:50px;border:5px solid red" class="w3-round">
     <p><h3>Seleccione un curso</h3></p>
-  
+
+  {% if user.is_authenticated %}
  
   <input id='buscarNombre' type='text' placeholder="Busque algún curso por su nombre"> 
   <select id='buscarSemestre'>
@@ -166,12 +167,16 @@
             <button class="w3-button w3-block w3-red w3-section w3-padding" type="submit">Agregar</button>
       </form>
       </div>
+    </div>
+    </div>
     <!--cierre de cajas de cursos-->
 </div>
 <!--cierre de contenido-->
-        {% endblock %}
-</div>
 
+{% else %}
+    <div>
+        <a href="{% url 'login'%}?next={{request.path}}">Entra a tu cuenta.</a>
+    </div>
+{% endif %}
+{% endblock %}
 
-</body>
-</html>

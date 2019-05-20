@@ -5,8 +5,7 @@
     <div class="w3-container" id="portada" style="margin-top:80px; margin-bottom:10px">
         <h1 class="w3-xxxlarge w3-text-red"><b>Evaluadores</b></h1>
         <hr style="width:50px;border:5px solid red" class="w3-round">
-        <p class="w3-col"><h3>Seleccione un evaluador</h3>
-
+        <p><h3>Seleccione un evaluador</h3>
     </div>
 
 {% if user.is_authenticated %}
@@ -44,8 +43,6 @@
 
                     evaluadoresJs.push(evaluadorJs);
                 </script>
-
-            
             </tr>
             {% endfor %}
             </tbody>
@@ -101,9 +98,11 @@
     <!-- Cierre de formulario de modificar o eliminar -->
 
 <script>
+
+
+
 function buscarEvaluador(){
     let busqueda = document.getElementById('buscar').value;
-
     let filtered = evaluadoresJs.filter((x)=>{
         if(busqueda==""){
             return true;}
@@ -131,15 +130,17 @@ function buscarEvaluador(){
 function showEditar(id){
     console.log(id);
     return ()=>{
-    document.getElementById('id_ID').value=id;
+    let modificar=document.getElementById('modificar')
+    GetElementInsideContainer('modificar','id_ID').value=id;
+    
     let filtered=evaluadoresJs.filter((x)=>{
         return id==x[0];
     });
     let evaluador=filtered[0];
-    document.getElementById('id_nombre').value=evaluador[1];
-    document.getElementById('id_apellido').value=evaluador[2];
-    document.getElementById('id_correo').value=evaluador[3];
-    document.getElementById('modificar').style.display='block';
+    GetElementInsideContainer('modificar','id_nombre').value=evaluador[1];
+    GetElementInsideContainer('modificar','id_apellido').value=evaluador[2];
+    GetElementInsideContainer('modificar','id_correo').value=evaluador[3];
+    modificar.style.display='block';
     };
 }
 
@@ -159,7 +160,7 @@ for(let i=0;i<evaluadoresJs.length; i++){
 </script>
 {% else %}
     <div class="w3-container">
-        <a href="{% url 'login'%}?next={{request.path}}">Entra a tu cuenta.</a></li>
+        <a href="{% url 'login'%}?next={{request.path}}">Entra a tu cuenta.</a>
     </div>
 {% endif %}
 
