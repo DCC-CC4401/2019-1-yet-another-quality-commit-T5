@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
+from django.contrib.auth.models import User
 #from django.views.generic.edit import UpdateView
 
 from .models import Evaluador
@@ -45,3 +46,16 @@ def update_evaluador(request):
             form = UpdateEvaluador()
 
     return render(request, 'evaluadores/evaluadores_admin.html', {'addForm': addForm, 'updateForm': form})
+
+def delete_evaluador(request):
+    if request.POST:
+        addForm = AddEvaluador()
+        updateForm = UpdateEvaluador()
+        id = int(request.POST['ID'])
+        user = Evaluador.objects.get(pk=id)
+        username = str(user.nombre).lower() + '.' + str(user.apellido).lower()
+        User.objects.get(username=username).delete()
+        deleted = Evaluador.objects.get(pk=id).delete()
+        if(deleted!=None):
+            return HttpResponseRedirect('evaluadores')
+    return render(request, 'evaluadores/evaluadores_admin.html', {'addForm': addForm, 'updateForm': updateForm})

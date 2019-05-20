@@ -5,9 +5,70 @@
   <div class="w3-container" id="portada" style="margin-top:80px; margin-bottom:10px">
     <h1 class="w3-xxxlarge w3-text-red"><b>Evaluaciones</b></h1>
     <hr style="width:50px;border:5px solid red" class="w3-round">
+
   </div>
 
 {% if user.is_authenticated %}
+    <!--Caja evaluaciones-->
+
+    <div class="w3-container w3-center w3-margin-top">
+
+
+<table class="w3-table w3-bordered w3-border-black w3-card-4">
+            <thead>
+                <tr>
+                    <th class="w3-red tabla-elemento" > Nombre </th>
+
+                    <th class="w3-red tabla-elemento" > Curso asociado</th>
+
+                    <th class="w3-red tabla-elemento" > Estado </th>
+
+                    <th class="w3-red tabla-elemento" > Fecha inicio</th>
+
+                    <th class="w3-red tabla-elemento" > Fecha fin</th>
+
+                    <th class="w3-red tabla-elemento" > Duración esperada </th>
+                </tr>
+            </thead>
+            <script>
+                var evaluacionesJs= new Array();
+                var evaluacionJs= new Array();
+            </script>
+            <tbody id='evaluaciones'>
+            {% for evaluacion in evaluacion_list %}
+            <tr>
+                <td class="w3-light-gray tabla-elemento" >{{ evaluacion }}</td>
+                <td class="w3-light-gray tabla-elemento">{{ evaluacion.get_course }}</td>
+                <td class="w3-light-gray tabla-elemento"> {{ evaluacion.get_state }} </td>
+                <td class="w3-light-gray tabla-elemento"> {{ evaluacion.get_startdate }} </td>
+                <td class="w3-light-gray tabla-elemento"> {{ evaluacion.get_enddate }} </td>
+                <td class="w3-light-gray tabla-elemento"> {{ evaluacion.get_rank }} </td>
+
+                <!-- Javascript scan for cursos with format {(codigo,seccion,nombre,semestre,año), ....}-->
+                <script>
+                    evaluacionJs=[];
+                    evaluacionJs.push('{{ evaluacion }}');
+                    evaluacionJs.push('{{ evaluacion.get_course }}');
+                    evaluacionJs.push('{{ evaluacion.get_rank }}');
+                    evaluacionJs.push('{{ evaluacion.get_startdate }}');
+                    evaluacionJs.push('{{ evaluacion.get_enddate }}');
+                    evaluacionJs.push('{{ evaluacion.get_state }}');
+
+                    evaluacionesJs.push(evaluacionJs);
+                </script>
+
+
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+</div>
+
+
+
+
+
+    <!--Caja agregar-->
 <div class="w3-margin-top w3-container w3-center">
     <button onclick="document.getElementById('agregar').style.display='block'" class="w3-col w3-round w3-button w3-red w3-right">
             <i class="fas fa-plus" style="text-align: center"></i>
@@ -25,6 +86,7 @@
             <button class="w3-button w3-block w3-red w3-section w3-padding" type="submit">Agregar</button>
       </form>
       </div>
+    </div>
     </div>
 <!--Seccion rubricas-->
 
