@@ -38,3 +38,6 @@ def all_cursos(request):
     form = AddCurso()
 
     return render(request, 'cursos/cursos_admin.html', {'cursos': cursos_list, 'form':form})
+
+def curso_detalle(request):
+    return render(request, 'cursos/curso_detalle.html')
