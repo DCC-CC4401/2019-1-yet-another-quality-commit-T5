@@ -5,38 +5,23 @@
     <h1 class="w3-xxxlarge w3-text-red"><b>Cursos</b></h1>
     <hr style="width:50px;border:5px solid red" class="w3-round">
 
-  <p><h3>Nombre del curso</h3></p>
-   <button onclick="myFunction('Demo1')" class="w3-button w3-half w3-left-align w3-red w3-center">
-Evaluadores</button>
-
-<div id="Demo1" class="w3-container w3-hide">
-  <ul class="w3-ul w3-half">
-    <li class="w3-bar">
-      <span onclick="this.parentElement.style.display='none'" class="w3-bar-item w3-button w3-white w3-xlarge w3-right">×</span>
-      <img src="img_avatar2.png" class="w3-bar-item w3-circle w3-hide-small" style="width:85px">
-      <div class="w3-bar-item">
-        <span class="w3-large">Mike</span><br>
-        <span>Web Designer</span>
+      <div class="w3-row" style="width: 50%">
+          <p><h3>Nombre del curso</h3></p>
+          <ul class="w3-ul w3-padding h3-half w3-light-gray">
+            <li class="column">Docentes</li>
+          <li class="column">Código</li>
+          <li class="column">Sección</li>
+          <li class="column">Semestre</li>
+         <li class="column">Año</li>
+          </ul>
       </div>
-    </li>
-
-    <li class="w3-bar">
-      <span onclick="this.parentElement.style.display='none'" class="w3-bar-item w3-button w3-white w3-xlarge w3-right">×</span>
-      <img src="img_avatar5.png" class="w3-bar-item w3-circle w3-hide-small" style="width:85px">
-      <div class="w3-bar-item">
-        <span class="w3-large">Jill</span><br>
-        <span>Support</span>
-      </div>
-    </li>
-
-    <li class="w3-bar">
-      <span onclick="this.parentElement.style.display='none'" class="w3-bar-item w3-button w3-white w3-xlarge w3-right">×</span>
-      <img src="img_avatar6.png" class="w3-bar-item w3-circle w3-hide-small" style="width:85px">
-      <div class="w3-bar-item">
-        <span class="w3-large">Jane</span><br>
-        <span>Accountant</span>
-      </div>
-    </li>
-  </ul>
-</div>
+        <div id="evaluadores" class="w3-container w3-half">
+      <p><h3>Evaluadores</h3></p>
+            <ul class="w3-ul w3-hoverable w3-border">
+  <li>Jill</li>
+  <li>Eve</li>
+  <li>Adam</li>
+</ul>
+  </div>
+  </div>
 {% endblock %}
