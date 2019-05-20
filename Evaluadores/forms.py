@@ -25,3 +25,4 @@ class UpdateEvaluador(forms.ModelForm):
         evaluador.apellido = self.cleaned_data['apellido']
         evaluador.correo  = self.cleaned_data['correo']
         evaluador.save()
+
