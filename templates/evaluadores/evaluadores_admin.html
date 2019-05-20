@@ -1,5 +1,6 @@
 <!--Evaluadores-->
 {% extends 'base.html' %}
+{% load evaluador_privileges %}
 {% block content %}
     <!-- Titulo -->
     <div class="w3-container" id="portada" style="margin-top:80px; margin-bottom:10px">
@@ -55,13 +56,14 @@
     
     
 
-
+    {% if not request.user|is_evaluador %}
     <div class="w3-margin-top w3-container w3-center">
     <button onclick="document.getElementById('agregar').style.display='block'" class="w3-col w3-round w3-button w3-red w3-right">
             <i class="fas fa-user-plus" style="text-align: center"></i>
             Agregar evaluador</button>
     </div>
-   
+
+
     <!-- Formulario de agregar -->
     <div id="agregar" class="w3-modal">
     <div class="w3-modal-content w3-card-4 w3-animate-zoom" style="max-width:600px">
@@ -77,6 +79,7 @@
       </div>
     </div>
     </div>
+    {% endif %}
     <!-- Cierre de formulario de agregar -->
 
      <!-- Formulario de modificar o eliminar -->
@@ -104,9 +107,8 @@
     </div>
     <!-- Cierre de formulario de modificar o eliminar -->
 
+{% if not request.user|is_evaluador %}
 <script>
-
-
 
 function buscarEvaluador(){
     let busqueda = document.getElementById('buscar').value;
@@ -165,6 +167,7 @@ for(let i=0;i<evaluadoresJs.length; i++){
     document.getElementById(idPrepare).addEventListener("click",showEditar(idPrepare));
 }
 </script>
+{% endif %}
 {% else %}
     <div class="w3-container">
         <a href="{% url 'login'%}?next={{request.path}}">Entra a tu cuenta.</a>
