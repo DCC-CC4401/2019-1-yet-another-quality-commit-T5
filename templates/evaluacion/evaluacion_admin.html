@@ -7,6 +7,7 @@
     <hr style="width:50px;border:5px solid red" class="w3-round">
   </div>
 
+{% if user.is_authenticated %}
 <div class="w3-margin-top w3-container w3-center">
     <button onclick="document.getElementById('agregar').style.display='block'" class="w3-col w3-round w3-button w3-red w3-right">
             <i class="fas fa-plus" style="text-align: center"></i>
@@ -27,11 +28,10 @@
     </div>
 <!--Seccion rubricas-->
 
-
-
+{% else %}
+    <div class="w3-container">
+        <a href="{% url 'login'%}?next={{request.path}}">Entra a tu cuenta.</a>
+    </div>
+{% endif %}
 </div>
 {% endblock %}
-
-
-</body>
-</html>

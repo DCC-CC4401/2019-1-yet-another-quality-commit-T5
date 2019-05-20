@@ -1,3 +1,4 @@
+from django.core.mail import send_mail
 from django.db import models
 from django.contrib.auth.models import User
 from django.contrib.auth.models import Group
@@ -43,10 +44,11 @@ class Evaluador(models.Model):
         user.first_name = self.nombre
         user.last_name = self.apellido
         # Agrega usuario al grupo Evaluadores
-        evaluadores = Group.objects.get(name='Evaluadores')
-        evaluadores.user_set.add(user)
+        #evaluadores = Group.objects.get(name='Evaluadores')
+        #evaluadores.user_set.add(user)
         # Guarda usuario
         user.save()
+        send_mail('Bienvenido!', 'Tu usuario es: ' + user.username + '\n Tu contraseña es: ' + password, 'djangotesting052@gmail.com',  [self.correo,])
 
     def update(self, *args, **kwargs):
         """

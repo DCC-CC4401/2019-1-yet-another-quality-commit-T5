@@ -5,8 +5,7 @@
     <div class="w3-container" id="portada" style="margin-top:80px; margin-bottom:10px">
         <h1 class="w3-xxxlarge w3-text-red"><b>Evaluadores</b></h1>
         <hr style="width:50px;border:5px solid red" class="w3-round">
-        <p class="w3-col"><h3>Seleccione un evaluador</h3>
-
+        <p><h3>Seleccione un evaluador</h3>
     </div>
 
 {% if user.is_authenticated %}
@@ -161,7 +160,7 @@ for(let i=0;i<evaluadoresJs.length; i++){
 </script>
 {% else %}
     <div class="w3-container">
-        <a href="{% url 'login'%}?next={{request.path}}">Entra a tu cuenta.</a></li>
+        <a href="{% url 'login'%}?next={{request.path}}">Entra a tu cuenta.</a>
     </div>
 {% endif %}
 
