@@ -105,10 +105,7 @@
 
 
 function buscarEvaluador(){
-    let busqueda = document.getElevar elm = document.getElementById(childID);
-    var parent = elm ? elm.parentNode : {};
-    return (parent.id && parent.id === containerID) ? elm : {};mentById('buscar').value;
-
+    let busqueda = document.getElementById('buscar').value;
     let filtered = evaluadoresJs.filter((x)=>{
         if(busqueda==""){
             return true;}
