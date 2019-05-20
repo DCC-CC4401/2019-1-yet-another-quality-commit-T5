@@ -4,58 +4,78 @@
   <div class="w3-container" id="portada" style="margin-top:80px; margin-bottom:10px">
     <h1 class="w3-xxxlarge w3-text-red"><b>Cursos</b></h1>
     <hr style="width:50px;border:5px solid red" class="w3-round">
-<<<<<<< HEAD
-
-      <div class="w3-row" style="width: 50%">
-          <p><h3>Nombre del curso</h3></p>
-          <ul class="w3-ul w3-padding h3-half w3-light-gray">
-            <li class="column">Docentes</li>
-          <li class="column">Código</li>
-          <li class="column">Sección</li>
-          <li class="column">Semestre</li>
-         <li class="column">Año</li>
-          </ul>
-=======
   </div>
-  <p><h3>Nombre del curso</h3></p>
-   <button onclick="myFunction('Demo1')" class="w3-button w3-half w3-left-align w3-red w3-center">
-Evaluadores</button>
+    <p><h3>Nombre del curso</h3></p>
+    <!-- Informacion sobre el curso -->
+    <div class="w3-round w3-quarter w3-padding">
+    <button onclick="myFunction('Demo1')" class="w3-button w3-block w3-left-align w3-red w3-centered w3-center w3-round w3-large">
+        Información del curso</button>
 
-<div id="Demo1" class="w3-container w3-hide">
-  <ul class="w3-ul w3-half">
-    <li class="w3-bar">
-      <span onclick="this.parentElement.style.display='none'" class="w3-bar-item w3-button w3-white w3-xlarge w3-right">×</span>
-      <img src="img_avatar2.png" class="w3-bar-item w3-circle w3-hide-small" style="width:85px">
-      <div class="w3-bar-item">
-        <span class="w3-large">Mike</span><br>
-        <span>Web Designer</span>
-      </div>
-    </li>
+    <div id="Demo1" class="w3-container w3-hide w3-pale-red w3-round">
+        <p><ul class="w3-ul w3-light-gray w3-round">
+        <li>Código:</li>
+        <li>Semestre:</li>
+        <li>Año:</li>
+        <li>Docente(s):</li>
+    </ul></p>
+    </div>
+        </div>
 
-    <li class="w3-bar">
-      <span onclick="this.parentElement.style.display='none'" class="w3-bar-item w3-button w3-white w3-xlarge w3-right">×</span>
-      <img src="img_avatar5.png" class="w3-bar-item w3-circle w3-hide-small" style="width:85px">
-      <div class="w3-bar-item">
-        <span class="w3-large">Jill</span><br>
-        <span>Support</span>
-      </div>
-    </li>
+    <!-- Evaluadores-->
+    <div class="w3-round w3-quarter w3-padding">
+    <button onclick="myFunction('Demo2')" class="w3-button w3-block w3-left-align w3-red w3-centered w3-center w3-round w3-large">
+        Evaluadores</button>
 
-    <li class="w3-bar">
-      <span onclick="this.parentElement.style.display='none'" class="w3-bar-item w3-button w3-white w3-xlarge w3-right">×</span>
-      <img src="img_avatar6.png" class="w3-bar-item w3-circle w3-hide-small" style="width:85px">
-      <div class="w3-bar-item">
-        <span class="w3-large">Jane</span><br>
-        <span>Accountant</span>
->>>>>>> 50c34f377b1a80c9b7ae9df5c7607bb9469e7008
-      </div>
-        <div id="evaluadores" class="w3-container w3-half">
-      <p><h3>Evaluadores</h3></p>
-            <ul class="w3-ul w3-hoverable w3-border">
-  <li>Jill</li>
-  <li>Eve</li>
-  <li>Adam</li>
-</ul>
-  </div>
-  </div>
+    <div id="Demo2" class="w3-container w3-hide w3-pale-red w3-round w3-center">
+        <p><ul class="w3-ul w3-border-black">
+        <li class="w3-display-container">Evaluador 1 </li>
+        <li class="w3-display-container">Evaluador 2 </li>
+    </ul></p>
+    </div>
+    </div>
+
+    <!--Evaluaciones-->
+    <div class="w3-padding w3-round w3-quarter">
+    <button onclick="myFunction('Demo3')" class="w3-button w3-block w3-left-align w3-red w3-centered w3-center w3-round w3-large">
+        Evaluaciones</button>
+
+    <div id="Demo3" class="w3-container w3-hide w3-pale-red w3-round">
+        <p><ul class="w3-ul">
+        <li>Evaluación 1 (en curso)</li>
+        <li>Evaluación 2 </li>
+        <li>Evaluación 3</li>
+
+    </ul></p>
+    </div>
+    </div>
+
+    <!--Listado de alumnos-->
+    <div class="w3-padding w3-round w3-quarter">
+    <button onclick="myFunction('Demo4')" class="w3-button w3-block w3-left-align w3-red w3-centered w3-center w3-round w3-large">
+        Integrantes</button>
+
+    <div id="Demo4" class="w3-container w3-hide w3-pale-red w3-round">
+        <p><ul class="w3-ul">
+        <li><strong>Grupo 1</strong>
+        <ul class="w3-ul">
+            <li>Participante 1</li>
+            <li>Participante 2</li>
+            <li>Participante 3</li>
+            <li>Participante 4</li>
+
+        </ul></li>
+        <li><strong>Grupo 2</strong>
+        <ul class="w3-ul">
+            <li>Participante 1</li>
+            <li>Participante 2</li>
+            <li>Participante 3</li>
+            <li>Participante 4</li>
+
+        </ul></li>
+
+        <li><strong>Grupo 3</strong></li>
+
+    </ul></p>
+    </div>
+    </div>
 {% endblock %}
