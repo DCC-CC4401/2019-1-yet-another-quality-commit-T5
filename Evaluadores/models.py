@@ -25,10 +25,16 @@ class Evaluador(models.Model):
         return str(self.nombre + " " + self.apellido)
 
     def save(self, *args, **kwargs):
+        """
+        Guarda en la base de datos, y genera un Usuario con privilegios de Evaluador.
+        :param args:
+        :param kwargs:
+        :return:
+        """
         # Agrega el modelo a la base de datos
         super(Evaluador, self).save(*args, **kwargs)
 
-        # Genera un User
+        # Genera un User para cada evaluador
         user = str(self.nombre).lower() + "." + str(self.apellido).lower()
         password = User.objects.make_random_password()
         user = User.objects.create_user(username=user,
@@ -36,8 +42,17 @@ class Evaluador(models.Model):
                                         password=password)
         user.first_name = self.nombre
         user.last_name = self.apellido
-
+        # Agrega usuario al grupo Evaluadores
         evaluadores = Group.objects.get(name='Evaluadores')
         evaluadores.user_set.add(user)
-
+        # Guarda usuario
         user.save()
+
+    def update(self, *args, **kwargs):
+        """
+        Actualiza los datos del evaluador en la base de datos del modelo
+        :param args:
+        :param kwargs:
+        :return:
+        """
+        super(Evaluador, self).save(*args, **kwargs)
