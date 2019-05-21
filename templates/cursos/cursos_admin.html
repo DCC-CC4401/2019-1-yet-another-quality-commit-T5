@@ -52,7 +52,7 @@
             </script>
             <tbody id='cursos'>
             {% for curso in cursos_list %}
-            <tr class="w3-light-gray opcion" id="{{ curso.get_pk }}">
+            <tr class="w3-light-gray opcion clickable-row" id="{{ curso.get_pk }}">
                 <td class="w3-light-gray tabla-elemento" >{{curso}}</td>
                 <td class="w3-light-gray tabla-elemento">{{curso.get_date}}</td>
                 <td class="w3-small w3-light-gray tabla-elemento" style="border: 1px solid #ddd; border-collapse: collapse"> {{ curso.get_name }} </td>
@@ -60,6 +60,7 @@
                 <!-- Javascript scan for cursos with format {(codigo,seccion,nombre,semestre,año), ....}-->
                 <script>
                     cursoJs=[];
+                    cursoJs.push('{{curso.get_pk}}');
                     cursoJs.push('{{curso.get_code}}');
                     cursoJs.push('{{curso.get_section}}');
                     cursoJs.push('{{curso.get_name}}');
@@ -143,6 +144,7 @@
                     
                     document.getElementById('cursos').innerHTML=texto;
                 }
+
                 
             </script>
             
@@ -174,7 +176,6 @@
     <!--cierre de cajas de cursos-->
 </div>
 <!--cierre de contenido-->
-
 {% else %}
     <div>
         <a href="{% url 'login'%}?next={{request.path}}">Entra a tu cuenta.</a>
