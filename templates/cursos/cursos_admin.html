@@ -1,5 +1,6 @@
 <!--Cursos-->
 {% extends 'base.html' %}
+{% load evaluador_privileges %}
 {% block content %}
    <!-- Portada -->
   <div class="w3-container" id="portada" style="margin-top:80px; margin-bottom:10px">
@@ -52,7 +53,7 @@
             </script>
             <tbody id='cursos'>
             {% for curso in cursos_list %}
-            <tr class="w3-light-gray opcion clickable-row" id="{{ curso.get_pk }}">
+            <tr class="w3-light-gray {% if user|is_admin %}opcion{% endif %} clickable-row" id="{{ curso.get_pk }}">
                 <td class="w3-light-gray tabla-elemento" >{{curso}}</td>
                 <td class="w3-light-gray tabla-elemento">{{curso.get_date}}</td>
                 <td class="w3-small w3-light-gray tabla-elemento" style="border: 1px solid #ddd; border-collapse: collapse"> {{ curso.get_name }} </td>
@@ -75,7 +76,6 @@
             {% endfor %}
             </tbody>
            
-            
             
             <script>
                 function buscar(){
@@ -147,9 +147,11 @@
 
                 
             </script>
-            
+
         </table>
 </div>
+
+      {% if user|is_admin %}
     <!--Caja de agregar-->
 <div class="w3-margin-top w3-container w3-center">
     <button onclick="document.getElementById('agregar').style.display='block'" class="w3-col w3-round w3-button w3-red w3-right">
@@ -171,6 +173,7 @@
       </div>
     </div>
     </div>
+          {% endif %}
 
 
     <!--cierre de cajas de cursos-->

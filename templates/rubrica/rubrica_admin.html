@@ -1,5 +1,6 @@
 <!--Rubricas-->
 {% extends 'base.html' %}
+{% load evaluador_privileges %}
 {% block content %}
   <!-- Portada -->
   <div class="w3-container" id="portada" style="margin-top:80px; margin-bottom:10px">
@@ -8,12 +9,12 @@
   </div>
 
 {% if user.is_authenticated %}
+    {% if user|is_admin %}
    <div class="w3-margin-top w3-container w3-center">
     <button onclick="document.getElementById('agregar').style.display='block'" class="w3-col w3-round w3-button w3-red w3-right">
             <i class="fas fa-user-plus" style="text-align: center"></i>
             Agregar rúbrica</button>
     </div>
-
     <!-- Formulario de agregar -->
     <div id="agregar" class="w3-modal">
     <div class="w3-modal-content w3-card-4 w3-animate-zoom" style="max-width:600px">
@@ -29,6 +30,7 @@
       </div>
     </div>
     </div>
+    {% endif %}
 {% else %}
     <div class="w3-container">
         <a href="{% url 'login'%}?next={{request.path}}">Entra a tu cuenta.</a>

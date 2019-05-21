@@ -4,7 +4,8 @@ from django.contrib.auth.models import User
 #from django.views.generic.edit import UpdateView
 
 from .models import Evaluador
-from .forms import AddEvaluador
+from .models import Profesor
+from .forms import AddEvaluador, AddProfesor
 from .forms import UpdateEvaluador
 
 
@@ -76,3 +77,28 @@ def get_evaluador_profile(request):
         form = UpdateEvaluador({'ID': id, 'nombre': nombre, 'apellido': apellido, 'correo': correo})
         return render(request, 'evaluadores/profile.html', {'form': form})
     return HttpResponseRedirect('/accounts/login')
+
+
+def add_profesor(request):
+    if request.POST:
+        form = AddProfesor(request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect('evaluadores')
+        else:
+            form = AddProfesor()
+
+    return render(request, 'evaluadores/evaluadores_admin.html', {'form': form})
+
+
+def post_profesores(request):
+    addForm = AddProfesor()
+    profesores = Profesor.objects.all()
+    profesores_list = []
+
+    for profesor in profesores:
+        profesores_list.append(profesor)
+
+    #form = AddEvaluador()
+    #print(evaluadores_list)
+    return render(request, 'contacto.html', {'addForm': addForm, 'profesores_list': profesores_list})

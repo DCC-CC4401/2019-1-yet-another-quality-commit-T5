@@ -58,3 +58,20 @@ class Evaluador(models.Model):
         :return:
         """
         super(Evaluador, self).save(*args, **kwargs)
+
+
+class Profesor(Evaluador):
+    """
+    Crea un modelo Profesor, y lo guarda como usuario
+    """
+    def save(self, *args, **kwargs):
+        """
+        Guarda en la base de datos, y crea un Usuario con privilegios de Profesor.
+        :param args:
+        :param kwargs:
+        :return:
+        """
+        super(Profesor, self).save(*args, **kwargs)
+        profesores, created = Group.objects.get_or_create(name='Profesores')
+        user = User.objects.get(email=self.correo)
+        profesores.user_set.add(user)

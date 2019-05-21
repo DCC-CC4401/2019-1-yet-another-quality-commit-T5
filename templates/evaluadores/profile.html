@@ -7,8 +7,8 @@
         <h1 class="w3-xxxlarge w3-text-red"><b>Perfil</b></h1>
         <hr style="width:50px;border:5px solid red" class="w3-round">
         <p><h3>
-        {% if user|is_evaluador %} <b>Evaluador</b>
-        {% elif user|is_evaluador %} <b>Profesor</b>
+        {% if user|is_admin %} <b>Profesor</b>
+        {% elif user|is_evaluador %} <b>Evaluador</b>
         {% endif %}</h3>
     </div>
     <!-- Verifica autentificacion -->

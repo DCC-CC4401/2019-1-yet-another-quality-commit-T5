@@ -30,7 +30,7 @@
             </script>
             <tbody id='evaluadores'>
             {% for evaluador in evaluadores_list %}
-            <tr class='w3-light-gray opcion' id='{{evaluador.get_pk}}'>
+            <tr class='w3-light-gray {% if user|is_admin %}opcion{% endif %}' id='{{evaluador.get_pk}}'>
                 <td class='tabla-elemento w3-center'>{{evaluador.get_pk}} </td>
                 <td class='tabla-elemento'>{{evaluador}}</td>
                 <td class='tabla-elemento w3-small'> {{ evaluador.get_email }} </td>
@@ -41,22 +41,17 @@
                     evaluadorJs.push('{{evaluador.get_name}}');
                     evaluadorJs.push('{{evaluador.get_lastname}}');
                     evaluadorJs.push('{{evaluador.get_email}}');
-
                     evaluadoresJs.push(evaluadorJs);
                 </script>
             </tr>
             {% endfor %}
             </tbody>
-           
-            
-            
-
         </table>
     </div>
     
     
 
-    {% if not request.user|is_evaluador %}
+    {% if request.user|is_admin %}
     <div class="w3-margin-top w3-container w3-center">
     <button onclick="document.getElementById('agregar').style.display='block'" class="w3-col w3-round w3-button w3-red w3-right">
             <i class="fas fa-user-plus" style="text-align: center"></i>
@@ -74,7 +69,7 @@
                 <table class="w3-table">
                     {{ addForm.as_table }}
                 </table>
-            <button class="w3-button w3-block w3-red w3-section w3-padding" type="submit">Agregar</button>
+            <button class="w3-button w3-block w3-round w3-red w3-section w3-padding" type="submit">Agregar</button>
             </form>
       </div>
     </div>
@@ -94,13 +89,13 @@
                     {{ updateForm.as_table }}
                 </table>
 
-            <button class="w3-button w3-block w3-red w3-section w3-padding" type="submit">Guardar cambios</button>
+            <button class="w3-button w3-block w3-round w3-pink w3-section w3-padding" type="submit">Guardar cambios</button>
             </form>
 
             <form class="w3-container" action="{% url 'evaluadores:delete_evaluador' %}" method="post">
                 {% csrf_token %}
                 <input type='text' id='delete_id' name='ID' readonly style="display:none">
-                <button class="w3-button w3-red w3-margin-bottom" type="submit"><i class="fas fa-user-times"></i> Eliminar </button>
+                <button class="w3-button w3-block w3-round w3-red w3-margin-bottom" type="submit"><i class="fas fa-user-times"></i> Eliminar </button>
             </form>
       </div>
     </div>
@@ -108,7 +103,7 @@
     <!-- Cierre de formulario de modificar o eliminar -->
 
 
-{% if not request.user|is_evaluador %}
+{% if request.user|is_admin %}
 <script>
 
 function buscarEvaluador(){
@@ -124,10 +119,8 @@ function buscarEvaluador(){
             if(palabras[i].toLowerCase()==busqueda.toLowerCase()){
                 return true;
             }
-
         }
         return false;
-        
     });
     for(i=0;i<evaluadoresJs.length;i++){
         document.getElementById(evaluadoresJs[i][0]).style.display='none';

@@ -37,3 +37,11 @@ class UpdateEvaluador(forms.ModelForm):
         user.last_name = evaluador.apellido
         user.email = evaluador.correo
         user.save()
+
+
+class AddProfesor(forms.ModelForm):
+    class Meta:
+        model = Profesor
+        fields = '__all__'
+
+

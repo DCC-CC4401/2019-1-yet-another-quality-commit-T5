@@ -37,7 +37,7 @@
           <a href="/evaluadores" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">Evaluadores</a>
           <a href="/rubricas" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">Rúbricas</a>
           <a href="/evaluaciones" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">Evaluaciones</a>
-          <a href="/#contact" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">Contacto</a>
+          <a href="{% url 'evaluadores:profesores' %}" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">Contacto</a>
           <h5 class="w3-small w3-center w3-bar-item w3-hover-white"><a href="{% url 'logout'%}?next={{request.path}}">
               <i class="fas fa-sign-out-alt"></i>
               Cerrar sesión</a></h5>
