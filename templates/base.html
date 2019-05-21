@@ -20,9 +20,10 @@
       <p class="w3-center"><img src="{% static 'images/avatar.png'%}" class="w3-circle" style="height:200px;width:200px" alt="Avatar"></p>
       {% if user.is_authenticated %}
         <h3 class="w3-center"><b>
+            <a href="{% url 'evaluadores:profile' %}" class="w3-button w3-bar-item w3-hover-white" style="text-decoration: None">
             {{ user.first_name }}
             <br>
-            {{ user.last_name }}</b>
+            {{ user.last_name }}</a></b>
         </h3>
       {% else %}
           <h3 class="w3-center w3-hover-white"><a href="{% url 'login'%}?next={{request.path}}">

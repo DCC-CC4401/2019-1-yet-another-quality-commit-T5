@@ -13,3 +13,13 @@ def is_evaluador(user):
     :return:
     """
     return user.groups.filter(name='Evaluadores').exists()
+
+
+@register.filter(name='is_admin')
+def is_admin(user):
+    """
+    Devuelve True si corresponde a un Usuario con privilegios de Administrador
+    :param user:
+    :return:
+    """
+    return user.groups.filter(name='Profesores').exists()
