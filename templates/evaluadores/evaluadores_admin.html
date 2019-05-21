@@ -89,7 +89,7 @@
                     {{ updateForm.as_table }}
                 </table>
 
-            <button class="w3-button w3-block w3-round w3-pink w3-section w3-padding" type="submit">Guardar cambios</button>
+            <button class="w3-button w3-block w3-round w3-red w3-section w3-padding w3-hover-light-green" type="submit">Guardar cambios</button>
             </form>
 
             <form class="w3-container" action="{% url 'evaluadores:delete_evaluador' %}" method="post">
@@ -103,7 +103,7 @@
     <!-- Cierre de formulario de modificar o eliminar -->
 
 
-{% if request.user|is_admin %}
+
 <script>
 
 function buscarEvaluador(){
@@ -130,6 +130,15 @@ function buscarEvaluador(){
         document.getElementById(filtered[i][0]).style.display='';
     }
 }
+
+//prepare document for buscar
+document.getElementById('buscar').addEventListener('keydown',event=>{
+    if(event.key=='Enter'){
+        buscarEvaluador();
+    }
+});
+
+{% if request.user|is_admin %}
 function showEditar(id){
     console.log(id);
     return ()=>{
@@ -147,12 +156,7 @@ function showEditar(id){
     };
 }
 
-//prepare document for buscar
-document.getElementById('buscar').addEventListener('keydown',event=>{
-    if(event.key=='Enter'){
-        buscarEvaluador();
-    }
-});
+
 
 //prepare document for editar evaluador
 let idPrepare="";
@@ -160,8 +164,9 @@ for(let i=0;i<evaluadoresJs.length; i++){
     idPrepare=evaluadoresJs[i][0];
     document.getElementById(idPrepare).addEventListener("click",showEditar(idPrepare));
 }
-</script>
 {% endif %}
+</script>
+
 {% else %}
     <div class="w3-container">
         <a href="{% url 'login'%}?next={{request.path}}">Entra a tu cuenta.</a>
