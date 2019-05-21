@@ -9,7 +9,7 @@ from Evaluadores.models import Evaluador
 class Evaluacion(models.Model):
     tiempo_min = models.PositiveSmallIntegerField(default=5)
     tiempo_max = models.PositiveSmallIntegerField(default=8)
-    #rubrica = models.ForeignKey(Rubrica, on_delete=models.CASCADE)
+    #rubrica = models.ForeignKey(Rubrica, on_delete=models.CASCADE, default=Rubrica(name="NuevaRubrica").save())
     fecha_inicio = models.DateField(default=timezone.now)
     fecha_fin = models.DateField(default=timezone.now)
     curso = models.ForeignKey(Curso, on_delete=models.CASCADE)
