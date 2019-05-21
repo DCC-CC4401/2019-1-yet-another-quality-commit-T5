@@ -5,7 +5,7 @@
     <h1 class="w3-xxxlarge w3-text-red"><b>Cursos</b></h1>
     <hr style="width:50px;border:5px solid red" class="w3-round">
   </div>
-    <p><h3>Nombre del curso</h3></p>
+    <p><h3>{{ curso.nombre}}</h3></p>
     <!-- Informacion sobre el curso -->
     <div class="w3-round w3-quarter w3-padding">
     <button onclick="myFunction('Demo1')" class="w3-button w3-block w3-left-align w3-red w3-centered w3-center w3-round w3-large">
@@ -13,10 +13,9 @@
 
     <div id="Demo1" class="w3-container w3-hide w3-pale-red w3-round">
         <p><ul class="w3-ul w3-light-gray w3-round">
-        <li>Código:</li>
-        <li>Semestre:</li>
-        <li>Año:</li>
-        <li>Docente(s):</li>
+        <li>Código: {{ curso.get_code }}</li>
+        <li>Semestre:{{ curso.semestre }}</li>
+        <li>Año:{{ curso.año }}</li>
     </ul></p>
     </div>
         </div>

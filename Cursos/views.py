@@ -39,5 +39,6 @@ def all_cursos(request):
 
     return render(request, 'cursos/cursos_admin.html', {'cursos': cursos_list, 'form':form})
 
-def curso_detalle(request):
-    return render(request, 'cursos/curso_detalle.html')
+def curso_detalle(request, pk):
+    curso_id=Curso.objects.get(pk=pk)
+    return render(request, 'cursos/curso_detalle.html',context={'curso':curso_id})

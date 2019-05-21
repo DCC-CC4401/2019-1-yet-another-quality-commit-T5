@@ -52,7 +52,7 @@
             </script>
             <tbody id='cursos'>
             {% for curso in cursos_list %}
-            <tr>
+            <tr class="w3-light-gray opcion" id="{{ curso.get_pk }}">
                 <td class="w3-light-gray tabla-elemento" >{{curso}}</td>
                 <td class="w3-light-gray tabla-elemento">{{curso.get_date}}</td>
                 <td class="w3-small w3-light-gray tabla-elemento" style="border: 1px solid #ddd; border-collapse: collapse"> {{ curso.get_name }} </td>
@@ -169,6 +169,8 @@
       </div>
     </div>
     </div>
+
+
     <!--cierre de cajas de cursos-->
 </div>
 <!--cierre de contenido-->
