@@ -47,6 +47,7 @@ def update_evaluador(request):
 
     return render(request, 'evaluadores/evaluadores_admin.html', {'addForm': addForm, 'updateForm': form})
 
+
 def delete_evaluador(request):
     if request.POST:
         addForm = AddEvaluador()
@@ -60,6 +61,18 @@ def delete_evaluador(request):
             return HttpResponseRedirect('evaluadores')
     return render(request, 'evaluadores/evaluadores_admin.html', {'addForm': addForm, 'updateForm': updateForm})
 
+
 def get_evaluador_profile(request):
-    form = UpdateEvaluador()
-    return render(request, 'evaluadores/profile.html', {'form' : form})
+    """
+    Recupera la informacion del Evaluador, y le permite modificador
+    :param request:
+    :return:
+    """
+    if request.user.is_authenticated:
+        nombre = request.user.first_name
+        apellido = request.user.last_name
+        correo = request.user.email
+        id = Evaluador.objects.get(correo=correo).id
+        form = UpdateEvaluador({'ID': id, 'nombre': nombre, 'apellido': apellido, 'correo': correo})
+        return render(request, 'evaluadores/profile.html', {'form': form})
+    return HttpResponseRedirect('/accounts/login')
