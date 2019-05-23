@@ -42,7 +42,7 @@ def add_evaluador(request):
     :param request: request
     :return:
     """
-    if request.POST and request.user.groups.filter(name='Profesores').exists():
+    if request.POST and (request.user.groups.filter(name='Profesores').exists() or request.user.is_superuser):
         addForm = AddEvaluador(request.POST)
         if addForm.is_valid():
             addForm.save()
@@ -61,7 +61,7 @@ def update_evaluador(request):
     :param request:
     :return:
     """
-    if request.POST and request.user.groups.filter(name='Profesores').exists():
+    if request.POST and (request.user.groups.filter(name='Profesores').exists() or request.user.is_superuser):
         addForm = AddEvaluador()
         form = UpdateEvaluador(request.POST)
         if form.is_valid():
@@ -80,7 +80,7 @@ def delete_evaluador(request):
     :param request:
     :return:
     """
-    if request.POST and request.user.groups.filter(name='Profesores').exists():
+    if request.POST and (request.user.groups.filter(name='Profesores').exists() or request.user.is_superuser):
         addForm = AddEvaluador()
         updateForm = UpdateEvaluador()
         id = int(request.POST['ID'])
@@ -117,15 +117,15 @@ def add_profesor(request):
     :param request:
     :return:
     """
-    if request.POST and request.user.groups.filter(name='Profesores').exists():
+    if request.POST and (request.user.groups.filter(name='Profesores').exists() or request.user.is_superuser):
         form = AddProfesor(request.POST)
         if form.is_valid():
             form.save()
             return HttpResponseRedirect('evaluadores')
         else:
             form = AddProfesor()
-
-    return render(request, 'evaluadores/evaluadores_admin.html', {'form': form})
+            return render(request, 'evaluadores/evaluadores_admin.html', {'form': form})
+    return post_profesores(request)
 
 
 @login_required
