@@ -6,7 +6,13 @@
     <div class="w3-container" id="portada" style="margin-top:80px; margin-bottom:10px">
         <h1 class="w3-xxxlarge w3-text-red"><b>Evaluadores</b></h1>
         <hr style="width:50px;border:5px solid red" class="w3-round">
-        <p><h3>Seleccione un evaluador</h3>
+        <!-- Display de mensajes exitoso o erroneo-->
+        {% if messages %}
+            {% for message in messages %}
+            <p {% if message.tags %} class='{{ message.tags }}' {% endif %}>{{ message }}</p>
+            {% endfor %}
+        {% endif %}
+        <p><h3>Seleccione un evaluador</h3></p>
     </div>
 
 {% if user.is_authenticated %}

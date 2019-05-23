@@ -1,7 +1,7 @@
 from django.db import models
 
 class Rubrica(models.Model):
-    name = models.CharField(max_length=50)
+    nombre = models.CharField(max_length=50)
     descripcion = models.CharField(default="", max_length=50)
 
 

@@ -6,9 +6,53 @@
   <div class="w3-container" id="portada" style="margin-top:80px; margin-bottom:10px">
     <h1 class="w3-xxxlarge w3-text-red"><b>Rúbricas</b></h1>
     <hr style="width:50px;border:5px solid red" class="w3-round">
+    {% if messages %}
+            {% for message in messages %}
+            <p {% if message.tags %} class='{{ message.tags }}' {% endif %}>{{ message }}</p>
+            {% endfor %}
+        {% endif %}
   </div>
 
 {% if user.is_authenticated %}
+    <!-- Listado de rubricas-->
+    <div class="w3-margin-top w3-container w3-center">
+        <table class="w3-table w3-card-4 w3-bordered w3-border-black">
+            <thead>
+                <tr>
+                    <th class="w3-center w3-red tabla-elemento"> ID </th>
+                    <th class="w3-red tabla-elemento"> Nombre </th>
+                    <th class="w3-red tabla-elemento"> Descripción </th>
+                </tr>
+            </thead>
+            <script>
+                var rubricasJs= new Array();
+                var rubricaJs= new Array();
+            </script>
+            <tbody id='rubricas'>
+            {% for rubrica in rubricas_list %}
+            <tr class='w3-light-gray opcion' id='{{rubrica.pk}}'>
+                <td class='tabla-elemento w3-center'>{{rubrica.pk}} </td>
+                <td class='tabla-elemento'>{{rubrica.nombre}}</td>
+                <td class='tabla-elemento w3-small'> {{ rubrica.descripcion }} </td>
+                <!-- Javascript scan for evaluadores with format {(name,lastname,email),(name,lastname,email)...}-->
+                <script>
+                    evaluadorJs=[];
+                    rubricaJs.push('{{rubrica.pk}}');
+                    rubricaJs.push('{{rubrica.nombre}}');
+                    rubricaJs.push('{{rubrica.descripcion}}');
+                    
+                    rubricasJs.push(evaluadorJs);
+                </script>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Fin listado de rubricas -->
+
+
+   
     {% if user|is_admin %}
    <div class="w3-margin-top w3-container w3-center">
     <button onclick="document.getElementById('agregar').style.display='block'" class="w3-col w3-round w3-button w3-red w3-right">
@@ -23,7 +67,7 @@
             <form class="w3-container" action="{% url 'rubricas:add_rubrica' %}" method="post">
                 {% csrf_token %}
                 <table class="w3-table">
-                    {{ form.as_table }}
+                    {{ addForm.as_table }}
                 </table>
             <button class="w3-button w3-block w3-red w3-section w3-padding" type="submit">Agregar</button>
             </form>

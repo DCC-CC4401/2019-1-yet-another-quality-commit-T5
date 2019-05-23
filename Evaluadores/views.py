@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.contrib.auth.models import User
+from django.contrib import messages
 #from django.views.generic.edit import UpdateView
 
 from .models import Evaluador
@@ -25,12 +26,23 @@ def post_evaluadores(request):
 
 def add_evaluador(request):
     if request.POST:
+        #verificar si ya existe usuario
+        usuarios=Evaluador.objects.filter(correo=request.POST['correo'])
+        if usuarios.count() > 0:
+            ##caso en que existe mas de un usuario con el mismo email
+            messages.warning(request, 'El email ya está en uso')
+            return HttpResponseRedirect('evaluadores')
+
         form = AddEvaluador(request.POST)
         if form.is_valid():
             form.save()
+            ##caso exitoso
+            messages.success(request, 'Evaluador agregado correctamente')
             return HttpResponseRedirect('evaluadores')
         else:
             form = AddEvaluador()
+        
+            
 
     return render(request, 'evaluadores/evaluadores_admin.html', {'form': form})
 
@@ -81,9 +93,19 @@ def get_evaluador_profile(request):
 
 def add_profesor(request):
     if request.POST:
+
+        #verificar si ya existe usuario
+        usuarios=Evaluador.objects.filter(correo=request.POST['correo'])
+        if usuarios.count() > 0:
+            ##caso en que existe mas de un usuario con el mismo email
+            messages.warning(request, 'El email ya está en uso')
+            return HttpResponseRedirect('evaluadores')
+
         form = AddProfesor(request.POST)
         if form.is_valid():
             form.save()
+            ##caso exitoso
+            messages.success(request, 'Evaluador agregado correctamente')
             return HttpResponseRedirect('evaluadores')
         else:
             form = AddProfesor()
