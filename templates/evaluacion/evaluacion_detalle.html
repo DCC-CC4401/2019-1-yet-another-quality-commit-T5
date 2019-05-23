@@ -1,0 +1,28 @@
+{% extends 'evaluacion/evaluacion_admin.html' %}
+{% block content %}
+   <!-- Portada -->
+  <div class="w3-container" id="portada" style="margin-top:80px; margin-bottom:10px">
+    <h1 class="w3-xxxlarge w3-text-red"><b>Evaluaciones</b></h1>
+    <hr style="width:50px;border:5px solid red" class="w3-round">
+  </div>
+    <p><h3>{{ evaluacion }}</h3></p>
+
+    <!-- Información sobre la evaluación -->
+
+    <div class="w3-round w3-quarter w3-padding">
+    <button onclick="myFunction('Demo1')" class="w3-button w3-block w3-red w3-section w3-padding">
+        Información de la evaluación</button>
+
+    <div id="Demo1" class="w3-container w3-hide w3-pale-red w3-round">
+        <p><ul class="w3-ul w3-light-gray w3-round w3-center">
+        <li>Nombre: {{ evaluacion }}</li>
+        <li>Curso asociado:   {{ evaluacion.get_course }}</li>
+        <li>Estado:    {{ evaluacion.get_state }}</li>
+        <li>Fecha inicio:    {{ evaluacion.get_startdate }}</li>
+        <li>Fecha fin:    {{ evaluacion.get_enddate }}</li>
+        <li>Duración esperada:    {{ evaluacion.get_rank }}</li>
+    </ul></p>
+    </div>
+        </div>
+
+{% endblock %}

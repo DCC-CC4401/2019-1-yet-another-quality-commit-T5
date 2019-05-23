@@ -19,6 +19,9 @@ class Evaluacion(models.Model):
     def __str__(self):
         return self.nombre
 
+    def get_pk(self):
+        return str(self.pk)
+
     def get_rank(self):
         return str(self.tiempo_min) + "-" + str(self.tiempo_max) + " min"
 

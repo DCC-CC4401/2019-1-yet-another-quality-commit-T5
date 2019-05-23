@@ -45,7 +45,7 @@
                 <td class="w3-light-gray tabla-elemento"> {{ evaluacion.get_enddate }} </td>
                 <td class="w3-light-gray tabla-elemento"> {{ evaluacion.get_rank }} </td>
 
-                <!-- Javascript scan for cursos with format {(codigo,seccion,nombre,semestre,año), ....}-->
+                <!-- Javascript scan for evaluaciones with format {(nombre, curso, rango, fecha_inicio, fecha_fin, estado), ....}-->
                 <script>
                     evaluacionJs=[];
                     evaluacionJs.push('{{ evaluacion }}');
