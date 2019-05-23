@@ -1,11 +1,12 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="w3-container" id="portada" style="margin-top:80px; margin-bottom:10px">
+    <div class="w3-container" id="portada" style="margin-top:80px; margin-bottom:10px">
         <h1 class="w3-xxxlarge w3-text-red"><b>Acceso</b></h1>
         <hr style="width:50px;border:5px solid red" class="w3-round">
-        <p class="w3-col"><h3>Vuelve pronto</h3>
-        <p><a href="{% url 'login'%}">¿Acceder otra vez?</a>
-</div>
+        <p class="w3-col">
+        <h3>Vuelve pronto</h3>
+        <p><a href="{% url 'login' %}">¿Acceder otra vez?</a>
+    </div>
 
 {% endblock %}

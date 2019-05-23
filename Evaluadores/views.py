@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.contrib.auth.models import User
@@ -9,35 +10,58 @@ from .forms import AddEvaluador, AddProfesor
 from .forms import UpdateEvaluador
 
 
+@login_required
 def post_evaluadores(request):
-    updateForm = UpdateEvaluador()
-    addForm = AddEvaluador()
+    """
+    Vista del panel de evaluadores, permite su modificacion por parte de usuarios con privilegios
+    :param request:
+    :return:
+    """
+    # lista de evaluadores
     evaluadores = Evaluador.objects.all()
     evaluadores_list = []
 
     for evaluador in evaluadores:
         evaluadores_list.append(evaluador)
 
-    #form = AddEvaluador()
-    #print(evaluadores_list)
-    return render(request, 'evaluadores/evaluadores_admin.html', {'updateForm': updateForm ,'addForm': addForm, 'evaluadores_list': evaluadores_list})
+    # si el usuario es un profesor, cargar formularios de adicion y edicion de evaluadores
+    if request.user.groups.filter(name='Profesores').exists():
+        updateForm = UpdateEvaluador()
+        addForm = AddEvaluador()
+        # devolver la lista de evaluadores y los formularios
+        return render(request, 'evaluadores/evaluadores_admin.html', {'updateForm': updateForm ,'addForm': addForm, 'evaluadores_list': evaluadores_list})
+    # devolver la lista de evaluadores
+    return render(request, 'evaluadores/evaluadores_admin.html', {'evaluadores_list': evaluadores_list})
 
 
+@login_required
 def add_evaluador(request):
-    if request.POST:
-        form = AddEvaluador(request.POST)
-        if form.is_valid():
-            form.save()
+    """
+    Agrega un evaluador, en caso de que la request sea de un Profesor.
+    Caso contrario, redirige a la vista de evaluaciones.
+    :param request: request
+    :return:
+    """
+    if request.POST and request.user.groups.filter(name='Profesores').exists():
+        addForm = AddEvaluador(request.POST)
+        if addForm.is_valid():
+            addForm.save()
             return HttpResponseRedirect('evaluadores')
         else:
-            form = AddEvaluador()
+            addForm = AddEvaluador()
+            return render(request, 'evaluadores/evaluadores_admin.html', {'addForm': addForm})
 
-    return render(request, 'evaluadores/evaluadores_admin.html', {'form': form})
+    return post_evaluadores(request)
 
 
-
+@login_required
 def update_evaluador(request):
-    if request.POST:
+    """
+    Actualiza los datos de un Evaluador, en caso de que la request sea de un Profesor.
+    :param request:
+    :return:
+    """
+    if request.POST and request.user.groups.filter(name='Profesores').exists():
         addForm = AddEvaluador()
         form = UpdateEvaluador(request.POST)
         if form.is_valid():
@@ -49,8 +73,14 @@ def update_evaluador(request):
     return render(request, 'evaluadores/evaluadores_admin.html', {'addForm': addForm, 'updateForm': form})
 
 
+@login_required
 def delete_evaluador(request):
-    if request.POST:
+    """
+    Elimina a un Evaluador.
+    :param request:
+    :return:
+    """
+    if request.POST and request.user.groups.filter(name='Profesores').exists():
         addForm = AddEvaluador()
         updateForm = UpdateEvaluador()
         id = int(request.POST['ID'])
@@ -63,6 +93,7 @@ def delete_evaluador(request):
     return render(request, 'evaluadores/evaluadores_admin.html', {'addForm': addForm, 'updateForm': updateForm})
 
 
+@login_required
 def get_evaluador_profile(request):
     """
     Recupera la informacion del Evaluador, y le permite modificador
@@ -79,8 +110,14 @@ def get_evaluador_profile(request):
     return HttpResponseRedirect('/accounts/login')
 
 
+@login_required
 def add_profesor(request):
-    if request.POST:
+    """
+    Agrega un Profesor, en caso de que el usuario de la request sea un Profesor.
+    :param request:
+    :return:
+    """
+    if request.POST and request.user.groups.filter(name='Profesores').exists():
         form = AddProfesor(request.POST)
         if form.is_valid():
             form.save()
@@ -91,7 +128,14 @@ def add_profesor(request):
     return render(request, 'evaluadores/evaluadores_admin.html', {'form': form})
 
 
+@login_required
 def post_profesores(request):
+    """
+    Despliega los profesores registrados en la plataforma.
+    Requiere de un usuario loggeado.
+    :param request:
+    :return:
+    """
     addForm = AddProfesor()
     profesores = Profesor.objects.all()
     profesores_list = []

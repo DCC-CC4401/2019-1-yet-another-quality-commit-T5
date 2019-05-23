@@ -1,80 +1,98 @@
 {% extends 'cursos/cursos_admin.html' %}
 {% block content %}
-   <!-- Portada -->
-  <div class="w3-container" id="portada" style="margin-top:80px; margin-bottom:10px">
-    <h1 class="w3-xxxlarge w3-text-red"><b>Cursos</b></h1>
-    <hr style="width:50px;border:5px solid red" class="w3-round">
-  </div>
-    <p><h3>{{ curso.nombre}}</h3></p>
+    <!-- Portada -->
+    <div class="w3-container" id="portada" style="margin-top:80px; margin-bottom:10px">
+        <h1 class="w3-xxxlarge w3-text-red"><b>Cursos</b></h1>
+        <hr style="width:50px;border:5px solid red" class="w3-round">
+    </div>
+    <p><h3>{{ curso.nombre }}</h3></p>
     <!-- Informacion sobre el curso -->
     <div class="w3-round w3-quarter w3-padding">
-    <button onclick="myFunction('Demo1')" class="w3-button w3-block w3-left-align w3-red w3-centered w3-center w3-round w3-large">
-        Información del curso</button>
+        <button onclick="myFunction('Demo1')"
+                class="w3-button w3-block w3-left-align w3-red w3-centered w3-center w3-round w3-large">
+            Información del curso
+        </button>
 
-    <div id="Demo1" class="w3-container w3-hide w3-pale-red w3-round">
-        <p><ul class="w3-ul w3-light-gray w3-round w3-center">
-        <li>Código: {{ curso.get_code }}</li>
-        <li>Semestre:   {{ curso.semestre }}</li>
-        <li>Año:    {{ curso.año }}</li>
-    </ul></p>
-    </div>
+        <div id="Demo1" class="w3-container w3-hide w3-pale-red w3-round">
+            <p>
+            <ul class="w3-ul w3-light-gray w3-round w3-center">
+                <li>Código: {{ curso.get_code }}</li>
+                <li>Semestre: {{ curso.semestre }}</li>
+                <li>Año: {{ curso.año }}</li>
+            </ul>
+            </p>
         </div>
+    </div>
 
     <!-- Evaluadores-->
     <div class="w3-round w3-quarter w3-padding">
-    <button onclick="myFunction('Demo2')" class="w3-button w3-block w3-left-align w3-red w3-centered w3-center w3-round w3-large">
-        Evaluadores</button>
+        <button onclick="myFunction('Demo2')"
+                class="w3-button w3-block w3-left-align w3-red w3-centered w3-center w3-round w3-large">
+            Evaluadores
+        </button>
 
-    <div id="Demo2" class="w3-container w3-hide w3-pale-red w3-round w3-center">
-        <p><ul class="w3-ul w3-border-black">
-        <li class="w3-display-container">Evaluador 1 </li>
-        <li class="w3-display-container">Evaluador 2 </li>
-    </ul></p>
-    </div>
+        <div id="Demo2" class="w3-container w3-hide w3-pale-red w3-round w3-center">
+            <p>
+            <ul class="w3-ul w3-border-black">
+                <li class="w3-display-container">Evaluador 1</li>
+                <li class="w3-display-container">Evaluador 2</li>
+            </ul>
+            </p>
+        </div>
     </div>
 
     <!--Evaluaciones-->
     <div class="w3-padding w3-round w3-quarter">
-    <button onclick="myFunction('Demo3')" class="w3-button w3-block w3-left-align w3-red w3-centered w3-center w3-round w3-large">
-        Evaluaciones</button>
+        <button onclick="myFunction('Demo3')"
+                class="w3-button w3-block w3-left-align w3-red w3-centered w3-center w3-round w3-large">
+            Evaluaciones
+        </button>
 
-    <div id="Demo3" class="w3-container w3-hide w3-pale-red w3-round">
-        <p><ul class="w3-ul">
-        <li>Evaluación 1 (en curso)</li>
-        <li>Evaluación 2 </li>
-        <li>Evaluación 3</li>
+        <div id="Demo3" class="w3-container w3-hide w3-pale-red w3-round">
+            <p>
+            <ul class="w3-ul">
+                <li>Evaluación 1 (en curso)</li>
+                <li>Evaluación 2</li>
+                <li>Evaluación 3</li>
 
-    </ul></p>
-    </div>
+            </ul>
+            </p>
+        </div>
     </div>
 
     <!--Listado de alumnos-->
     <div class="w3-padding w3-round w3-quarter">
-    <button onclick="myFunction('Demo4')" class="w3-button w3-block w3-left-align w3-red w3-centered w3-center w3-round w3-large">
-        Integrantes</button>
+        <button onclick="myFunction('Demo4')"
+                class="w3-button w3-block w3-left-align w3-red w3-centered w3-center w3-round w3-large">
+            Integrantes
+        </button>
 
-    <div id="Demo4" class="w3-container w3-hide w3-pale-red w3-round">
-        <p><ul class="w3-ul">
-        <li><strong>Grupo 1</strong>
-        <ul class="w3-ul">
-            <li>Participante 1</li>
-            <li>Participante 2</li>
-            <li>Participante 3</li>
-            <li>Participante 4</li>
+        <div id="Demo4" class="w3-container w3-hide w3-pale-red w3-round">
+            <p>
+            <ul class="w3-ul">
+                <li><strong>Grupo 1</strong>
+                    <ul class="w3-ul">
+                        <li>Participante 1</li>
+                        <li>Participante 2</li>
+                        <li>Participante 3</li>
+                        <li>Participante 4</li>
 
-        </ul></li>
-        <li><strong>Grupo 2</strong>
-        <ul class="w3-ul">
-            <li>Participante 1</li>
-            <li>Participante 2</li>
-            <li>Participante 3</li>
-            <li>Participante 4</li>
+                    </ul>
+                </li>
+                <li><strong>Grupo 2</strong>
+                    <ul class="w3-ul">
+                        <li>Participante 1</li>
+                        <li>Participante 2</li>
+                        <li>Participante 3</li>
+                        <li>Participante 4</li>
 
-        </ul></li>
+                    </ul>
+                </li>
 
-        <li><strong>Grupo 3</strong></li>
+                <li><strong>Grupo 3</strong></li>
 
-    </ul></p>
-    </div>
+            </ul>
+            </p>
+        </div>
     </div>
 {% endblock %}

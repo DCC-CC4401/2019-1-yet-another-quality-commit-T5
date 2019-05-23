@@ -7,6 +7,10 @@ class Curso(models.Model):
     año = models.PositiveSmallIntegerField()
     semestre = models.CharField(max_length=9) #Otoño o Primavera
 
+    class Meta:
+        unique_together = ('nombre', 'código', 'sección', 'año', 'semestre')
+
+
     def get_pk(self):
         return str(self.pk)
 

@@ -1,23 +1,27 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
-#from django.views.generic.edit import UpdateView
+# from django.views.generic.edit import UpdateView
 
 from .forms import AddCurso
 from .models import Curso
 
+
+@login_required
 def post_cursos(request):
     form = AddCurso()
     cursos = Curso.objects.all()
-    cursos_list=[]
+    cursos_list = []
 
     for curso in cursos:
         cursos_list.append(curso)
 
-    return render(request,'cursos/cursos_admin.html', {'form': form, 'cursos_list': cursos_list})
+    return render(request, 'cursos/cursos_admin.html', {'form': form, 'cursos_list': cursos_list})
 
+
+@login_required
 def add_curso(request):
-    if request.POST:
+    if request.POST and request.user.groups.filter(name='Profesores').exists():
         form = AddCurso(request.POST)
         if form.is_valid():
             form.save()
@@ -25,9 +29,10 @@ def add_curso(request):
         else:
             form = AddCurso()
 
-    
-    return render(request, 'cursos/cursos_admin.html', {'form': form})
+    return post_cursos(request)
 
+
+@login_required
 def all_cursos(request):
     cursos = Curso.objects.all()
     cursos_list = []
@@ -37,8 +42,10 @@ def all_cursos(request):
 
     form = AddCurso()
 
-    return render(request, 'cursos/cursos_admin.html', {'cursos': cursos_list, 'form':form})
+    return render(request, 'cursos/cursos_admin.html', {'cursos': cursos_list, 'form': form})
 
+
+@login_required
 def curso_detalle(request, pk):
-    curso_id=Curso.objects.get(pk=pk)
-    return render(request, 'cursos/curso_detalle.html',context={'curso':curso_id})
+    curso_id = Curso.objects.get(pk=pk)
+    return render(request, 'cursos/curso_detalle.html', context={'curso': curso_id})
