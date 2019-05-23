@@ -39,3 +39,7 @@ def all_evaluaciones(request):
     form = AddEvaluacion()
 
     return render(request, 'evaluacion/evaluacion_admin.html', {'evaluacion': evaluacion_list, 'form':form})
+
+def evaluacion_detalle(request, pk):
+    evaluacion_id=Evaluacion.objects.get(pk=pk)
+    return render(request, 'evaluacion/evaluacion_detalle.html', context={'evaluacion':evaluacion_id})
