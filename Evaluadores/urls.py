@@ -8,5 +8,5 @@ urlpatterns = [
     path('add_profesor', views.add_profesor, name='add_profesor'),
     path('update_evaluador', views.update_evaluador, name='update_evaluador'),
     path('delete_evaluador', views.delete_evaluador, name='delete_evaluador'),
-    path('profile', views.get_evaluador_profile, name='profile'),
+    path('accounts', views.get_evaluador_profile, name='profile'),
 ]

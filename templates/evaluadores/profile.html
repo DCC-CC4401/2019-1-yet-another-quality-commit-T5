@@ -13,9 +13,10 @@
             {% endif %}</h3>
     </div>
     <!-- Verifica autentificacion -->
-    {% if user.is_authenticated %}
+    {% if user.is_authenticated %} <!-- Deprecated, but... -->
         <div class="w3-container">
             <!-- Modificacion de datos de usuario -->
+            <h3>Modifica tus datos personales:</h3>
             <form action="{% url 'evaluadores:update_evaluador' %}" method="post">
                 {% csrf_token %}
                 <table class="w3-table">
@@ -23,6 +24,9 @@
                 </table>
                 <button class="w3-button w3-red w3-round w3-col w3-margin-top" type="submit">Confirmar cambios</button>
             </form>
+        </div>
+        <div class="w3-container w3-margin-top">
+            Para cambiar tu contraseña, click <a href="{% url 'password_change' %}">aqui</a>.
         </div>
     {% else %}
         <div class="w3-container">

@@ -66,6 +66,18 @@ def all_evaluaciones(request):
 
     return render(request, 'evaluacion/evaluacion_admin.html', {'evaluacion': evaluacion_list, 'form':form})
 
+
+@login_required
 def evaluacion_detalle(request, pk):
     evaluacion_id=Evaluacion.objects.get(pk=pk)
     return render(request, 'evaluacion/evaluacion_detalle.html', context={'evaluacion':evaluacion_id})
+
+
+@login_required
+def delete_evaluacion(request):
+    if request.POST:
+        id = int(request.POST('id'))
+        deleted = Evaluacion.objects.get(pk=id).delete()
+        if deleted is not None:
+            return HttpResponseRedirect('evaluacion')
+    return post_evaluacion(request)

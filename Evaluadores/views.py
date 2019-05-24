@@ -2,6 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.contrib.auth.models import User
+from django.contrib.auth.forms import PasswordChangeForm
 #from django.views.generic.edit import UpdateView
 
 from .models import Evaluador
@@ -42,7 +43,7 @@ def add_evaluador(request):
     :param request: request
     :return:
     """
-    if request.POST and (request.user.groups.filter(name='Profesores').exists() or request.user.is_superuser):
+    if request.POST and request.user.groups.filter(name='Profesores').exists():
         addForm = AddEvaluador(request.POST)
         if addForm.is_valid():
             addForm.save()
@@ -61,7 +62,7 @@ def update_evaluador(request):
     :param request:
     :return:
     """
-    if request.POST and (request.user.groups.filter(name='Profesores').exists() or request.user.is_superuser):
+    if request.POST and request.user.groups.filter(name='Profesores').exists():
         addForm = AddEvaluador()
         form = UpdateEvaluador(request.POST)
         if form.is_valid():
@@ -80,7 +81,7 @@ def delete_evaluador(request):
     :param request:
     :return:
     """
-    if request.POST and (request.user.groups.filter(name='Profesores').exists() or request.user.is_superuser):
+    if request.POST and request.user.groups.filter(name='Profesores').exists():
         addForm = AddEvaluador()
         updateForm = UpdateEvaluador()
         id = int(request.POST['ID'])
@@ -105,19 +106,20 @@ def get_evaluador_profile(request):
         apellido = request.user.last_name
         correo = request.user.email
         id = Evaluador.objects.get(correo=correo).id
+        passwordForm = PasswordChangeForm(request.user)
         form = UpdateEvaluador({'ID': id, 'nombre': nombre, 'apellido': apellido, 'correo': correo})
-        return render(request, 'evaluadores/profile.html', {'form': form})
-    return HttpResponseRedirect('/accounts/login')
+        return render(request, 'evaluadores/profile.html', {'form': form, 'passwordForm' : passwordForm})
+    return HttpResponseRedirect('login')
 
 
-@login_required
+#@login_required
 def add_profesor(request):
     """
     Agrega un Profesor, en caso de que el usuario de la request sea un Profesor.
     :param request:
     :return:
     """
-    if request.POST and (request.user.groups.filter(name='Profesores').exists() or request.user.is_superuser):
+    if request.POST: # temporalmente, sin restricciones
         form = AddProfesor(request.POST)
         if form.is_valid():
             form.save()
@@ -128,7 +130,7 @@ def add_profesor(request):
     return post_profesores(request)
 
 
-@login_required
+#@login_required
 def post_profesores(request):
     """
     Despliega los profesores registrados en la plataforma.
