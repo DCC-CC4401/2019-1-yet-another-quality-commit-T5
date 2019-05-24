@@ -2,6 +2,8 @@ from django.shortcuts import render
 from django.contrib import messages
 from django.http import HttpResponseRedirect
 from Rubricas.forms import *
+from django.core import serializers
+from django.http import HttpResponse
 
 def post_rubricas(request):
     addForm = AddRubrica()
@@ -18,6 +20,7 @@ def add_rubrica(request):
     if request.POST:
         #verificar si ya existe rubrica con ese nombre
         creadas = Rubrica.objects.filter(nombre__startswith=request.POST['nombre'])
+        creadas.order_by('fila','columna')
         print(creadas.count())
         if creadas.count() > 0:
             ##caso en que existe mas de una rubrica con el mismo nombre
@@ -46,3 +49,16 @@ def all_rubrica(request):
 
     return render(request, 'rubrica/rubrica_admin.html', {'rubrica': rubrica_list, 'form':form})
 
+import json
+def busqueda_rubrica_ajax(request):
+    if request.GET:
+        id_rubrica= request.GET['id']
+        aspectos = AspectoRubrica.objects.filter(rubrica__id=id_rubrica)
+        aspectos = aspectos.order_by('fila','columna')
+        data = [ rubrica_serializer(aspecto)  for aspecto in aspectos] 
+        return HttpResponse(json.dumps(data), content_type='application/json')
+    
+def rubrica_serializer(aspectoRubrica):
+    return {'fila': aspectoRubrica.fila, 'columna' : aspectoRubrica.columna,
+                'puntaje': str(aspectoRubrica.puntaje), 'nombreFila':aspectoRubrica.nombreFila,
+                    'descripcion': aspectoRubrica.descripcion}

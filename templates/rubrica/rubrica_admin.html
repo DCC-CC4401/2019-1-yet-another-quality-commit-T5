@@ -14,6 +14,9 @@
   </div>
 
 {% if user.is_authenticated %}
+    <div class="w3-container">
+    <input id='buscar'  type='text' placeholder="Busque algún evaluador">
+    </div>
     <!-- Listado de rubricas-->
     <div class="w3-margin-top w3-container w3-center">
         <table class="w3-table w3-card-4 w3-bordered w3-border-black">
@@ -36,12 +39,12 @@
                 <td class='tabla-elemento w3-small'> {{ rubrica.descripcion }} </td>
                 <!-- Javascript scan for evaluadores with format {(name,lastname,email),(name,lastname,email)...}-->
                 <script>
-                    evaluadorJs=[];
+                    rubricaJs=[];
                     rubricaJs.push('{{rubrica.pk}}');
                     rubricaJs.push('{{rubrica.nombre}}');
                     rubricaJs.push('{{rubrica.descripcion}}');
                     
-                    rubricasJs.push(evaluadorJs);
+                    rubricasJs.push(rubricaJs);
                 </script>
             </tr>
             {% endfor %}
@@ -51,8 +54,133 @@
 
     <!-- Fin listado de rubricas -->
 
+    <!-- Function para buscar rubrica-->
+    <script>
+        function buscarRubrica(){
+            let busqueda = document.getElementById('buscar').value;
+            let filtered = rubricasJs.filter((x)=>{
+            if(busqueda==""){
+                return true;
+                }
 
-   
+            let raw_palabras = x[0]+" "+x[1]+" "+x[2];
+
+            let palabras = raw_palabras.split(" ");
+            for(let i=0; i<palabras.length; i++){
+                if(palabras[i].toLowerCase()==busqueda.toLowerCase()){
+                    return true;
+                }
+            }   
+            return false;
+            });
+            for(i=0;i<rubricasJs.length;i++){
+                document.getElementById(rubricasJs[i][0]).style.display='none';
+
+            }
+            for(i=0;i<filtered.length;i++){
+                document.getElementById(filtered[i][0]).style.display='';
+            }
+        }
+
+        //prepare document for buscar
+        document.getElementById('buscar').addEventListener('keydown',event=>{
+            if(event.key=='Enter'){
+                buscarRubrica();
+            }
+        });
+    </script>
+
+    <!-- Formulario de rubrica -->
+    
+    <div id="rubrica-detalle" class="w3-animate-zoom" style="display:none;">
+
+        
+
+        <div class="w3-margin-top w3-margin-bottom w3-container w3-center "><br>
+            
+            <div class="w3-display-container">
+                <span onclick="document.getElementById('rubrica-detalle').style.display='none'"  class="w3-display-right w3-xlarge w3-text-red opcion" title="Close Modal">
+                    <i class="fa fa-window-close" aria-hidden="true"></i></span>
+            </div> 
+            <br>
+
+            <table id="tabla-rubrica" class="w3-card-4" style="width: 100%"  >
+              
+            </table>
+        {% if user.is_admin %}
+            <button class="w3-button w3-block w3-red w3-section w3-padding" type="submit">Guardar cambios</button>
+        {% endif %}
+      </div>
+      
+    </div>
+
+    <script>
+    //funcion para traer los aspectos de la rubrica a la pagina
+    let idRubrica;
+    var Rubrica;
+    for(let i=0; i<rubricasJs.length; i++){
+        idRubrica=rubricasJs[i][0];
+        $('#'+rubricasJs[i][0]).on('click', traerRubrica);
+    }
+    function traerRubrica(){
+        idRubrica= $(this).attr("id");
+        $.ajax({
+            data : {'id' : idRubrica},
+            url : 'busqueda_rubrica_ajax',
+            type : 'get',
+            success: function(data){
+                console.log(data)
+                let html = "<tbody>";
+                let currentFila = -1 ;
+                let fila; 
+                let mayorColumna = 0;
+                let columnaCompare;
+                
+                for(let i=0; i<data.length ; i++){
+                    fila=parseInt(data[i]['fila'],10);
+                    if (currentFila!=fila){
+                        html += '<tr "> <th class="w3-red tabla-elemento-rubrica w3-small" style="height: 60px" >' + data[i]['nombreFila']
+                            + '</th>';
+                        currentFila = fila;
+                        columnaCompare = 1;
+                    }
+                    else{
+                        columnaCompare ++ ;
+                    }
+
+                    html +='<td id="'+data[i]['fila']+'__'+data[i]['columna']
+                            +'"  class="w3-display-container w3-hover-gray w3-tiny tabla-elemento-rubrica"  {% if user.is_admin %} contenteditable="true" {% endif %}>'
+                                +data[i]['descripcion'] +'<span id="'+data[i]['fila']+'__'+data[i]['columna']+'-puntaje" class="w3-display-topright w3-green w3-medium">'+data[i]['puntaje']+'</span></td>';
+                    if (i==(data.length-1) || parseInt(data[i+1]['fila'],10)!=currentFila){
+                        html +='</tr>';
+                        if(columnaCompare>mayorColumna){
+                            mayorColumna=columnaCompare;
+
+                        }
+                    }
+                }
+                
+                let width=Math.floor(100/(mayorColumna+1));
+                html +='</tbody>';
+                head = '<thead> <tr> <th class="w3-red tabla-elemento-rubrica" style="width: '+width+'% ; height: 60px"> Niveles </th>' ;
+                for(let i=1;i<=mayorColumna;i++){
+                    head += '<th style="width: '+width+'%" class="w3-red tabla-elemento-rubrica"> Nivel ' + i +'</th>';
+                }
+                head += '</tr></thead>'
+                html = head + html;
+                
+                console.log(mayorColumna);
+                $('#tabla-rubrica').html(html);
+                $('#rubrica-detalle').show();
+            }
+        });
+        
+    }
+
+    </script>
+
+
+
     {% if user|is_admin %}
    <div class="w3-margin-top w3-container w3-center">
     <button onclick="document.getElementById('agregar').style.display='block'" class="w3-col w3-round w3-button w3-red w3-right">

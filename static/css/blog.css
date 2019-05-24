@@ -26,9 +26,13 @@ body {font-size:16px;}
 
 .warning{
     color: orange
-    
+
 }
 
 .success{
     color: green
+}
+
+.tabla-elemento-rubrica{
+    border: 1px solid #ddd; border-collapse: collapse;
 }
