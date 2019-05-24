@@ -14,52 +14,63 @@
 <body>
 
 <!-- Sidebar/menu -->
-<nav class="w3-sidebar w3-red w3-collapse w3-top w3-large w3-padding" style="z-index:3;width:300px;font-weight:bold;" id="mySidebar"><br>
-  <a href="javascript:void(0)" onclick="w3_close()" class="w3-button w3-hide-large w3-display-topleft" style="width:100%;font-size:22px">Close Menu</a>
+<nav class="w3-sidebar w3-red w3-collapse w3-top w3-large w3-padding" style="z-index:3;width:300px;font-weight:bold;"
+     id="mySidebar"><br>
+    <a href="javascript:void(0)" onclick="w3_close()" class="w3-button w3-hide-large w3-display-topleft"
+       style="width:100%;font-size:22px">Close Menu</a>
     <!--Profile image -->
-  <div class="w3-container">
-      <p class="w3-center"><img src="{% static 'images/avatar.png'%}" class="w3-circle" style="height:200px;width:200px" alt="Avatar"></p>
-      {% if user.is_authenticated %}
-        <h3 class="w3-center"><b>
-            <a href="{% url 'evaluadores:profile' %}" class="w3-button w3-bar-item w3-hover-white" style="text-decoration: None">
-            {{ user.first_name }}
-            <br>
-            {{ user.last_name }}</a></b>
-        </h3>
-      {% else %}
-          <h3 class="w3-center w3-hover-white"><a href="{% url 'login'%}?next={{request.path}}">
-              <i class="fas fa-sign-in-alt"></i>
-              Acceder</a></h3>
-      {% endif %}
-  </div>
-  <div class="w3-bar-block">
-      {% if user.is_authenticated %}
-          <a href="/cursos" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">Cursos</a>
-          <a href="/evaluadores" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">Evaluadores</a>
-          <a href="/rubricas" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">Rúbricas</a>
-          <a href="/evaluaciones" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">Evaluaciones</a>
-          <a href="{% url 'evaluadores:profesores' %}" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">Contacto</a>
-          <h5 class="w3-small w3-center w3-bar-item w3-hover-white"><a href="{% url 'logout'%}?next={{request.path}}">
-              <i class="fas fa-sign-out-alt"></i>
-              Cerrar sesión</a></h5>
-      {% else %}
-          <a href="{% url 'login'%}?next={{request.path}}" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">Cursos</a>
-          <a href="{% url 'login'%}?next={{request.path}}" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">Evaluadores</a>
-          <a href="{% url 'login'%}?next={{request.path}}" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">Rúbricas</a>
-          <a href="{% url 'login'%}?next={{request.path}}" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">Evaluaciones</a>
-          <a href="/#contact" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">Contacto</a>
-      {% endif %}
-  </div>
+    <div class="w3-container">
+        <p class="w3-center"><img src="{% static 'images/avatar.png' %}" class="w3-circle"
+                                  style="height:200px;width:200px" alt="Avatar"></p>
+        {% if user.is_authenticated %}
+            <h3 class="w3-center"><b>
+                <a href="{% url 'evaluadores:profile' %}" class="w3-button w3-bar-item w3-hover-white"
+                   style="text-decoration: None">
+                    {{ user.first_name }}
+                    <br>
+                    {{ user.last_name }}</a></b>
+            </h3>
+        {% else %}
+            <h3 class="w3-center w3-hover-white"><a href="{% url 'login' %}?next={{ request.path }}">
+                <i class="fas fa-sign-in-alt"></i>
+                Acceder</a></h3>
+        {% endif %}
+    </div>
+    <div class="w3-bar-block">
+        {% if user.is_authenticated %}
+            <a href="/cursos" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">Cursos</a>
+            <a href="/evaluadores" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">Evaluadores</a>
+            <a href="/rubricas" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">Rúbricas</a>
+            <a href="/evaluaciones" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">Evaluaciones</a>
+            <a href="{% url 'evaluadores:profesores' %}" onclick="w3_close()"
+               class="w3-bar-item w3-button w3-hover-white">Contacto</a>
+            <h5 class="w3-small w3-center w3-bar-item w3-hover-white">
+                <a href="{% url 'logout' %}?next={{ request.path }}">
+                <i class="fas fa-sign-out-alt"></i>
+                Cerrar sesión</a></h5>
+        {% else %}
+            <a href="{% url 'login' %}?next={{ request.path }}" onclick="w3_close()"
+               class="w3-bar-item w3-button w3-hover-white">Cursos</a>
+            <a href="{% url 'login' %}?next={{ request.path }}" onclick="w3_close()"
+               class="w3-bar-item w3-button w3-hover-white">Evaluadores</a>
+            <a href="{% url 'login' %}?next={{ request.path }}" onclick="w3_close()"
+               class="w3-bar-item w3-button w3-hover-white">Rúbricas</a>
+            <a href="{% url 'login' %}?next={{ request.path }}" onclick="w3_close()"
+               class="w3-bar-item w3-button w3-hover-white">Evaluaciones</a>
+            <a href="/#contact" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">Contacto</a>
+        {% endif %}
+    </div>
 </nav>
 
 <!-- Top menu on small screens -->
 <header class="w3-container w3-top w3-hide-large w3-red w3-xlarge w3-padding">
-  <a href="javascript:void(0)" class="w3-button w3-red w3-margin-right" onclick="w3_open()">☰</a>
-  <span>Usuario</span>
+    <a href="javascript:void(0)" class="w3-button w3-red w3-margin-right" onclick="w3_open()">☰</a>
+    <span>Usuario</span>
 </header>
 
 <!-- Overlay effect when opening sidebar on small screens -->
-<div class="w3-overlay w3-hide-large" onclick="w3_close()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>
+<div class="w3-overlay w3-hide-large" onclick="w3_close()" style="cursor:pointer" title="close side menu"
+     id="myOverlay"></div>
 
 <!-- !PAGE CONTENT! -->
 <div class="w3-main" style="margin-left:340px;margin-right:40px">
@@ -67,42 +78,46 @@
     {% endblock %}
 </div>
 <script>
-// Script to open and close sidebar
-function w3_open() {
-  document.getElementById("mySidebar").style.display = "block";
-  document.getElementById("myOverlay").style.display = "block";
-}
-function w3_close() {
-  document.getElementById("mySidebar").style.display = "none";
-  document.getElementById("myOverlay").style.display = "none";
-}
-// Modal Image Gallery
-function onClick(element) {
-  document.getElementById("img01").src = element.src;
-  document.getElementById("modal01").style.display = "block";
-  var captionText = document.getElementById("caption");
-  captionText.innerHTML = element.alt;
-}
-function myFunction(id) {
-  var x = document.getElementById(id);
-  if (x.className.indexOf("w3-show") == -1) {
-    x.className += " w3-show";
-  } else {
-    x.className = x.className.replace(" w3-show", "");
-  }
-}
-//Funciones personalizadas by us
-function GetElementInsideContainer(containerID, childID) {
-    var elm = {};
-    var elms = document.getElementById(containerID).getElementsByTagName("*");
-    for (var i = 0; i < elms.length; i++) {
-        if (elms[i].id === childID) {
-            elm = elms[i];
-            break;
+    // Script to open and close sidebar
+    function w3_open() {
+        document.getElementById("mySidebar").style.display = "block";
+        document.getElementById("myOverlay").style.display = "block";
+    }
+
+    function w3_close() {
+        document.getElementById("mySidebar").style.display = "none";
+        document.getElementById("myOverlay").style.display = "none";
+    }
+
+    // Modal Image Gallery
+    function onClick(element) {
+        document.getElementById("img01").src = element.src;
+        document.getElementById("modal01").style.display = "block";
+        var captionText = document.getElementById("caption");
+        captionText.innerHTML = element.alt;
+    }
+
+    function myFunction(id) {
+        var x = document.getElementById(id);
+        if (x.className.indexOf("w3-show") == -1) {
+            x.className += " w3-show";
+        } else {
+            x.className = x.className.replace(" w3-show", "");
         }
     }
-    return elm;
-}
+
+    //Funciones personalizadas by us
+    function GetElementInsideContainer(containerID, childID) {
+        var elm = {};
+        var elms = document.getElementById(containerID).getElementsByTagName("*");
+        for (var i = 0; i < elms.length; i++) {
+            if (elms[i].id === childID) {
+                elm = elms[i];
+                break;
+            }
+        }
+        return elm;
+    }
 
 </script>
 </body>

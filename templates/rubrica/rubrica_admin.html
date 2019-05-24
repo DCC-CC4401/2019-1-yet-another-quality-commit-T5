@@ -202,10 +202,13 @@
       </div>
     </div>
     </div>
+
+    
+    
     {% endif %}
 {% else %}
     <div class="w3-container">
-        <a href="{% url 'login'%}?next={{request.path}}">Entra a tu cuenta.</a>
+        <a href="{% url 'login' %}?next={{ request.path }}">Entra a tu cuenta.</a>
     </div>
 {% endif %}
 {% endblock %}
