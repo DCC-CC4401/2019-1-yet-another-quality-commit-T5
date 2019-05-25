@@ -73,6 +73,20 @@ def all_rubrica(request):
 
     return render(request, 'rubrica/rubrica_admin.html', {'rubrica': rubrica_list, 'form':form})
 
+@login_required
+def delete_rubrica(request):
+    if request.POST and request.user.groups.filter(name='Profesores').exists():
+        id = int(request.POST.get('id'))
+        deleted = Rubrica.objects.get(pk=id).delete()
+        if deleted is not None:
+            ##caso exitoso
+            messages.success(request, 'Rúbrica eliminada de la faz de la Tierra')
+            return HttpResponseRedirect('rubricas')
+    
+    ##caso de error
+    messages.warning(request, 'Error del servidor: no se pudo eliminar la rúbrica')        
+    return post_rubricas(request)
+
 import json
 def busqueda_rubrica_ajax(request):
     if request.GET:
@@ -95,11 +109,11 @@ def aspectoRubrica_serializer(aspectoRubrica):
                     'descripcion': aspectoRubrica.descripcion}
 
 
-@login_required
-def delete_rubrica(request):
-    if request.POST:
-        id = int(request.POST.get('id'))
-        deleted = Rubrica.objects.get(pk=id).delete()
-        if deleted is not None:
-            return HttpResponseRedirect('rubricas')
-    return post_rubricas(request)
+def updateAspectosRubrica(request):
+    if request.method == "POST":
+        received_json_data=json.loads(request.body)
+        print(received_json_data)
+        return HttpResponse('')
+    
+
+
