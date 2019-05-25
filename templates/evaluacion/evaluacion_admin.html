@@ -18,17 +18,19 @@
             <table class="w3-table w3-bordered w3-border-black w3-card-4 w3-centered">
                 <thead>
                 <tr>
-                    <th class="w3-red tabla-elemento"> Nombre</th>
+                    <th class="w3-red"> Nombre</th>
 
-                    <th class="w3-red tabla-elemento"> Curso asociado</th>
+                    <th class="w3-red"> Curso asociado</th>
 
-                    <th class="w3-red tabla-elemento"> Estado</th>
+                    <th class="w3-red"> Estado</th>
 
-                    <th class="w3-red tabla-elemento"> Fecha inicio</th>
+                    <th class="w3-red"> Fecha inicio</th>
 
-                    <th class="w3-red tabla-elemento"> Fecha fin</th>
+                    <th class="w3-red"> Fecha fin</th>
 
-                    <th class="w3-red tabla-elemento"> Duración esperada</th>
+                    <th class="w3-red"> Duración esperada</th>
+
+                    <th class="w3-red"></th>
                 </tr>
                 </thead>
                 <script>
@@ -38,12 +40,21 @@
                 <tbody id='evaluaciones'>
                 {% for evaluacion in evaluacion_list %}
                     <tr>
-                        <td class="w3-light-gray tabla-elemento">{{ evaluacion }}</td>
-                        <td class="w3-light-gray tabla-elemento">{{ evaluacion.get_course }}</td>
-                        <td class="w3-light-gray tabla-elemento"> {{ evaluacion.get_state }} </td>
-                        <td class="w3-light-gray tabla-elemento"> {{ evaluacion.get_startdate }} </td>
-                        <td class="w3-light-gray tabla-elemento"> {{ evaluacion.get_enddate }} </td>
-                        <td class="w3-light-gray tabla-elemento"> {{ evaluacion.get_rank }} </td>
+                        <td class="w3-light-gray">{{ evaluacion }}</td>
+                        <td class="w3-light-gray">{{ evaluacion.get_course }}</td>
+                        <td class="w3-light-gray"> {{ evaluacion.get_state }} </td>
+                        <td class="w3-light-gray"> {{ evaluacion.get_startdate }} </td>
+                        <td class="w3-light-gray"> {{ evaluacion.get_enddate }} </td>
+                        <td class="w3-light-gray"> {{ evaluacion.get_rank }} </td>
+                        <td class="w3-light-gray w3-right-align">
+                            <form action="{% url 'evaluaciones:delete_evaluacion' %}" method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="id" value="{{ evaluacion.pk }}">
+                                <button class="w3-button w3-round w3-red w3-small" type="submit">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </form>
+                        </td>
 
                         <!-- Javascript scan for evaluaciones with format {(nombre, curso, rango, fecha_inicio, fecha_fin, estado), ....}-->
                         <script>

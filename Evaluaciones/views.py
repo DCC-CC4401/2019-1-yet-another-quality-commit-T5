@@ -76,8 +76,8 @@ def evaluacion_detalle(request, pk):
 @login_required
 def delete_evaluacion(request):
     if request.POST:
-        id = int(request.POST('id'))
+        id = int(request.POST.get('id'))
         deleted = Evaluacion.objects.get(pk=id).delete()
         if deleted is not None:
             return HttpResponseRedirect('evaluacion')
-    return post_evaluacion(request)
+    return post_evaluaciones(request)

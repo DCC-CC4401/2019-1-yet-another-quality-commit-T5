@@ -49,3 +49,13 @@ def all_cursos(request):
 def curso_detalle(request, pk):
     curso_id = Curso.objects.get(pk=pk)
     return render(request, 'cursos/curso_detalle.html', context={'curso': curso_id})
+
+
+@login_required
+def delete_curso(request):
+    if request.POST:
+        id = int(request.POST.get('id'))
+        deleted = Curso.objects.get(pk=id).delete()
+        if deleted is not None:
+            return HttpResponseRedirect('cursos')
+    return post_cursos(request)

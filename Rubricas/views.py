@@ -93,3 +93,13 @@ def aspectoRubrica_serializer(aspectoRubrica):
     return {'fila': aspectoRubrica.fila, 'columna' : aspectoRubrica.columna,
                 'puntaje': str(aspectoRubrica.puntaje), 'nombreFila':aspectoRubrica.nombreFila,
                     'descripcion': aspectoRubrica.descripcion}
+
+
+@login_required
+def delete_rubrica(request):
+    if request.POST:
+        id = int(request.POST.get('id'))
+        deleted = Rubrica.objects.get(pk=id).delete()
+        if deleted is not None:
+            return HttpResponseRedirect('rubricas')
+    return post_rubricas(request)

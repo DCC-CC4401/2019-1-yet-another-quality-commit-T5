@@ -21,7 +21,7 @@
                     <td>{{ form.password }}</td>
                 </tr>
                 <tr>
-                    <td><p class="w3-small"><a href="{% url 'password_reset' pk=evaluacion.pk %}">He olvidado mi contraseña</a></p></td>
+                    <td><p class="w3-small"><a href="{% url 'password_reset' %}">He olvidado mi contraseña</a></p></td>
                     <td class="w3-center"><input class="w3-button w3-red w3-round" type="submit" value="Entrar"/></td>
                     <input type="hidden" name="next" value="{{ next }}"/>
                 </tr>
