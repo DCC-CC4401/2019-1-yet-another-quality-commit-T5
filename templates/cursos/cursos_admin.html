@@ -57,7 +57,7 @@
                     </script>
                     <tbody id='cursos'>
                     {% for curso in cursos_list %}
-                        <tr class="w3-light-gray {% if user|is_admin %}opcion{% endif %} clickable-row"
+                        <tr class="w3-light-gray {% if user|is_admin %}opcion{% endif %}"
                             id="{{ curso.get_pk }}">
                             <td class="w3-light-gray">{{ curso }}</td>
                             <td class="w3-light-gray">{{ curso.get_date }}</td>

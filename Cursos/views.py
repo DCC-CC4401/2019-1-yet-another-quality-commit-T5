@@ -3,8 +3,8 @@ from django.shortcuts import render
 from django.http import HttpResponseRedirect
 # from django.views.generic.edit import UpdateView
 
-from .forms import AddCurso
-from .models import Curso
+from .forms import AddCurso, AddGrupo
+from .models import Curso, Grupo
 
 
 @login_required
@@ -59,3 +59,28 @@ def delete_curso(request):
         if deleted is not None:
             return HttpResponseRedirect('cursos')
     return post_cursos(request)
+
+@login_required
+def all_grupos(request):
+    grupos = Grupo.objects.all()
+    grupos_list = []
+
+    for grupo in grupos:
+        grupos_list.append(grupo)
+
+    form = AddGrupo()
+
+    return render(request, 'cursos/cursos_admin.html', {'cursos': grupos_list, 'form': form})
+
+@login_required
+def add_grupo(request,pk):
+    curso_id=Curso.objects.get(pk=pk)
+    form = AddGrupo(request.POST)
+    if form.is_valid():
+           form.save()
+           return HttpResponseRedirect('cursos')
+    else:
+           form = AddGrupo()
+
+    return render(request, 'cursos/curso_detalle.html', context={'curso': curso_id})
+
