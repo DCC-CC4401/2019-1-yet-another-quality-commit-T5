@@ -48,6 +48,7 @@
                         <th class="w3-red"> Nombre</th>
 
                         <th class="w3-red"></th>
+                        <th class="w3-red"></th>
                     </tr>
                     </thead>
                     <script>
@@ -61,15 +62,23 @@
                             <td class="w3-light-gray">{{ curso }}</td>
                             <td class="w3-light-gray">{{ curso.get_date }}</td>
                             <td class="w3-light-gray"> {{ curso.get_name }} </td>
-                            <td class="w3-light-gray w3-right-align">
-                                <form action="{% url 'cursos:delete_curso' %}" method="post">
+                            <td class="w3-light-gray">
+                                <form action="{% url 'cursos:curso_detalle' pk=curso.get_pk%}" method="post">
                                     {% csrf_token %}
                                     <input type="hidden" name="id" value="{{ curso.pk }}">
-                                    <button class="w3-button w3-round w3-red w3-small" type="submit">
-                                        <i class="fas fa-trash"></i>
+                                    <button class="w3-button w3-round w3-red w3-center" type="submit">Ver detalles
                                     </button>
                                 </form>
                             </td>
+                            <td class="w3-light-gray w3-right-align">
+                            <form action="{% url 'cursos:delete_curso' %}" method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="id" value="{{ curso.pk }}">
+                                <button class="w3-button w3-round w3-red w3-small" type="submit">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </form>
+                        </td>
 
                             <!-- Javascript scan for cursos with format {(codigo,seccion,nombre,semestre,año), ....}-->
                             <script>
