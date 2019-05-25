@@ -12,7 +12,7 @@ def post_evaluaciones(request):
     :return:
     """
     form = AddEvaluacion()
-    evaluaciones = Evaluacion.objects.all()
+    evaluaciones = Evaluacion.objects.all().order_by('fecha_fin')
     evaluacion_list = []
 
     for evaluacion in evaluaciones:

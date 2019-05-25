@@ -40,7 +40,7 @@
                 <tbody id='evaluaciones'>
                 {% for evaluacion in evaluacion_list %}
                     <tr>
-                        <td class="w3-light-gray">{{ evaluacion }}</td>
+                        <td class="w3-light-gray"><a href="{% url 'evaluaciones:evaluacion_detalle' evaluacion.pk %}">{{ evaluacion }}</a></td>
                         <td class="w3-light-gray">{{ evaluacion.get_course }}</td>
                         <td class="w3-light-gray"> {{ evaluacion.get_state }} </td>
                         <td class="w3-light-gray"> {{ evaluacion.get_startdate }} </td>
