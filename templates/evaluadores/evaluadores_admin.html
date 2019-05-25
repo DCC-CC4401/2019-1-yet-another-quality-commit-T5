@@ -9,10 +9,11 @@
         <!-- Display de mensajes exitoso o erroneo-->
         {% if messages %}
             {% for message in messages %}
-            <p {% if message.tags %} class='{{ message.tags }}' {% endif %}>{{ message }}</p>
+                <p {% if message.tags %} class='{{ message.tags }}' {% endif %}>{{ message }}</p>
             {% endfor %}
         {% endif %}
-        <p><h3>Seleccione un evaluador</h3></p>
+        <p>
+        <h3>Seleccione un evaluador</h3></p>
     </div>
 
     {% if user.is_authenticated %}
@@ -25,9 +26,10 @@
             <table class="w3-table w3-card-4 w3-bordered w3-border-black">
                 <thead>
                 <tr>
-                    <th class="w3-red tabla-elemento w3-center"> ID</th>
-                    <th class="w3-red tabla-elemento"> Nombre</th>
-                    <th class="w3-red tabla-elemento"> Email</th>
+                    <th class="w3-red w3-center"> ID</th>
+                    <th class="w3-red"> Nombre</th>
+                    <th class="w3-red"> Email</th>
+                    <th class="w3-red"></th>
                 </tr>
                 </thead>
                 <script>
@@ -37,9 +39,18 @@
                 <tbody id='evaluadores'>
                 {% for evaluador in evaluadores_list %}
                     <tr class='w3-light-gray {% if user|is_admin %}opcion{% endif %}' id='{{ evaluador.get_pk }}'>
-                        <td class='tabla-elemento w3-center'>{{ evaluador.get_pk }} </td>
-                        <td class='tabla-elemento'>{{ evaluador }}</td>
-                        <td class='tabla-elemento w3-small'> {{ evaluador.get_email }} </td>
+                        <td class='w3-center'>{{ evaluador.get_pk }} </td>
+                        <td>{{ evaluador }}</td>
+                        <td> {{ evaluador.get_email }} </td>
+                        <td class="w3-light-gray w3-right-align">
+                            <form action="{% url 'evaluadores:delete_evaluador' %}" method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="ID" value="{{ evaluador.pk }}">
+                                <button class="w3-button w3-round w3-red w3-small" type="submit">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </form>
+                        </td>
                         <!-- Javascript scan for evaluadores with format {(name,lastname,email),(name,lastname,email)...}-->
                         <script>
                             evaluadorJs = [];
@@ -110,8 +121,8 @@
                     <form class="w3-container" action="{% url 'evaluadores:delete_evaluador' %}" method="post">
                         {% csrf_token %}
                         <input type='text' id='delete_id' name='ID' readonly style="display:none">
-                        <button class="w3-button w3-block w3-round w3-red w3-margin-bottom" type="submit"><i
-                                class="fas fa-user-times"></i> Eliminar
+                        <button class="w3-button w3-block w3-round w3-red w3-margin-bottom" type="submit">
+                            <i class="fas fa-trash"></i> Eliminar
                         </button>
                     </form>
                 </div>

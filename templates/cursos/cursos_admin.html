@@ -41,11 +41,13 @@
                 <table class="w3-table w3-bordered w3-border-black w3-card-4">
                     <thead>
                     <tr>
-                        <th class="w3-red tabla-elemento"> Código</th>
+                        <th class="w3-red"> Código</th>
 
-                        <th class="w3-red tabla-elemento"> Semestre y año</th>
+                        <th class="w3-red"> Semestre y año</th>
 
-                        <th class="w3-red tabla-elemento"> Nombre</th>
+                        <th class="w3-red"> Nombre</th>
+
+                        <th class="w3-red"></th>
                     </tr>
                     </thead>
                     <script>
@@ -56,10 +58,18 @@
                     {% for curso in cursos_list %}
                         <tr class="w3-light-gray {% if user|is_admin %}opcion{% endif %} clickable-row"
                             id="{{ curso.get_pk }}">
-                            <td class="w3-light-gray tabla-elemento">{{ curso }}</td>
-                            <td class="w3-light-gray tabla-elemento">{{ curso.get_date }}</td>
-                            <td class="w3-small w3-light-gray tabla-elemento"
-                                style="border: 1px solid #ddd; border-collapse: collapse"> {{ curso.get_name }} </td>
+                            <td class="w3-light-gray">{{ curso }}</td>
+                            <td class="w3-light-gray">{{ curso.get_date }}</td>
+                            <td class="w3-light-gray"> {{ curso.get_name }} </td>
+                            <td class="w3-light-gray w3-right-align">
+                                <form action="{% url 'cursos:delete_curso' %}" method="post">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="id" value="{{ curso.pk }}">
+                                    <button class="w3-button w3-round w3-red w3-small" type="submit">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </form>
+                            </td>
 
                             <!-- Javascript scan for cursos with format {(codigo,seccion,nombre,semestre,año), ....}-->
                             <script>

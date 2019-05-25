@@ -18,9 +18,9 @@ class AddEvaluacion(forms.Form):
                                      #widget=forms.Select(attrs={'class': 'form-control'}),
                                      #required=False, label='Rubrica')
 
-    fecha_inicio= forms.DateField(widget=forms.SelectDateWidget(years=YEARS))
+    fecha_inicio= forms.DateField(widget=forms.SelectDateWidget(years=YEARS.reverse()))
 
-    fecha_fin=forms.DateField(widget=forms.SelectDateWidget(years=YEARS))
+    fecha_fin=forms.DateField(widget=forms.SelectDateWidget(years=YEARS.reverse()))
 
     curso=forms.ModelChoiceField(queryset=Curso.objects,
                                  widget=forms.Select(attrs={'class':'form-control'}), label='Curso')
