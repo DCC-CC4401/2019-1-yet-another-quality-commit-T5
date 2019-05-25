@@ -5,11 +5,11 @@
         <h1 class="w3-xxxlarge w3-text-red"><b>Cursos</b></h1>
         <hr style="width:50px;border:5px solid red" class="w3-round">
     </div>
-    <p><h3>{{ curso.nombre }}</h3></p>
+    <p><h3><strong>{{ curso.nombre }}</strong></h3></p>
     <!-- Informacion sobre el curso -->
-    <div class="w3-round w3-quarter w3-padding">
+    <div class="w3-round w3-padding">
         <button onclick="myFunction('Demo1')"
-                class="w3-button w3-block w3-left-align w3-red w3-centered w3-center w3-round w3-large">
+                class="w3-button w3-block w3-left-align w3-red w3-centered w3-center w3-round w3-xlarge">
             Información del curso
         </button>
 
@@ -25,74 +25,62 @@
     </div>
 
     <!-- Evaluadores-->
-    <div class="w3-round w3-quarter w3-padding">
+    <div class="w3-round w3-padding">
         <button onclick="myFunction('Demo2')"
-                class="w3-button w3-block w3-left-align w3-red w3-centered w3-center w3-round w3-large">
+                class="w3-button w3-block w3-left-align w3-red w3-centered w3-center w3-round w3-xlarge">
             Evaluadores
         </button>
 
         <div id="Demo2" class="w3-container w3-hide w3-pale-red w3-round w3-center">
-            <p>
-            <ul class="w3-ul w3-border-black">
-                <li class="w3-display-container">Evaluador 1</li>
-                <li class="w3-display-container">Evaluador 2</li>
-            </ul>
-            </p>
+            <button class="w3-margin">Agregar evaluador</button>
         </div>
     </div>
 
     <!--Evaluaciones-->
-    <div class="w3-padding w3-round w3-quarter">
+    <div class="w3-padding w3-round">
         <button onclick="myFunction('Demo3')"
-                class="w3-button w3-block w3-left-align w3-red w3-centered w3-center w3-round w3-large">
+                class="w3-button w3-block w3-left-align w3-red w3-centered w3-center w3-round w3-xlarge">
             Evaluaciones
         </button>
 
-        <div id="Demo3" class="w3-container w3-hide w3-pale-red w3-round">
-            <p>
-            <ul class="w3-ul">
-                <li>Evaluación 1 (en curso)</li>
-                <li>Evaluación 2</li>
-                <li>Evaluación 3</li>
-
-            </ul>
-            </p>
+        <div id="Demo3" class="w3-container w3-hide w3-pale-red w3-round w3-center">
+            <button class="w3-margin">Agregar evaluación</button>
         </div>
     </div>
 
     <!--Listado de alumnos-->
-    <div class="w3-padding w3-round w3-quarter">
+    <div class="w3-padding w3-round">
         <button onclick="myFunction('Demo4')"
-                class="w3-button w3-block w3-left-align w3-red w3-centered w3-center w3-round w3-large">
-            Integrantes
+                class="w3-button w3-block w3-left-align w3-red w3-centered w3-center w3-round w3-xlarge">
+            Integrantes/Grupos
         </button>
 
-        <div id="Demo4" class="w3-container w3-hide w3-pale-red w3-round">
-            <p>
-            <ul class="w3-ul">
-                <li><strong>Grupo 1</strong>
-                    <ul class="w3-ul">
-                        <li>Participante 1</li>
-                        <li>Participante 2</li>
-                        <li>Participante 3</li>
-                        <li>Participante 4</li>
-
-                    </ul>
-                </li>
-                <li><strong>Grupo 2</strong>
-                    <ul class="w3-ul">
-                        <li>Participante 1</li>
-                        <li>Participante 2</li>
-                        <li>Participante 3</li>
-                        <li>Participante 4</li>
-
-                    </ul>
-                </li>
-
-                <li><strong>Grupo 3</strong></li>
-
-            </ul>
-            </p>
+        <div id="Demo4" class="w3-container w3-hide w3-pale-red w3-round w3-center">
+            <div class="w3-margin-top w3-container w3-center">
+                    <button onclick="document.getElementById('agregar').style.display='block'"
+                            class="w3-round w3-white w3-margin w3-button w3-right">
+                        <i class="fas fa-plus" style="text-align: center"></i>
+                        Agregar grupo
+                    </button>
+                </div>
         </div>
     </div>
+
+    <div id="agregar" class="w3-modal">
+                    <div class="w3-modal-content w3-card-4 w3-animate-zoom" style="max-width:600px">
+                        <div class="w3-center"><br>
+                            <span onclick="document.getElementById('agregar').style.display='none'"
+                                  class="w3-button w3-xlarge w3-transparent w3-display-topright"
+                                  title="Close Modal">×</span>
+                            <form class="w3-container" action="{% url 'cursos:add_grupo' pk=curso.get_pk %}" method="post">
+                                {% csrf_token %}
+                                <table class="w3-table">
+                                {{ form.as_table }}
+                            </table>
+                                <button class="w3-button w3-block w3-red w3-section w3-padding" type="submit">Agregar
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
 {% endblock %}
