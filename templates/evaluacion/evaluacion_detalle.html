@@ -48,17 +48,43 @@
         </table>
     </div>
 
-    <div class="w3-roun w3-half w3-container w3-padding">
-        <button onclick="myFunction('Evaluadores')" class="w3-button w3-block w3-red w3-section w3-padding">
+    <div class="w3-round w3-half w3-container w3-padding">
+        <button onclick="myFunction('Evaluadores')" class="w3-button w3-round w3-block w3-red w3-section w3-padding">
             Evaluadores
         </button>
         <div id="Evaluadores" class="w3-container w3-hide w3-pale-red w3-round">
             <p>
             <ul class="w3-ul w3-light gray w3-round w3-center">
                 {% for eval in evaluadores %}
-                    <li>{{ eval.evaluador }}</li>
+                    <li>
+                        {{ eval }}
+                        <form action="{% url 'evaluaciones:unbound_evaluador' evaluacion.pk %}" method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="id_evaluacion" value="{{ evaluacion.pk }}">
+                            <input type="hidden" name="id_evaluador" value="{{ eval.pk }}">
+                            <button class="w3-button w3-red w3-round w3-small" type="submit">
+                                <i class="fas fa-user-minus"></i>
+                            </button>
+                        </form>
+                    </li>
                 {% endfor %}
+                <form action="{% url 'evaluaciones:bound_evaluador' evaluacion.pk %}" method="post">
+                    {% csrf_token %}
+                    <li class="w3-hide">{{ evaluador_form.evaluacion }}</li>
+                    <li>{{ evaluador_form.evaluador }}
+                        <button class="w3-button w3-red w3-round w3-small" type="submit">+</button>
+                    </li>
+                </form>
             </ul>
+        </div>
+    </div>
+
+    <div class="w3-round w3-half w3-container w3-padding">
+        <button onclick="myFunction('Grupos')" class="w3-button w3-round w3-block w3-red w3-section w3-padding">
+            Grupos
+        </button>
+        <div id="Grupos" class="w3-container w3-hide w3-pale-red w3-round">
+            This is a work in progress.
         </div>
     </div>
 

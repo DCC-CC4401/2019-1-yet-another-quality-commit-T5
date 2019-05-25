@@ -44,3 +44,9 @@ class AddEvaluacion(forms.Form):
 
 
         evaluacion.save()
+
+
+class BondEvaluador(forms.ModelForm):
+    class Meta:
+        model = EvaluadoresEvaluacion
+        fields = '__all__'

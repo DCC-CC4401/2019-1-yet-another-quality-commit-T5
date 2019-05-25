@@ -70,7 +70,12 @@ def all_evaluaciones(request):
 @login_required
 def evaluacion_detalle(request, pk):
     evaluacion_id=Evaluacion.objects.get(pk=pk)
-    return render(request, 'evaluacion/evaluacion_detalle.html', context={'evaluacion':evaluacion_id})
+    evaluadores_raw = EvaluadoresEvaluacion.objects.all()
+    evaluadores = []
+    for eval in evaluadores_raw:
+        evaluadores.append(eval.evaluador)
+    evaluador_form = BondEvaluador({'evaluacion' : evaluacion_id})
+    return render(request, 'evaluacion/evaluacion_detalle.html', context={'evaluacion':evaluacion_id, 'evaluador_form' : evaluador_form, 'evaluadores' : evaluadores})
 
 
 @login_required
@@ -81,3 +86,37 @@ def delete_evaluacion(request):
         if deleted is not None:
             return HttpResponseRedirect('evaluacion')
     return post_evaluaciones(request)
+
+
+@login_required
+def bound_evaluador(request, pk):
+    """
+    Asigna un evaluador a una evaluacion
+    :param request:
+    :return:
+    """
+    if request.POST and request.user.groups.filter(name='Profesores').exists():
+        form = BondEvaluador(request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect('/evaluaciones/' + str(pk) + '/evaluacion_detalle')
+        else:
+            form = AddEvaluacion()
+            return render(request, '/evaluacion/evaluacion_admin.html', {'form': form})
+    return HttpResponseRedirect('/evaluaciones/' + str(pk) + '/evaluacion_detalle')
+
+
+def unbound_evaluador(request, pk):
+    """
+    Retira un evaluador asignado a una evaluacion
+    :param request:
+    :return:
+    """
+    if request.POST and request.user.groups.filter(name='Profesores').exists():
+        id_evaluacion = int(request.POST.get('id_evaluacion'))
+        id_evaluador = int(request.POST.get('id_evaluador'))
+        deleted = EvaluadoresEvaluacion.objects.get(evaluacion=id_evaluacion,
+                                                    evaluador=id_evaluador).delete()
+        if deleted is not None:
+            return HttpResponseRedirect('/evaluaciones/' + str(pk) + '/evaluacion_detalle')
+    return HttpResponseRedirect('/evaluaciones/' + str(pk) + '/evaluacion_detalle')

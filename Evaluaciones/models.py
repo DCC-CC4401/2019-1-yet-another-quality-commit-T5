@@ -68,3 +68,11 @@ class FichaEvaluacion(models.Model):
 
     def get_presenter(self):
         return str(self.presentador)
+
+
+class EvaluadoresEvaluacion(models.Model):
+    evaluacion = models.ForeignKey(Evaluacion, on_delete=models.CASCADE)
+    evaluador = models.ForeignKey(Evaluador, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ('evaluacion', 'evaluador')
