@@ -79,10 +79,17 @@ def busqueda_rubrica_ajax(request):
         id_rubrica= request.GET['id']
         aspectos = AspectoRubrica.objects.filter(rubrica__id=id_rubrica)
         aspectos = aspectos.order_by('fila','columna')
-        data = [ rubrica_serializer(aspecto)  for aspecto in aspectos] 
-        return HttpResponse(json.dumps(data), content_type='application/json')
+        grouped = []
+        ##ahora agrupamos por fila, la salida es [[aspectosfila1][aspectosfila2][...]]
+        for aspecto in aspectos:
+            if (len(grouped)-1 < aspecto.fila):
+                grouped.append([])
+            grouped[aspecto.fila].append(aspectoRubrica_serializer(aspecto))
+            
+        return HttpResponse(json.dumps(grouped), content_type='application/json')
     
-def rubrica_serializer(aspectoRubrica):
+
+def aspectoRubrica_serializer(aspectoRubrica):
     return {'fila': aspectoRubrica.fila, 'columna' : aspectoRubrica.columna,
                 'puntaje': str(aspectoRubrica.puntaje), 'nombreFila':aspectoRubrica.nombreFila,
                     'descripcion': aspectoRubrica.descripcion}
