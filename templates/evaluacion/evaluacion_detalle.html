@@ -1,31 +1,66 @@
-{% extends 'evaluacion/evaluacion_admin.html' %}
+{% extends 'base.html' %}
 {% block content %}
     <!-- Portada -->
     <div class="w3-container" id="portada" style="margin-top:80px; margin-bottom:10px">
         <h1 class="w3-xxxlarge w3-text-red"><b>Evaluaciones</b></h1>
         <hr style="width:50px;border:5px solid red" class="w3-round">
+        <p>
+        <h3>{{ evaluacion }}</h3>
     </div>
-    <p><h3>{{ evaluacion }}</h3></p>
+
 
     <!-- Información sobre la evaluación -->
 
-    <div class="w3-round w3-quarter w3-padding">
-        <button onclick="myFunction('Demo1')" class="w3-button w3-block w3-red w3-section w3-padding">
-            Información de la evaluación
-        </button>
+    <div class="w3-round w3-container w3-padding">
+        <table class="w3-table w3-bordered w3-border-black w3-card-4 w3-centered">
+            <tr>
+                <th class="w3-red"> Nombre</th>
 
-        <div id="Demo1" class="w3-container w3-hide w3-pale-red w3-round">
+                <th class="w3-red"> Curso asociado</th>
+
+                <th class="w3-red"> Estado</th>
+
+                <th class="w3-red"> Fecha inicio</th>
+
+                <th class="w3-red"> Fecha fin</th>
+
+                <th class="w3-red"> Duración esperada</th>
+
+                <th class="w3-red"></th>
+            </tr>
+            <tr>
+                <td class="w3-light-gray"> {{ evaluacion }}</td>
+                <td class="w3-light-gray"> {{ evaluacion.get_course }}</td>
+                <td class="w3-light-gray"> {{ evaluacion.get_state }} </td>
+                <td class="w3-light-gray"> {{ evaluacion.get_startdate }} </td>
+                <td class="w3-light-gray"> {{ evaluacion.get_enddate }} </td>
+                <td class="w3-light-gray"> {{ evaluacion.get_rank }} </td>
+                <td class="w3-light-gray w3-right-align">
+                    <form action="{% url 'evaluaciones:delete_evaluacion' %}" method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="id" value="{{ evaluacion.pk }}">
+                        <button class="w3-button w3-round w3-red w3-small" type="submit">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </form>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="w3-roun w3-half w3-container w3-padding">
+        <button onclick="myFunction('Evaluadores')" class="w3-button w3-block w3-red w3-section w3-padding">
+            Evaluadores
+        </button>
+        <div id="Evaluadores" class="w3-container w3-hide w3-pale-red w3-round">
             <p>
-            <ul class="w3-ul w3-light-gray w3-round w3-center">
-                <li>Nombre: {{ evaluacion }}</li>
-                <li>Curso asociado: {{ evaluacion.get_course }}</li>
-                <li>Estado: {{ evaluacion.get_state }}</li>
-                <li>Fecha inicio: {{ evaluacion.get_startdate }}</li>
-                <li>Fecha fin: {{ evaluacion.get_enddate }}</li>
-                <li>Duración esperada: {{ evaluacion.get_rank }}</li>
+            <ul class="w3-ul w3-light gray w3-round w3-center">
+                {% for eval in evaluadores %}
+                    <li>{{ eval.evaluador }}</li>
+                {% endfor %}
             </ul>
-            </p>
         </div>
     </div>
+
 
 {% endblock %}
