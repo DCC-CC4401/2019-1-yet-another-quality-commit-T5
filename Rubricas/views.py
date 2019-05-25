@@ -112,7 +112,27 @@ def aspectoRubrica_serializer(aspectoRubrica):
 def updateAspectosRubrica(request):
     if request.method == "POST":
         received_json_data=json.loads(request.body)
-        print(received_json_data)
+        for fila in received_json_data:
+            for elemento in fila:
+            
+                id=int(elemento['idRubrica'])
+                puntaje=float(elemento['puntaje'])
+                descripcion=forms.CharField(max_length=50).clean(elemento['descripcion'])
+                nombreFila=forms.CharField(max_length=30).clean(elemento['nombreFila'])
+                rubrica=Rubrica.objects.get(pk=id)
+                fila=int(elemento['fila'])
+                columna=int(elemento['columna'])
+                aspectoRubrica, created=AspectoRubrica.objects.get_or_create(
+                    rubrica=rubrica,
+                    fila=fila,
+                    columna=columna
+                )
+                
+                aspectoRubrica.puntaje=puntaje
+                aspectoRubrica.descripcion=descripcion
+                aspectoRubrica.nombreFila=nombreFila
+                aspectoRubrica.save()
+
         return HttpResponse('')
     
 

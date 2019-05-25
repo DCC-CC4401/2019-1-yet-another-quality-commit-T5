@@ -176,7 +176,7 @@
 
 
 //funcion para traer los aspectos de la rubrica a la pagina
-    let idRubrica;
+    var idRubrica;
     var detalleRubrica;
     var sumaRubrica;
     for(let i=0; i<rubricasJs.length; i++){
@@ -202,13 +202,13 @@
                         if(j==0){
                             //comparar la maxima columna
                             mayorColumna=Math.max(mayorColumna,data[i].length);
-                            html += '<tr "> <th class="w3-red tabla-elemento-rubrica w3-small" style="height: 60px" >' + data[i][j]['nombreFila']
+                            html += '<tr "> <th id="info-'+i+'" class="w3-red tabla-elemento-rubrica w3-small" style="height: 60px" {% if user|is_admin %} contenteditable="true" {% endif %} >' + data[i][j]['nombreFila']
                             + '</th>';
                         }
-                        html +='<td id="'+i+'__'+j
-                            +'"  class="w3-display-container w3-hover-gray w3-tiny tabla-elemento-rubrica"  > <div {% if user|is_admin %} contenteditable="true" {% endif %}>'
-                                +data[i][j]['descripcion'] +'</div><div id="'+i+'__'+j+'-puntaje" style="width: 50px" class="w3-display-topright w3-container w3-green w3-medium" {% if user|is_admin %} contenteditable="true" {% endif %}>'
-                                    +data[i][j]['puntaje']+'</div></td>';
+                        html +='<td class="w3-display-container w3-hover-gray w3-tiny tabla-elemento-rubrica"  >'+
+                                ' <div id="'+i+'__'+j+'-descripcion" {% if user|is_admin %} contenteditable="true" {% endif %}>' +data[i][j]['descripcion'] +
+                                    '</div><div id="'+i+'__'+j+'-puntaje" style="width: 50px" class="w3-display-topright w3-container w3-green w3-medium" {% if user|is_admin %} contenteditable="true" {% endif %}>'
+                                        +data[i][j]['puntaje']+'</div></td>';
                         
                         if(j==(data[i].length-1)){
                             sumaRubrica+=parseFloat(data[i][j]['puntaje']);
@@ -293,6 +293,16 @@ function sendAspectosRubrica(){
     xhr.open("POST", url, true);
     xhr.setRequestHeader("Content-Type", "application/json");
     xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+    //se actualizan los valores de la tabla al objeto Rubrica (los puntajes ya estan actualizados)
+    let infoFila;
+    for(let i=0 ; i<detalleRubrica.length; i++){
+        infoFila=$('#info-'+i).text();
+        for(let j=0; j<detalleRubrica[i].length; j++){
+            detalleRubrica[i][j]['nombreFila']=infoFila;
+            detalleRubrica[i][j]['descripcion']=$('#'+i+'__'+j+'-descripcion').text();
+            detalleRubrica[i][j]['idRubrica']=idRubrica;
+        }
+    }
     xhr.send(JSON.stringify(detalleRubrica));
 }
 </script>
