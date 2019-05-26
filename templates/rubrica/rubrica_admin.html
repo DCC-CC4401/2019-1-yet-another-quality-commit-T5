@@ -73,11 +73,17 @@
         
 
         <div class="w3-margin-top w3-margin-bottom w3-container w3-center "><br>
+
+
             
             <div class="w3-display-container">
                 <span onclick="document.getElementById('rubrica-detalle').style.display='none'"  class="w3-display-right w3-xlarge w3-text-red opcion" title="Close Modal">
                     <i class="fa fa-window-close" aria-hidden="true"></i></span>
-            </div> 
+            </div>
+            <div class="w3-container">
+            <label for="new-nombre">Nombre:</label><input type="text"  maxlength="50" required="" id="new-nombre">
+                        <label for="new-descripcion">Descripcion:</label><input type="text"  maxlength="50" required="" id="new-descripcion">
+            </div>
             <br>
 
             <table id="tabla-rubrica" class="w3-card-4" style="width: 100%"  >
@@ -215,6 +221,17 @@ for(let i=0; i<rubricasJs.length; i++){
 function traerRubrica(){
 
     idRubrica= $(this).attr("id");
+    let nombre;
+    let descripcion;
+    //buscar info rubrica
+    for(let i=0; i<rubricasJs.length; i++){
+        if(rubricasJs[i][0]==idRubrica){
+            nombre=rubricasJs[i][1];
+            descripcion=rubricasJs[i][2];
+        }
+    }
+    $('#new-nombre').val(nombre);
+    $('#new-descripcion').val(descripcion);
     
     $.ajax({
         data : {'id' : idRubrica},
@@ -379,6 +396,10 @@ function actualizarPuntaje(){
 // Sending in JSON format using POST method
 //
 function sendAspectosRubrica(){
+    if(Math.abs(sumaRubrica-6)>Number.EPSILON){
+        alert("La suma de los puntajes asociados a la rúbrica debe ser 6 puntos");
+        return;
+    }
     var xhr = new XMLHttpRequest();
     var url = "{% url 'rubricas:update_aspectos_rubrica' %}";
     xhr.open("POST", url, true);
@@ -386,15 +407,20 @@ function sendAspectosRubrica(){
     xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
     //se actualizan los valores de la tabla al objeto Rubrica (los puntajes ya estan actualizados)
     let infoFila;
+    let newNombre=$('#new-nombre').val();
+    let newDescripcion=$('#new-descripcion').val();
+    let data={'idRubrica':idRubrica, 'nombre':newNombre, 'descripcion': newDescripcion};
     for(let i=0 ; i<detalleRubrica.length; i++){
         infoFila=$('#info-'+i).text();
         for(let j=0; j<detalleRubrica[i].length; j++){
             detalleRubrica[i][j]['nombreFila']=infoFila;
             detalleRubrica[i][j]['descripcion']=$('#'+i+'__'+j+'-descripcion').text();
-            detalleRubrica[i][j]['idRubrica']=idRubrica;
+            
         }
     }
-    xhr.send(JSON.stringify(detalleRubrica));
+    data['aspectosRubrica']=detalleRubrica
+    console.log(data);
+    xhr.send(JSON.stringify(data));
 }
 </script>
 

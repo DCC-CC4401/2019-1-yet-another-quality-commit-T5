@@ -112,25 +112,34 @@ def aspectoRubrica_serializer(aspectoRubrica):
 def updateAspectosRubrica(request):
     if request.method == "POST":
         received_json_data=json.loads(request.body)
-        for fila in received_json_data:
-            for elemento in fila:
-            
-                id=int(elemento['idRubrica'])
+        idRubrica = int(received_json_data['idRubrica'])
+        newNombre = forms.CharField(max_length=50).clean(received_json_data['nombre'])
+        newDescripcion = forms.CharField(max_length=50).clean(received_json_data['descripcion'])
+        newRubrica = Rubrica.objects.get(pk=idRubrica)
+        newRubrica.nombre=newNombre
+        newRubrica.descripcion=newDescripcion
+        newRubrica.save()
+
+        ##asegurarse que no existen aspectosRubrica asociados
+        ##DUDA A FUTURO: ¿porque si elimino primero lso aspectos y despues actualizo la rubrica ,
+        ##los aspectos anteriores no se borran?
+        AspectoRubrica.objects.filter(rubrica__id=idRubrica).delete()
+        
+        for i in received_json_data['aspectosRubrica']:
+            for elemento in i:
+                print(elemento)
                 puntaje=float(elemento['puntaje'])
                 descripcion=forms.CharField(max_length=50).clean(elemento['descripcion'])
                 nombreFila=forms.CharField(max_length=30).clean(elemento['nombreFila'])
-                rubrica=Rubrica.objects.get(pk=id)
                 fila=int(elemento['fila'])
                 columna=int(elemento['columna'])
-                aspectoRubrica, created=AspectoRubrica.objects.get_or_create(
-                    rubrica=rubrica,
-                    fila=fila,
-                    columna=columna
-                )
+                aspectoRubrica = AspectoRubrica(rubrica=newRubrica, 
+                                                fila=fila, 
+                                                columna=columna,
+                                                puntaje=puntaje,
+                                                descripcion=descripcion,
+                                                nombreFila=nombreFila)
                 
-                aspectoRubrica.puntaje=puntaje
-                aspectoRubrica.descripcion=descripcion
-                aspectoRubrica.nombreFila=nombreFila
                 aspectoRubrica.save()
 
         return HttpResponse('')
