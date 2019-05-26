@@ -16,8 +16,8 @@ class Rubrica(models.Model):
         """
         super(Rubrica, self).save(*args, **kwargs)
         AspectoRubrica(rubrica=self,fila=0,columna=0,puntaje=0.0, nombreFila= "Aspecto 1", descripcion="Nivel 1").save()
-        AspectoRubrica(rubrica=self,fila=0,columna=1,puntaje=2.0, nombreFila= "Aspecto 1", descripcion="Nivel 2").save()
-        AspectoRubrica(rubrica=self,fila=0,columna=2,puntaje=4.0, nombreFila= "Aspecto 1", descripcion="Nivel 3").save()
+        AspectoRubrica(rubrica=self,fila=0,columna=1,puntaje=1.5, nombreFila= "Aspecto 1", descripcion="Nivel 2").save()
+        AspectoRubrica(rubrica=self,fila=0,columna=2,puntaje=3.0, nombreFila= "Aspecto 1", descripcion="Nivel 3").save()
         AspectoRubrica(rubrica=self,fila=1,columna=0,puntaje=0.0, nombreFila= "Aspecto 2", descripcion="Nivel 1").save()
         AspectoRubrica(rubrica=self,fila=1,columna=1,puntaje=1.5, nombreFila= "Aspecto 2", descripcion="Nivel 2").save()
         AspectoRubrica(rubrica=self,fila=1,columna=2,puntaje=3.0, nombreFila= "Aspecto 2", descripcion="Nivel 3").save()
