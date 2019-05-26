@@ -15,7 +15,7 @@
 
 {% if user.is_authenticated %}
     <div class="w3-container">
-    <input id='buscar'  type='text' placeholder="Busque algún evaluador">
+    <input id='buscar'  type='text' placeholder="Busque alguna rúbrica">
     </div>
     <!-- Listado de rubricas-->
     <div class="w3-margin-top w3-container w3-center">
@@ -83,18 +83,43 @@
             <table id="tabla-rubrica" class="w3-card-4" style="width: 100%"  >
               
             </table>
-            <div class="w3-container">
+            <div >
                 
-                <div class="w3-container w3-display-container" style="height: 70px">
-                    <span class="w3-display-right w3-container w3-round-large "> Puntaje total:  <input size="1" id="puntaje-total" type="text" readonly=""></input></span>
+                
+                <div class="w3-row w3-margin-top w3-center " >
+                    {% if user|is_admin %}
+                    <div  class="w3-col s6 w3-large">
+                            <div id="mas-menos-filas">
+                                    <i id="mas-filas" class="fas fa-plus-square w3-text-blue-gray zoom"></i>                                
+
+                                    <i id="menos-filas" class="fas fa-minus-square w3-text-red zoom" style="margin-left:5px"> </i> 
+                            </div>
+                                
+                    </div>
+                    {% else %}
+                    <div class="w3-col s6">
+                        <p></p>
+                    </div>  
+                    {% endif %}
+                    <div class="w3-col s6 " >
+                    Puntaje total :  <input style="width: 4ch" id="puntaje-total" type="text" readonly=""></input>
+                    </div>
                 </div>
                 
-                {% if user|is_admin %}
-                <div class="w3-container"><div class="w3-display-container w3-container" style="height: 50px">
-                <button style="width:30%" class="w3-round w3-button  w3-red w3-display-right" onclick="sendAspectosRubrica()">Guardar cambios</button>
-                </div></div>
-                {% endif %}
+
             </div>
+          
+                {% if user|is_admin %}
+                <div class="w3-row w3-margin-top">
+                <div class="w3-col s6 w3-center" >
+                   <p></p>
+                </div>
+                <div class="w3-col s6 w3-center">
+                    <button class="w3-round w3-button  w3-red" style="width:100%" onclick="sendAspectosRubrica()"><i class="far fa-save"></i> Guardar cambios</button>
+                </div>
+            </div>
+                {% endif %}
+
         
       </div>
       
@@ -140,108 +165,165 @@
 <script>
 // Function para buscar rubrica 
     
-    function buscarRubrica(){
-        let busqueda = document.getElementById('buscar').value;
-        let filtered = rubricasJs.filter((x)=>{
-        if(busqueda==""){
+function buscarRubrica(){
+    let busqueda = document.getElementById('buscar').value;
+    let filtered = rubricasJs.filter((x)=>{
+    if(busqueda==""){
+        return true;
+        }
+
+    let raw_palabras = x[0]+" "+x[1]+" "+x[2];
+
+    let palabras = raw_palabras.split(" ");
+    for(let i=0; i<palabras.length; i++){
+        if(palabras[i].toLowerCase()==busqueda.toLowerCase()){
             return true;
-            }
-
-        let raw_palabras = x[0]+" "+x[1]+" "+x[2];
-
-        let palabras = raw_palabras.split(" ");
-        for(let i=0; i<palabras.length; i++){
-            if(palabras[i].toLowerCase()==busqueda.toLowerCase()){
-                return true;
-            }
-        }   
-        return false;
-        });
-        for(i=0;i<rubricasJs.length;i++){
-            document.getElementById(rubricasJs[i][0]).style.display='none';
-
         }
-        for(i=0;i<filtered.length;i++){
-            document.getElementById(filtered[i][0]).style.display='';
-        }
-    }
-
-    //prepare document for buscar
-    document.getElementById('buscar').addEventListener('keydown',event=>{
-        if(event.key=='Enter'){
-            buscarRubrica();
-        }
+    }   
+    return false;
     });
+    for(i=0;i<rubricasJs.length;i++){
+        document.getElementById(rubricasJs[i][0]).style.display='none';
+
+    }
+    for(i=0;i<filtered.length;i++){
+        document.getElementById(filtered[i][0]).style.display='';
+    }
+}
+
+//prepare document for buscar
+document.getElementById('buscar').addEventListener('keydown',event=>{
+    if(event.key=='Enter'){
+        buscarRubrica();
+    }
+});
+
+//prepare document for add/remove rows
+$('#mas-filas').click(()=>{añadirFila()});
+$('#menos-filas').click(()=>{quitarFila()});
 
 
 
 //funcion para traer los aspectos de la rubrica a la pagina
-    var idRubrica;
-    var detalleRubrica;
-    var sumaRubrica;
-    for(let i=0; i<rubricasJs.length; i++){
-        idRubrica=rubricasJs[i][0];
-        $('#'+rubricasJs[i][0]).on('click', traerRubrica);
-    }
-    function traerRubrica(){
-        observer.disconnect();
-        idRubrica= $(this).attr("id");
-        sumaRubrica=0;
-        $.ajax({
-            data : {'id' : idRubrica},
-            url : 'busqueda_rubrica_ajax',
-            type : 'get',
-            success: function(data){
-                detalleRubrica=data;
-                let html = "<tbody>";
-                let mayorColumna = 0;
-            
-                
-                for(let i=0; i<data.length ; i++){
-                    for(let j=0; j<data[i].length;j++){
-                        if(j==0){
-                            //comparar la maxima columna
-                            mayorColumna=Math.max(mayorColumna,data[i].length);
-                            html += '<tr "> <th id="info-'+i+'" class="w3-red tabla-elemento-rubrica w3-small" style="height: 60px" {% if user|is_admin %} contenteditable="true" {% endif %} >' + data[i][j]['nombreFila']
-                            + '</th>';
-                        }
-                        html +='<td class="w3-display-container w3-hover-gray w3-tiny tabla-elemento-rubrica"  >'+
-                                ' <div id="'+i+'__'+j+'-descripcion" {% if user|is_admin %} contenteditable="true" {% endif %}>' +data[i][j]['descripcion'] +
-                                    '</div><div id="'+i+'__'+j+'-puntaje" style="width: 50px" class="w3-display-topright w3-container w3-green w3-medium" {% if user|is_admin %} contenteditable="true" {% endif %}>'
-                                        +data[i][j]['puntaje']+'</div></td>';
-                        
-                        if(j==(data[i].length-1)){
-                            sumaRubrica+=parseFloat(data[i][j]['puntaje']);
-                            html +='</tr>';
-                        }
+var idRubrica;
+var detalleRubrica;
+var sumaRubrica;
+for(let i=0; i<rubricasJs.length; i++){
+    idRubrica=rubricasJs[i][0];
+    $('#'+rubricasJs[i][0]).on('click', traerRubrica);
+}
+function traerRubrica(){
 
-                    }
-                    
-                }
-                
-                let width=Math.floor(100/(mayorColumna+1));
-                html +='</tbody>';
-                head = '<thead> <tr> <th class="w3-red tabla-elemento-rubrica" style="width: '+width+'% ; height: 60px"> Niveles </th>' ;
-                for(let i=1;i<=mayorColumna;i++){
-                    head += '<th style="width: '+width+'%" class="w3-red tabla-elemento-rubrica"> Nivel ' + i +'</th>';
-                }
-                head += '</tr></thead>'
-                html = head + html;
-                
-                console.log(mayorColumna);
-                $('#tabla-rubrica').html(html);
-                $('#rubrica-detalle').show();
-                $('#puntaje-total').val(sumaRubrica);
-                for(let i=0; i<data.length;i++){
-                    for(let j=0; j<data[i].length;j++){
-                        observer.observe(document.getElementById(i+"__"+j+"-puntaje"),config);
-                    }
-                }
-                window.location.href = '#rubrica-detalle';
+    idRubrica= $(this).attr("id");
+    
+    $.ajax({
+        data : {'id' : idRubrica},
+        url : 'busqueda_rubrica_ajax',
+        type : 'get',
+        success: (data)=>{jsonToTable(data);
+                            window.location.href = '#rubrica-detalle';}
+        ,
+    });
+    
+}
+//añadir un fila a la rubrica
+function añadirFila(){ 
+    let ultimaFila=detalleRubrica.length;
+    let nuevoElemento={'fila': ultimaFila, 'columna': 0,
+                       'puntaje':  "0.0", 'nombreFila': 'Aspecto '+ (ultimaFila+1),
+                        'descripcion' : 'Nivel 1'};
+    let nuevaFila=[nuevoElemento];
+    detalleRubrica.push(nuevaFila);
+    jsonToTable(detalleRubrica);
+}
+
+
+//quitar una fila de la rubrica
+function quitarFila(){
+    detalleRubrica.pop();
+    jsonToTable(detalleRubrica);
+}
+
+//añadir una columna a la fila correspondiente
+function añadirColumna(fila){
+    columnaAnterior=detalleRubrica[fila].length-1
+    elementoAnterior=detalleRubrica[fila][columnaAnterior];
+    puntajeAnterior=(parseFloat(elementoAnterior['puntaje'])+1);
+    puntajeNuevo=puntajeAnterior.toFixed(1);
+    nuevoElemento={'fila': fila, 'columna': (columnaAnterior+1),
+                       'puntaje':  puntajeNuevo, 'nombreFila': elementoAnterior['nombreFila'],
+                        'descripcion' : 'Nivel '+(columnaAnterior+2)};
+    detalleRubrica[fila].push(nuevoElemento);
+    jsonToTable(detalleRubrica);
+}
+
+//quitar columna a la fila correspondiente
+function quitarColumna(fila){
+    detalleRubrica[fila].pop();
+    jsonToTable(detalleRubrica);
+}
+
+
+//traducir el json a tabla
+function jsonToTable(data){
+    observer.disconnect();
+    detalleRubrica=data;
+    let html = "<tbody>";
+    let mayorColumna = 0;
+    actualizarPuntaje();
+    for(let i=0; i<data.length ; i++){
+        for(let j=0; j<data[i].length;j++){
+            if(j==0){
+                //comparar la maxima columna
+                mayorColumna=Math.max(mayorColumna,data[i].length);
+                html += '<tr class="w3-display-container"> <th id="info-'+i+'" class="w3-red tabla-elemento-rubrica w3-small {% if user|is_admin %} w3-hover-opacity  {% endif %}" style="height: 60px" {% if user|is_admin %} contenteditable="true" {% endif %} >' + data[i][j]['nombreFila']
+                + '</th>';
             }
-        });
+            html +='<td id="'+i+'__'+j+'" class="w3-display-container {% if user|is_admin %} w3-hover-gray  {% endif %} w3-tiny tabla-elemento-rubrica"  >'+
+                    ' <div id="'+i+'__'+j+'-descripcion" {% if user|is_admin %} contenteditable="true" {% endif %}>' +data[i][j]['descripcion'] +
+                        '</div><div id="'+i+'__'+j+'-puntaje" style="width: 50px" class="w3-display-topleft w3-container w3-green w3-medium" {% if user|is_admin %} contenteditable="true" {% endif %}>'
+                            +data[i][j]['puntaje']+'</div>';
+            
+            if(j!=(data[i].length-1)){
+                 html+='</td>';
+            
+            }else{
+                {% if user|is_admin %}
+                html+='<div id="prueba" style="height:50px; width: 20%;" class="w3-container w3-display-right w3-display-container">'+
+                                    '<i id="mas-'+i+'" class="fas fa-plus-circle w3-text-blue-gray zoom w3-medium" style="margin-top:5px"></i>'+
+                                    '<i id="menos-'+i+'" class="fas fa-minus-circle w3-text-red zoom w3-medium" style="margin-top:5px"></i>'+
+                            '</div>';
+                {% endif %}
+                html +='</td></tr>';
+           
+            }
+
+        }
         
     }
+    
+    let width=Math.floor(100/(mayorColumna+1));
+    html +='</tbody>';
+    head = '<thead> <tr> <th class="w3-red tabla-elemento-rubrica" style="width: '+width+'% ; height: 60px"> Niveles </th>' ;
+    for(let i=1;i<=mayorColumna;i++){
+        head += '<th style="width: '+width+'%" class="w3-red tabla-elemento-rubrica"> Nivel ' + i +'</th>';
+    }
+    head += '</tr></thead>'
+    html = head + html;
+    console.log(width);
+    $('#mas-menos-filas').css('width',(width*2)+'%');
+    $('#tabla-rubrica').html(html);
+    $('#rubrica-detalle').show();
+    for(let i=0; i<data.length;i++){
+        $('#mas-'+i).click(()=>{añadirColumna(i)});
+        $('#menos-'+i).click(()=>{quitarColumna(i)});
+        for(let j=0; j<data[i].length;j++){
+            observer.observe(document.getElementById(i+"__"+j+"-puntaje"),config);
+        }
+    }
+    
+}
+
 
 //observador para los elementos de la tabla
 
@@ -280,8 +362,17 @@ function actualizarPuntaje(){
         ultimo = (detalleRubrica[i].length - 1);        
         sumaRubrica+=parseFloat(detalleRubrica[i][ultimo]['puntaje']);
         }
-    console.log(sumaRubrica);
-    $('#puntaje-total').val(sumaRubrica);
+    $('#puntaje-total').val(sumaRubrica.toFixed(1));
+    if(sumaRubrica<6){
+        $('#puntaje-total').css('color','#e8a814');
+    }
+    else{
+        if(Math.abs(sumaRubrica-6)< Number.EPSILON){
+        $('#puntaje-total').css('color','#2fba2a');
+        }   else{
+        $('#puntaje-total').css('color','#d62f26');
+    }
+}
 }
 
 //actualizar Rubricas
