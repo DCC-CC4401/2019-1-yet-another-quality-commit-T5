@@ -33,3 +33,17 @@ class AddCurso(forms.Form):
 
         curso.save()
 
+class AddGrupo(forms.Form):
+    Lista_alumnos=("Alumno1", "Alumno2", "Alumno3", "Alumno4")
+    Nombre = forms.CharField(max_length=40,
+                             widget=forms.TextInput(attrs={'class': 'form-control'}),
+                             required=True)
+
+    def is_valid(self):
+        return super(AddGrupo,self).is_valid()
+
+    def save(self, *args, **kwargs):
+        grupo=Grupo(nombre=self.cleaned_data['Nombre'])
+
+        grupo.save()
+
