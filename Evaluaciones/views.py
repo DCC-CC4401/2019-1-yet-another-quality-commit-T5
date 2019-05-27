@@ -42,6 +42,7 @@ def add_evaluacion(request):
         form = AddEvaluacion(request.POST)
         if form.is_valid():
             form.save()
+
             return HttpResponseRedirect('evaluacion')
         else:
             form = AddEvaluacion()
@@ -102,7 +103,7 @@ def bound_evaluador(request, pk):
             return HttpResponseRedirect('/evaluaciones/' + str(pk) + '/evaluacion_detalle')
         else:
             form = AddEvaluacion()
-            return render(request, '/evaluacion/evaluacion_admin.html', {'form': form})
+            return HttpResponseRedirect('/evaluaciones/' + str(pk) + '/evaluacion_detalle')
     return HttpResponseRedirect('/evaluaciones/' + str(pk) + '/evaluacion_detalle')
 
 

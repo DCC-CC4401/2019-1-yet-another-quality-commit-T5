@@ -7,4 +7,7 @@ urlpatterns = [
     path('delete_curso', views.delete_curso, name='delete_curso'),
     path(r'cursos/<int:pk>/curso_detalle/', views.curso_detalle, name='curso_detalle'),
     path(r'cursos/<int:pk>/agregar_grupo/', views.add_grupo, name='add_grupo'),
+    path('cursos/<int:pk>/bound_evaluador/', views.bound_evaluador, name='bound_evaluador'),
+    path('cursos/<int:pk>/unbound_evaluador/', views.unbound_evaluador, name='unbound_evaluador'),
+    path('cursos/<int:pk>/add_evaluacion/', views.add_evaluacion, name='add_evaluacion'),
 ]

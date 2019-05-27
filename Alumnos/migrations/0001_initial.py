@@ -13,20 +13,20 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='Evaluador',
+            name='Alumno',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('nombre', models.CharField(max_length=50)),
                 ('apellido', models.CharField(max_length=50)),
+                ('run', models.IntegerField(primary_key=True, serialize=False)),
                 ('correo', models.EmailField(max_length=50)),
-                ('creado', models.DateTimeField(auto_now=True)),
             ],
         ),
         migrations.CreateModel(
-            name='Profesor',
+            name='Grupos',
             fields=[
-                ('evaluador_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='Evaluadores.Evaluador')),
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('nombre', models.CharField(max_length=30)),
+                ('integrante', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='Alumnos.Alumno')),
             ],
-            bases=('Evaluadores.evaluador',),
         ),
     ]

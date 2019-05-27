@@ -1,50 +1,102 @@
-{% extends 'cursos/cursos_admin.html' %}
+{% extends 'base.html' %}
 {% block content %}
     <!-- Portada -->
     <div class="w3-container" id="portada" style="margin-top:80px; margin-bottom:10px">
         <h1 class="w3-xxxlarge w3-text-red"><b>Cursos</b></h1>
         <hr style="width:50px;border:5px solid red" class="w3-round">
+        <p>
+        <h3><strong>{{ curso.nombre }}</strong></h3></p>
     </div>
-    <p><h3><strong>{{ curso.nombre }}</strong></h3></p>
+
     <!-- Informacion sobre el curso -->
-    <div class="w3-round w3-padding">
-        <button onclick="myFunction('Demo1')"
-                class="w3-button w3-block w3-left-align w3-red w3-centered w3-center w3-round w3-xlarge">
-            Información del curso
-        </button>
+    <div class="w3-round w3-container w3-padding">
+        <table class="w3-table w3-bordered w3-border-black w3-card-4 w3-centered">
+            <tr>
+                <th class="w3-red"> Código</th>
+                <th class="w3-red"> Semestre y año</th>
+                <th class="w3-red"> Nombre</th>
+                <th class="w3-red"></th>
+            </tr>
+            <tr>
+                <td class="w3-light-gray"> {{ curso }}</td>
+                <td class="w3-light-gray"> {{ curso.get_date }}</td>
+                <td class="w3-light-gray"> {{ curso.get_name }} </td>
+                <td class="w3-light-gray w3-right-align">
+                    <form action="{% url 'cursos:delete_curso' %}" method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="id" value="{{ curso.pk }}">
+                        <button class="w3-button w3-round w3-red w3-small" type="submit">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </form>
+                </td>
+            </tr>
+        </table>
+    </div>
 
-        <div id="Demo1" class="w3-container w3-hide w3-pale-red w3-round">
+    <!-- Evaluadores -->
+    <div class="w3-round w3-half w3-container w3-padding">
+        <div class="w3-container w3-red w3-card">
+            <h5>Evaluadores</h5>
+        </div>
+        <div id="Evaluadores" class="w3-container w3-pale-red w3-round">
             <p>
-            <ul class="w3-ul w3-light-gray w3-round w3-center">
-                <li>Código: {{ curso.get_code }}</li>
-                <li>Semestre: {{ curso.semestre }}</li>
-                <li>Año: {{ curso.año }}</li>
+            <ul class="w3-ul w3-round w3-center">
+                {% for eval in evaluadores %}
+                    <li>
+                        {{ eval }}
+                        <form action="{% url 'cursos:unbound_evaluador' curso.pk %}" method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="id_curso" value="{{ curso.pk }}">
+                            <input type="hidden" name="id_evaluador" value="{{ eval.pk }}">
+                            <button class="w3-button w3-red w3-round w3-small" type="submit">
+                                <i class="fas fa-user-minus"></i>
+                            </button>
+                        </form>
+                    </li>
+                {% endfor %}
+                <form action="{% url 'cursos:bound_evaluador' curso.pk %}" method="post">
+                    {% csrf_token %}
+                    <li class="w3-hide">{{ bound_evaluador.curso }}</li>
+                    <li>{{ bound_evaluador.evaluador }}
+                        <button class="w3-button w3-red w3-round w3-small" type="submit">+</button>
+                    </li>
+                </form>
             </ul>
-            </p>
         </div>
     </div>
 
-    <!-- Evaluadores-->
-    <div class="w3-round w3-padding">
-        <button onclick="myFunction('Demo2')"
-                class="w3-button w3-block w3-left-align w3-red w3-centered w3-center w3-round w3-xlarge">
-            Evaluadores
-        </button>
 
-        <div id="Demo2" class="w3-container w3-hide w3-pale-red w3-round w3-center">
-            <button class="w3-margin">Agregar evaluador</button>
+    <!-- Evaluaciones -->
+    <div class="w3-round w3-half w3-container w3-padding">
+        <div class="w3-container w3-red w3-card">
+            <h5>Evaluaciones</h5>
         </div>
-    </div>
-
-    <!--Evaluaciones-->
-    <div class="w3-padding w3-round">
-        <button onclick="myFunction('Demo3')"
-                class="w3-button w3-block w3-left-align w3-red w3-centered w3-center w3-round w3-xlarge">
-            Evaluaciones
-        </button>
-
-        <div id="Demo3" class="w3-container w3-hide w3-pale-red w3-round w3-center">
-            <button class="w3-margin">Agregar evaluación</button>
+        <div id="Evaluadores" class="w3-container w3-pale-red w3-round">
+            <p>
+            <ul class="w3-ul w3-round w3-center">
+                {% for eval in evaluaciones %}
+                    <li>
+                        <a href="{% url 'evaluaciones:evaluacion_detalle' eval.pk %}">{{ eval }}</a>
+                        <form action="{% url 'evaluaciones:delete_evaluacion' %}" method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="id" value="{{ eval.pk }}">
+                            <button class="w3-button w3-red w3-round w3-small" type="submit">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </form>
+                    </li>
+                {% endfor %}
+                <li>
+                    <div class="w3-container">
+                        <button onclick="document.getElementById('agregar_evaluacion').style.display='block'"
+                                class="w3-round w3-small w3-button w3-red w3-center">
+                            <i class="fas fa-plus"></i>
+                            Agregar
+                        </button>
+                    </div>
+                </li>
+            </ul>
         </div>
     </div>
 
@@ -57,30 +109,32 @@
 
         <div id="Demo4" class="w3-container w3-hide w3-pale-red w3-round w3-center">
             <div class="w3-margin-top w3-container w3-center">
-                    <button onclick="document.getElementById('agregar').style.display='block'"
-                            class="w3-round w3-white w3-margin w3-button w3-right">
-                        <i class="fas fa-plus" style="text-align: center"></i>
-                        Agregar grupo
-                    </button>
-                </div>
+                <button onclick="document.getElementById('agregar').style.display='block'"
+                        class="w3-round w3-white w3-margin w3-button w3-right">
+                    <i class="fas fa-plus" style="text-align: center"></i>
+                    Agregar grupo
+                </button>
+            </div>
         </div>
     </div>
 
-    <div id="agregar" class="w3-modal">
-                    <div class="w3-modal-content w3-card-4 w3-animate-zoom" style="max-width:600px">
-                        <div class="w3-center"><br>
-                            <span onclick="document.getElementById('agregar').style.display='none'"
-                                  class="w3-button w3-xlarge w3-transparent w3-display-topright"
-                                  title="Close Modal">×</span>
-                            <form class="w3-container" action="{% url 'cursos:add_grupo' pk=curso.get_pk %}" method="post">
-                                {% csrf_token %}
-                                <table class="w3-table">
-                                {{ form.as_table }}
-                            </table>
-                                <button class="w3-button w3-block w3-red w3-section w3-padding" type="submit">Agregar
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
+    <!-- Formulario de agregar evaluacion -->
+    <div id="agregar_evaluacion" class="w3-modal">
+        <div class="w3-modal-content w3-card-4 w3-animate-zoom" style="max-width:600px">
+            <div class="w3-center"><br>
+                <span onclick="document.getElementById('agregar_evaluacion').style.display='none'"
+                      class="w3-button w3-xlarge w3-transparent w3-display-topright"
+                      title="Close Modal">×</span>
+                <form class="w3-container" action="{% url 'cursos:add_grupo' pk=curso.get_pk %}" method="post">
+                    {% csrf_token %}
+                    <table class="w3-table">
+                        {{ add_evaluacion.as_table }}
+                    </table>
+                    <button class="w3-button w3-block w3-red w3-section w3-padding" type="submit">Agregar
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
 {% endblock %}

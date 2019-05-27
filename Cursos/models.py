@@ -1,5 +1,8 @@
 from django.db import models
 
+from Evaluadores.models import Evaluador
+
+
 class Curso(models.Model):
     nombre = models.CharField(max_length=40)
     código = models.CharField(max_length=6)
@@ -51,3 +54,12 @@ class Alumno(models.Model):
 
     def __str__(self):
         return str(self.nombre)
+
+
+class EvaluadoresCurso(models.Model):
+    curso = models.ForeignKey(Curso, on_delete=models.CASCADE)
+    evaluador = models.ForeignKey(Evaluador, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ('curso', 'evaluador')
+
