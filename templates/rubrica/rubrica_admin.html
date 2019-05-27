@@ -447,8 +447,8 @@ function sendAspectosRubrica(){
     xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
     //se actualizan los valores de la tabla al objeto Rubrica (los puntajes ya estan actualizados)
     let infoFila;
-    let newNombre=$('#new-nombre').val();
-    let newDescripcion=$('#new-descripcion').val();
+    let newNombre=$('#new-nombre').text();
+    let newDescripcion=$('#new-descripcion').text();
     let data={'idRubrica':idRubrica, 'nombre':newNombre, 'descripcion': newDescripcion};
     /*
     for(let i=0 ; i<detalleRubrica.length; i++){
