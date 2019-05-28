@@ -2,7 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from Evaluaciones.forms import *
-
+from django.template import Context, Template
 
 @login_required
 def post_evaluaciones(request):
@@ -22,13 +22,39 @@ def post_evaluaciones(request):
 
 
 @login_required
-def post_evaluacion(request):
-    return render(request, 'evaluacion/evaluacion_post.html',{})
-
-
-@login_required
 def post_postevaluacion(request):
     return render(request, 'evaluacion/postevaluacion.html',{})
+
+import json
+
+@login_required
+def post_evaluacion(request):
+    if request.POST:
+        idEvaluacion=int(request.POST['idEvaluacion'])
+        print(idEvaluacion)
+        rubrica = Evaluacion.objects.get(pk=idEvaluacion).rubrica
+        aspectos = AspectoRubrica.objects.filter(rubrica=rubrica)
+        aspectos = aspectos.order_by('fila','columna')
+        grouped = []
+        ##ahora agrupamos por fila, la salida es [[aspectosfila1][aspectosfila2][...]]
+        for aspecto in aspectos:
+            if (len(grouped)-1 < aspecto.fila):
+                grouped.append([])
+            grouped[aspecto.fila].append(aspectoRubrica_serializer(aspecto))
+
+        data={'idEvaluacion':idEvaluacion, 'detalleRubrica':json.dumps(grouped)}
+    
+        
+        return render(request, 'evaluacion/evaluacion_evaluar.html', data)
+
+
+
+def aspectoRubrica_serializer(aspectoRubrica):
+    return {'fila': aspectoRubrica.fila, 'columna' : aspectoRubrica.columna,
+                'puntaje': str(aspectoRubrica.puntaje), 'nombreFila':aspectoRubrica.nombreFila,
+                    'descripcion': aspectoRubrica.descripcion}
+
+
 
 
 @login_required()

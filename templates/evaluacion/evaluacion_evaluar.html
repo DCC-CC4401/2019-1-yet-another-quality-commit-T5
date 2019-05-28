@@ -1,0 +1,127 @@
+<!-- Start Content for Django -->
+{% extends 'base.html' %}
+{% block content %}
+    <!-- Evaluacion -->
+    
+    <div class="w3-container" id="designers" style="margin-top:50px">
+        <h1 class="w3-xxxlarge w3-text-red"><b>Evaluación <i class="w3-text-green">en curso</i> </b></h1>
+        <hr style="width:50px;border:5px solid red" class="w3-round">
+        <div class="w3-container w3-center">
+            <p><b>Lambda-Ideas</b> Presentación Tarea 2 <i>CC4401-1/Otoño/2019</i></p>
+            <p>Seleccione el nivel de logro alcanzado por el grupo en cada ámbito</p></div>
+
+        <div class="w3-panel  w3-margin-bottom">
+            <ul class="w3-ul w3-light-grey w3-center w3-card-4">
+        
+            </ul>
+        </div>
+
+
+        <div id='paneles'>
+        
+        </div>
+
+        <div class="w3-panel w3-right w3-half">
+            <button class="w3-button w3-xlarge w3-red" style="margin-left: 15%"
+                    onclick="checkBeforeSend()"><i class="fas fa-envelope-open-text"></i> Entregar
+                evaluación
+            </button>
+        </div>
+        
+
+    </div>
+
+    <script>
+    var idEvaluacion='{{idEvaluacion}}';
+    var detalleRubrica=JSON.parse('{{detalleRubrica | escapejs}}');
+    var seleccion=new Array(detalleRubrica.length);
+        
+    $(document).ready(()=>{
+        let html="";
+        for(let i=0;i<detalleRubrica.length;i++){
+            html+='<div class="w3-panel w3-margin-bottom"><ul class="w3-ul w3-light-grey w3-center w3-card-4">'
+            html+='<li id="'+i+'-nombreFila" class="w3-red w3-xlarge w3-padding-32">'+detalleRubrica[i][0]['nombreFila']+' <i style="display:none" class="w3-animate-zoom fas fa-exclamation-circle" id="'+i+'-iconWarning" ></i> <i style="display:none" class="w3-animate-zoom fas fa-check-circle" id="'+i+'-iconCheck" ></i></li>'
+            for(let j=0;j<detalleRubrica[i].length;j++){
+                html+='<li id="'+i+'__'+j+'-opcion" class="opcion w3-padding-16">'+detalleRubrica[i][j]['descripcion']+'</li>'
+                if(j==detalleRubrica[i].length-1){
+                    html+='</ul></div>'
+                }
+            }
+            
+        }
+        $('#paneles').html(html);
+        for(let i=0;i<detalleRubrica.length;i++){
+            for(let j=0;j<detalleRubrica[i].length;j++){
+                $('#'+i+'__'+j+'-opcion').click(seleccionarOpcion);
+            }
+        }
+
+        
+        
+    })   
+
+    function seleccionarOpcion(){
+        let id=$(this).attr('id');
+        let filacolumna_opcion=id.split('-')[0];
+        let filacolumna=filacolumna_opcion.split('__');
+        let fila=filacolumna[0];
+        let columna=filacolumna[1];
+
+        
+        for(let j=0;j<detalleRubrica[fila].length;j++){
+            if(j==columna){
+                if(!$(this).hasClass('selected')){
+                    $(this).addClass('selected');
+                }
+            }
+            else{
+                if($('#'+fila+'__'+j+'-opcion').hasClass('selected')){
+                    $('#'+fila+'__'+j+'-opcion').removeClass('selected');
+                }            
+            }
+        }
+        if($('#'+fila+'-iconWarning').css('display') != 'none'){
+            $('#'+fila+'-iconWarning').hide();
+            $('#'+fila+'-nombreFila').removeClass('w3-orange');
+            $('#'+fila+'-nombreFila').addClass('w3-red');
+        }
+        seleccion[fila]=detalleRubrica[fila][columna];
+        $('#'+fila+'-iconCheck').show();
+
+    }
+
+    function checkBeforeSend(){
+        let allPresent=true;
+        for(let i=0; i<detalleRubrica.length; i++){
+            if (seleccion[i]==null){
+                allPresent=false;
+                $('#'+i+'-iconWarning').show();
+                if($('#'+i+'-nombreFila').hasClass('w3-red')){
+                    $('#'+i+'-nombreFila').removeClass('w3-red');
+                }
+                if(!$('#'+i+'-nombreFila').hasClass('w3-orange')){
+                    $('#'+i+'-nombreFila').addClass('w3-orange');
+                }
+            }
+        }
+        if(!allPresent)
+        alert('Porfavor complete la evaluación antes de realizar la entrega');
+        return allPresent;
+    }     
+            
+    
+            
+            
+            
+        </script>
+
+
+
+
+
+{% endblock %}
+<!-- End page content -->
+
+
+
+
