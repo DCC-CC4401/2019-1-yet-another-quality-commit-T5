@@ -101,20 +101,26 @@
     </div>
 
     <!--Listado de alumnos-->
-    <div class="w3-padding w3-round">
-        <button onclick="myFunction('Demo4')"
-                class="w3-button w3-block w3-left-align w3-red w3-centered w3-center w3-round w3-xlarge">
-            Integrantes/Grupos
-        </button>
+    <div class="w3-container">
+        <div class="w3-container w3-red w3-card">
+            <h5>Alumnos</h5>
+        </div>
 
-        <div id="Demo4" class="w3-container w3-hide w3-pale-red w3-round w3-center">
-            <div class="w3-margin-top w3-container w3-center">
-                <button onclick="document.getElementById('agregar').style.display='block'"
-                        class="w3-round w3-white w3-margin w3-button w3-right">
-                    <i class="fas fa-plus" style="text-align: center"></i>
-                    Agregar grupo
-                </button>
-            </div>
+        <div id="Alumnos" class="w3-container w3-pale-red w3-round w3-center">
+            <table class="w3-table">
+                <th>Grupo</th>
+                <th>Nombre</th>
+                <th>Run</th>
+            <th>Correo</th>
+                {% for alumno in alumnos %}
+                    <tr>
+                    <td>Work in progress</td>
+                    <td>{{ alumno }}</td>
+                    <td>{{ alumno.run }}</td>
+                    <td>{{ alumno.correo }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
         </div>
     </div>
 
@@ -125,7 +131,7 @@
                 <span onclick="document.getElementById('agregar_evaluacion').style.display='none'"
                       class="w3-button w3-xlarge w3-transparent w3-display-topright"
                       title="Close Modal">×</span>
-                <form class="w3-container" action="{% url 'cursos:add_grupo' pk=curso.get_pk %}" method="post">
+                <form class="w3-container" action="{% url 'cursos:add_evaluacion' pk=curso.get_pk %}" method="post">
                     {% csrf_token %}
                     <table class="w3-table">
                         {{ add_evaluacion.as_table }}

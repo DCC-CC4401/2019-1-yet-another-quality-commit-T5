@@ -36,24 +36,7 @@ class Curso(models.Model):
         return str(self.get_semester() +" "+self.get_year())
 
     def __str__(self):
-        return str(self.get_code() + "-" + self.get_section())
-
-
-class Grupo(models.Model):
-    nombre = models.CharField(max_length=100)
-
-    def __str__(self):
-        return str(self.nombre)
-
-
-class Alumno(models.Model):
-    curso = models.ForeignKey(Curso, on_delete=models.CASCADE)
-    rut = models.CharField(max_length=12)
-    grupo = models.ForeignKey(Grupo, on_delete=models.CASCADE)
-    nombre = models.CharField(max_length=30)
-
-    def __str__(self):
-        return str(self.nombre)
+        return str(self.get_code() + "-" + self.get_section() + " " + self.get_date())
 
 
 class EvaluadoresCurso(models.Model):

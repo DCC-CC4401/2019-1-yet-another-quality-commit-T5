@@ -1,6 +1,8 @@
 from django.db import models
 from django.utils import timezone
-from Cursos.models import Curso, Alumno, Grupo, EvaluadoresCurso
+
+from Alumnos.models import Grupo, Alumno
+from Cursos.models import Curso, EvaluadoresCurso
 from Rubricas.models import Rubrica
 from Rubricas.models import AspectoRubrica
 from Evaluadores.models import Evaluador
@@ -9,7 +11,7 @@ from Evaluadores.models import Evaluador
 class Evaluacion(models.Model):
     tiempo_min = models.PositiveSmallIntegerField(default=5)
     tiempo_max = models.PositiveSmallIntegerField(default=8)
-    #rubrica = models.ForeignKey(Rubrica, on_delete=models.CASCADE, default=Rubrica(name="NuevaRubrica").save())
+    rubrica = models.ForeignKey(Rubrica, on_delete=models.CASCADE, null=True, blank=True)
     fecha_inicio = models.DateField(default=timezone.now)
     fecha_fin = models.DateField(default=timezone.now)
     curso = models.ForeignKey(Curso, on_delete=models.CASCADE)

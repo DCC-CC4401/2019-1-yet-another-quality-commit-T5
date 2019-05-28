@@ -5,8 +5,10 @@ from django.http import HttpResponseRedirect
 
 from .forms import AddCurso, AddGrupo, BoundEvaluador
 from Evaluaciones.forms import AddEvaluacion
-from .models import Curso, Grupo, EvaluadoresCurso
+from .models import Curso, EvaluadoresCurso
 from Evaluaciones.models import Evaluacion, EvaluadoresEvaluacion
+
+from Alumnos.models import Alumno, Grupo
 
 
 @login_required
@@ -62,13 +64,14 @@ def curso_detalle(request, pk):
 
     # lista de evaluaciones
     evaluaciones = Evaluacion.objects.all()
-    evaluaciones_list = []
-    for evaluacion in evaluaciones:
-        evaluaciones_list.append(evaluacion)
+
+    # lista de alumnos
+    alumnos = Alumno.objects.all()
 
     return render(request, 'cursos/curso_detalle.html', context={'curso': curso_id,
                                                                  'evaluadores': evaluadores_list,
-                                                                 'evaluaciones': evaluaciones_list,
+                                                                 'evaluaciones': evaluaciones,
+                                                                 'alumnos': alumnos,
                                                                  'bound_evaluador': bound_evaluador,
                                                                  'add_evaluacion': add_evaluacion})
 
@@ -85,6 +88,7 @@ def delete_curso(request):
 
 @login_required
 def all_grupos(request):
+    from Alumnos.models import Grupo
     grupos = Grupo.objects.all()
     grupos_list = []
 
@@ -151,13 +155,8 @@ def add_evaluacion(request, pk):
     :return:
     """
     if request.POST and request.user.groups.filter(name='Profesores').exists():
-        id_curso = int(request.POST.get('id_curso'))
-        curso = Curso.objects.get(pk=id_curso)
         add_evaluacion = AddEvaluacion(request.POST)
         if add_evaluacion.is_valid():
             add_evaluacion.save()
             return HttpResponseRedirect('/cursos/' + str(pk) + '/curso_detalle')
-        else:
-            add_evaluacion = AddEvaluacion({'curso': curso})
-            return render(request, '/cursos/curso_detalle.html', {'add_evaluacion': add_evaluacion})
-        return HttpResponseRedirect('/cursos/' + str(pk) + '/curso_detalle')
+    return HttpResponseRedirect('/cursos/' + str(pk) + '/curso_detalle')

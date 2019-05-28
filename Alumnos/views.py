@@ -12,12 +12,11 @@ def add_alumno(request):
         if form.is_valid():
             form.save()
             return HttpResponseRedirect('cursos')
-        else:
-            form = AlumnoForm()
 
     return post_alumnos(request)
 
 
+@login_required
 def post_alumnos(request):
     form = AlumnoForm()
     alumnos = Alumno.objects.all()
@@ -27,3 +26,5 @@ def post_alumnos(request):
         alumnos_list.append(alumno)
 
     return render(request, 'cursos/cursos_admin.html', {'form': form, 'alumno_list': alumnos_list})
+
+
