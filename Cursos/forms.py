@@ -47,3 +47,11 @@ class AddGrupo(forms.Form):
 
         grupo.save()
 
+
+class BoundEvaluador(forms.ModelForm):
+
+    class Meta:
+        model = EvaluadoresCurso
+        fields = '__all__'
+
+

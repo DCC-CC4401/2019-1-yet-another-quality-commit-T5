@@ -1,5 +1,8 @@
 from django.db import models
 
+from Evaluadores.models import Evaluador
+
+
 class Curso(models.Model):
     nombre = models.CharField(max_length=40)
     código = models.CharField(max_length=6)
@@ -33,21 +36,28 @@ class Curso(models.Model):
         return str(self.get_semester() +" "+self.get_year())
 
     def __str__(self):
-        return str(self.get_code() + "-" + self.get_section())
+        return str(self.get_code() + "-" + self.get_section() + " " + self.get_date())
 
 
-class Grupo(models.Model):
-    nombre = models.CharField(max_length=100)
-
-    def __str__(self):
-        return str(self.nombre)
-
-
-class Alumno(models.Model):
+class EvaluadoresCurso(models.Model):
     curso = models.ForeignKey(Curso, on_delete=models.CASCADE)
-    rut = models.CharField(max_length=12)
-    grupo = models.ForeignKey(Grupo, on_delete=models.CASCADE)
-    nombre = models.CharField(max_length=30)
+    evaluador = models.ForeignKey(Evaluador, on_delete=models.CASCADE)
 
-    def __str__(self):
-        return str(self.nombre)
+    class Meta:
+        unique_together = ('curso', 'evaluador')
+
+    def save(self, *args, **kwargs):
+        """
+        Guarda el modelo, y agrega todos los nuevos evaluadores a los nuevos cursos.
+        :param args:
+        :param kwargs:
+        :return:
+        """
+        super(EvaluadoresCurso, self).save(*args, **kwargs)
+        from Evaluaciones.models import Evaluacion
+        evaluaciones = Evaluacion.objects.filter(curso=self.curso)
+        for eval in evaluaciones:
+            from Evaluaciones.models import EvaluadoresEvaluacion
+            eval_evaluacion = EvaluadoresEvaluacion(evaluacion=eval, evaluador=self.evaluador)
+            eval_evaluacion.save()
+

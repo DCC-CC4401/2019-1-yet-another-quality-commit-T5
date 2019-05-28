@@ -42,11 +42,8 @@
                     <thead>
                     <tr>
                         <th class="w3-red"> Código</th>
-
                         <th class="w3-red"> Semestre y año</th>
-
                         <th class="w3-red"> Nombre</th>
-
                         <th class="w3-red"></th>
                         <th class="w3-red"></th>
                     </tr>
@@ -57,19 +54,20 @@
                     </script>
                     <tbody id='cursos'>
                     {% for curso in cursos_list %}
-                        <tr class="w3-light-gray {% if user|is_admin %}opcion{% endif %}"
-                            id="{{ curso.get_pk }}">
+                        <tr class="w3-light-gray" id="{{ curso.get_pk }}">
                             <td class="w3-light-gray">{{ curso }}</td>
                             <td class="w3-light-gray">{{ curso.get_date }}</td>
                             <td class="w3-light-gray"> {{ curso.get_name }} </td>
+                            <!-- Boton de detalles -->
                             <td class="w3-light-gray">
                                 <form action="{% url 'cursos:curso_detalle' pk=curso.get_pk%}" method="post">
                                     {% csrf_token %}
                                     <input type="hidden" name="id" value="{{ curso.pk }}">
-                                    <button class="w3-button w3-round w3-red w3-center" type="submit">Ver detalles
+                                    <button class="w3-button w3-small w3-round w3-red w3-center" type="submit">Ver detalles
                                     </button>
                                 </form>
                             </td>
+                            <!-- Boton eliminar -->
                             <td class="w3-light-gray w3-right-align">
                             <form action="{% url 'cursos:delete_curso' %}" method="post">
                                 {% csrf_token %}

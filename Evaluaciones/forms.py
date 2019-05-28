@@ -14,9 +14,9 @@ class AddEvaluacion(forms.Form):
     tiempo_max = forms.IntegerField(widget=forms.TextInput(attrs={'class': 'form-control'}),
                              required=True)
 
-    #rubrica = forms.ModelChoiceField(queryset=Rubrica.objects,
-                                     #widget=forms.Select(attrs={'class': 'form-control'}),
-                                     #required=False, label='Rubrica')
+    rubrica = forms.ModelChoiceField(queryset=Rubrica.objects,
+                                     widget=forms.Select(attrs={'class': 'form-control'}),
+                                     required=False, label='Rubrica')
 
     fecha_inicio= forms.DateField(widget=forms.SelectDateWidget(years=YEARS.reverse()))
 

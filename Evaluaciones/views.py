@@ -68,6 +68,7 @@ def add_evaluacion(request):
         form = AddEvaluacion(request.POST)
         if form.is_valid():
             form.save()
+
             return HttpResponseRedirect('evaluacion')
         else:
             form = AddEvaluacion()
@@ -96,7 +97,7 @@ def all_evaluaciones(request):
 @login_required
 def evaluacion_detalle(request, pk):
     evaluacion_id=Evaluacion.objects.get(pk=pk)
-    evaluadores_raw = EvaluadoresEvaluacion.objects.all()
+    evaluadores_raw = EvaluadoresEvaluacion.objects.filter(evaluacion=evaluacion_id)
     evaluadores = []
     for eval in evaluadores_raw:
         evaluadores.append(eval.evaluador)
@@ -128,7 +129,7 @@ def bound_evaluador(request, pk):
             return HttpResponseRedirect('/evaluaciones/' + str(pk) + '/evaluacion_detalle')
         else:
             form = AddEvaluacion()
-            return render(request, '/evaluacion/evaluacion_admin.html', {'form': form})
+            return HttpResponseRedirect('/evaluaciones/' + str(pk) + '/evaluacion_detalle')
     return HttpResponseRedirect('/evaluaciones/' + str(pk) + '/evaluacion_detalle')
 
 
