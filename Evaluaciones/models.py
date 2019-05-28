@@ -1,6 +1,6 @@
 from django.db import models
 from django.utils import timezone
-from Cursos.models import Curso, Alumno, Grupo
+from Cursos.models import Curso, Alumno, Grupo, EvaluadoresCurso
 from Rubricas.models import Rubrica
 from Rubricas.models import AspectoRubrica
 from Evaluadores.models import Evaluador
@@ -36,6 +36,20 @@ class Evaluacion(models.Model):
 
     def get_state(self):
         return str(self.estado)
+
+    def save(self, *args, **kwargs):
+        """
+        Guarda el modelo y asigna todos los evaluadores del curso
+        :param args:
+        :param kwargs:
+        :return:
+        """
+        super(Evaluacion, self).save(*args, **kwargs)
+
+        evaluadores = EvaluadoresCurso.objects.filter(curso=self.curso)
+        for eval in evaluadores:
+            eval_eval = EvaluadoresEvaluacion(evaluacion=self, evaluador=eval.evaluador)
+            eval_eval.save()
 
 
 class FichaEvaluacion(models.Model):

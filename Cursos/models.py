@@ -63,3 +63,18 @@ class EvaluadoresCurso(models.Model):
     class Meta:
         unique_together = ('curso', 'evaluador')
 
+    def save(self, *args, **kwargs):
+        """
+        Guarda el modelo, y agrega todos los nuevos evaluadores a los nuevos cursos.
+        :param args:
+        :param kwargs:
+        :return:
+        """
+        super(EvaluadoresCurso, self).save(*args, **kwargs)
+        from Evaluaciones.models import Evaluacion
+        evaluaciones = Evaluacion.objects.filter(curso=self.curso)
+        for eval in evaluaciones:
+            from Evaluaciones.models import EvaluadoresEvaluacion
+            eval_evaluacion = EvaluadoresEvaluacion(evaluacion=eval, evaluador=self.evaluador)
+            eval_evaluacion.save()
+

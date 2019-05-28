@@ -6,7 +6,7 @@ from django.http import HttpResponseRedirect
 from .forms import AddCurso, AddGrupo, BoundEvaluador
 from Evaluaciones.forms import AddEvaluacion
 from .models import Curso, Grupo, EvaluadoresCurso
-from Evaluaciones.models import Evaluacion
+from Evaluaciones.models import Evaluacion, EvaluadoresEvaluacion
 
 
 @login_required
@@ -121,15 +121,12 @@ def bound_evaluador(request, pk):
         if form.is_valid():
             form.save()
             return HttpResponseRedirect('/cursos/' + str(pk) + '/curso_detalle')
-        else:
-            bound_evaluador = BondEvaluador()
-            return render(request, '/cursos/curso_detalle.html', {'bound_evaluador': bound_evaluador})
     return HttpResponseRedirect('/cursos/' + str(pk) + '/curso_detalle')
 
 
 def unbound_evaluador(request, pk):
     """
-    Retira un evaluador asignado a un curso
+    Retira un evaluador asignado a un curso y de todas las evaluaciones asociadas al curso.
     :param request:
     :return:
     """
@@ -138,6 +135,9 @@ def unbound_evaluador(request, pk):
         id_evaluador = int(request.POST.get('id_evaluador'))
         deleted = EvaluadoresCurso.objects.get(curso=id_curso,
                                                evaluador=id_evaluador).delete()
+        evaluaciones_curso = Evaluacion.objects.filter(curso=id_curso)
+        for eval in evaluaciones_curso:
+            EvaluadoresEvaluacion.objects.filter(evaluacion=eval, evaluador=id_evaluador).delete()
         if deleted is not None:
             return HttpResponseRedirect('/cursos/' + str(pk) + '/curso_detalle')
     return HttpResponseRedirect('/cursos/' + str(pk) + '/curso_detalle')

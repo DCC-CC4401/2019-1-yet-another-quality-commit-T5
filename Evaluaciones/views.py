@@ -71,7 +71,7 @@ def all_evaluaciones(request):
 @login_required
 def evaluacion_detalle(request, pk):
     evaluacion_id=Evaluacion.objects.get(pk=pk)
-    evaluadores_raw = EvaluadoresEvaluacion.objects.all()
+    evaluadores_raw = EvaluadoresEvaluacion.objects.filter(evaluacion=evaluacion_id)
     evaluadores = []
     for eval in evaluadores_raw:
         evaluadores.append(eval.evaluador)
