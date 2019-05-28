@@ -1,4 +1,4 @@
-
+﻿
 # Created by https://www.gitignore.io/api/linux,macos,django,python,windows,pycharm,database,intellij,visualstudio,visualstudiocode,openframeworks+visualstudio
 # Edit at https://www.gitignore.io/?templates=linux,macos,django,python,windows,pycharm,database,intellij,visualstudio,visualstudiocode,openframeworks+visualstudio
 
@@ -812,5 +812,8 @@ healthchecksdb
 
 # Backup folder for Package Reference Convert tool in Visual Studio 2017
 MigrationBackup/
+
+# Migrations
+migrations
 
 # End of https://www.gitignore.io/api/linux,macos,django,python,windows,pycharm,database,intellij,visualstudio,visualstudiocode,openframeworks+visualstudio
