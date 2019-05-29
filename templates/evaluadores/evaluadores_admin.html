@@ -29,7 +29,9 @@
                     <th class="w3-red w3-center"> ID</th>
                     <th class="w3-red"> Nombre</th>
                     <th class="w3-red"> Email</th>
-                    <th class="w3-red"></th>
+                    {% if user|is_admin %}
+                        <th class="w3-red"></th>
+                    {% endif %}
                 </tr>
                 </thead>
                 <script>
@@ -42,15 +44,17 @@
                         <td class='w3-center'>{{ evaluador.get_pk }} </td>
                         <td>{{ evaluador }}</td>
                         <td> {{ evaluador.get_email }} </td>
-                        <td class="w3-light-gray w3-right-align">
-                            <form action="{% url 'evaluadores:delete_evaluador' %}" method="post">
-                                {% csrf_token %}
-                                <input type="hidden" name="ID" value="{{ evaluador.pk }}">
-                                <button class="w3-button w3-round w3-red w3-small" type="submit">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </form>
-                        </td>
+                        {% if user|is_admin %}
+                            <td class="w3-light-gray w3-right-align">
+                                <form action="{% url 'evaluadores:delete_evaluador' %}" method="post">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="ID" value="{{ evaluador.pk }}">
+                                    <button class="w3-button w3-round w3-red w3-small" type="submit">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        {% endif %}
                         <!-- Javascript scan for evaluadores with format {(name,lastname,email),(name,lastname,email)...}-->
                         <script>
                             evaluadorJs = [];

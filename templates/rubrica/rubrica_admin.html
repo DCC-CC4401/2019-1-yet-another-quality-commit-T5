@@ -26,7 +26,9 @@
                     <th class="w3-center w3-red"> ID </th>
                     <th class="w3-red"> Nombre </th>
                     <th class="w3-red"> Descripción </th>
+                    {% if user|is_admin %}
                     <th class="w3-red"></th>
+                    {% endif %}
                 </tr>
             </thead>
             <script>
@@ -39,6 +41,7 @@
                 <td class='w3-center'>{{rubrica.pk}} </td>
                 <td>{{rubrica.nombre}}</td>
                 <td> {{ rubrica.descripcion }} </td>
+                {% if user|is_admin %}
                 <td class="w3-light-gray w3-right-align">
                                 <form action="{% url 'rubricas:delete_rubrica' %}" method="post">
                                     {% csrf_token %}
@@ -48,13 +51,14 @@
                                     </button>
                                 </form>
                             </td>
+                {% endif %}
                 <!-- Javascript scan for evaluadores with format {(name,lastname,email),(name,lastname,email)...}-->
                 <script>
                     rubricaJs=[];
                     rubricaJs.push('{{rubrica.pk}}');
                     rubricaJs.push('{{rubrica.nombre}}');
                     rubricaJs.push('{{rubrica.descripcion}}');
-                    
+
                     rubricasJs.push(rubricaJs);
                 </script>
             </tr>
@@ -65,18 +69,18 @@
 
     <!-- Fin listado de rubricas -->
 
-    
+
 
     <!-- Formulario de rubrica -->
-    
+
     <div id="rubrica-detalle" class="w3-modal">
 
-        
+
 
         <div class="w3-modal-content w3-round-large w3-card-4 w3-animate-zoom  " style="width:80%">
 
             <div class="w3-center w3-container">
-            
+
                 <div class="w3-display-container w3-margin-top" style="height:25px">
                     <span onclick="document.getElementById('rubrica-detalle').style.display='none'"  class="w3-display-right w3-xxlarge w3-text-red opcion" title="Close Modal">
                         <i class="fa fa-window-close " aria-hidden="true"></i></span>
@@ -85,41 +89,41 @@
                 <div class="w3-container w3-xlarge {% if user|is_admin %} opcion {% endif %}" style="font-weight: bold" {% if user|is_admin %} contenteditable="true" {% endif %}   id='new-nombre'></div>
                 <div id='new-descripcion' class="w3-container {% if user|is_admin %} opcion {% endif %}" style="font-style: italic;" {% if user|is_admin %} contenteditable="true" {% endif %} class="w3-medium "></div>
                 {% if user|is_admin %}
-                <i class="fas fa-edit w3-xxlarge w3-text-red w3-display-left " style="margin-left:20%"></i> 
+                <i class="fas fa-edit w3-xxlarge w3-text-red w3-display-left " style="margin-left:20%"></i>
                 {% else %}
                 <i class="fas fa-align-center w3-xxlarge w3-text-red w3-display-left " style="margin-left:20%"></i>
                 {% endif %}
                 </div>
 
                 <table id="tabla-rubrica" class="w3-card-4 w3-margin-top" style="width: 100%"  >
-                    
+
                 </table>
                 <div >
-                    
-                    
+
+
                     <div class="w3-row w3-margin-top w3-margin-bottom w3-center " >
                         {% if user|is_admin %}
                         <div  class="w3-col s6 w3-large">
                                 <div id="mas-menos-filas">
-                                        <i id="mas-filas" class="fas fa-plus-square w3-text-blue-gray zoom"></i>                                
+                                        <i id="mas-filas" class="fas fa-plus-square w3-text-blue-gray zoom"></i>
 
-                                        <i id="menos-filas" class="fas fa-minus-square w3-text-red zoom" style="margin-left:5px"> </i> 
+                                        <i id="menos-filas" class="fas fa-minus-square w3-text-red zoom" style="margin-left:5px"> </i>
                                 </div>
-                                    
+
                         </div>
                         {% else %}
                         <div class="w3-col s6">
                             <p></p>
-                        </div>  
+                        </div>
                         {% endif %}
                         <div class="w3-col s6 " >
                         Puntaje total :  <input style="width: 4ch" id="puntaje-total" type="text" readonly=""></input>
                         </div>
                     </div>
-                    
+
 
                 </div>
-                
+
                     {% if user|is_admin %}
                     <div class="w3-row w3-margin-top w3-margin-bottom">
                     <div class="w3-col s6 w3-center" >
@@ -137,10 +141,10 @@
 
         </div>
       </div>
-      
+
     </div>
 
-    
+
 
 
 
@@ -166,8 +170,8 @@
     </div>
     </div>
 
-    
-    
+
+
     {% endif %}
 {% else %}
     <div class="w3-container">
@@ -177,8 +181,8 @@
 
 
 <script>
-// Function para buscar rubrica 
-    
+// Function para buscar rubrica
+
 function buscarRubrica(){
     let busqueda = document.getElementById('buscar').value;
     let filtered = rubricasJs.filter((x)=>{
@@ -193,7 +197,7 @@ function buscarRubrica(){
         if(palabras[i].toLowerCase()==busqueda.toLowerCase()){
             return true;
         }
-    }   
+    }
     return false;
     });
     for(i=0;i<rubricasJs.length;i++){
@@ -246,7 +250,7 @@ function traerRubrica(){
     }
     $('#new-nombre').html(nombre);
     $('#new-descripcion').html(descripcion);
-    
+
     $.ajax({
         data : {'id' : idRubrica},
         url : 'busqueda_rubrica_ajax',
@@ -255,10 +259,10 @@ function traerRubrica(){
                             window.location.href = '#rubrica-detalle';}
         ,
     });
-    
+
 }
 //añadir un fila a la rubrica
-function añadirFila(){ 
+function añadirFila(){
     let ultimaFila=detalleRubrica.length;
     let nuevoElemento={'fila': ultimaFila, 'columna': 0,
                        'puntaje':  "0.0", 'nombreFila': 'Aspecto '+ (ultimaFila+1),
@@ -320,10 +324,10 @@ function jsonToTable(data){
                     ' <div id="'+i+'__'+j+'-descripcion" {% if user|is_admin %} contenteditable="true" {% endif %}>' +data[i][j]['descripcion'] +
                         '</div><div id="'+i+'__'+j+'-puntaje" style="width: 50px" class="w3-display-topleft w3-container w3-green w3-medium" {% if user|is_admin %} contenteditable="true" {% endif %}>'
                             +data[i][j]['puntaje']+'</div>';
-            
+
             if(j!=(data[i].length-1)){
                  html+='</td>';
-            
+
             }else{
                 {% if user|is_admin %}
                 html+='<div id="prueba" style="height:50px; width: 20%;" class="w3-container w3-display-right w3-display-container">'+
@@ -332,13 +336,13 @@ function jsonToTable(data){
                             '</div>';
                 {% endif %}
                 html +='</td></tr>';
-           
+
             }
 
         }
-        
+
     }
-    
+
     let width=Math.floor(100/(mayorColumna+1));
     html +='</tbody>';
     head = '<thead> <tr> <th class="w3-red tabla-elemento-rubrica" style="width: '+width+'% ; height: 60px"> Niveles </th>' ;
@@ -359,7 +363,7 @@ function jsonToTable(data){
             observerPuntaje.observe(document.getElementById(i+"__"+j+"-puntaje"),config);
         }
     }
-    
+
 }
 
 
@@ -382,7 +386,7 @@ var observarNombreFila = function(mutationsList,observer){
             }
         }
     }
-    
+
 }
 
 //actualizar descripcion
@@ -394,7 +398,7 @@ var observarDescripcion = function(mutationsList,observer){
             let x = position[0];
             let y = position[1].split('-')[0];
             detalleRubrica[x][y]['descripcion'] = stripHtml(rawData);
-            
+
         }
 }}
 
@@ -411,7 +415,7 @@ var observarPuntaje = function(mutationsList, observer) {
                 detalleRubrica[x][y]['puntaje'] = stripHtml(rawData);
                 actualizarPuntaje();
             }
-        
+
     }
 };
 
@@ -426,7 +430,7 @@ function actualizarPuntaje(){
     sumaRubrica=0;
     let ultimo=0;
     for(let i=0;i<detalleRubrica.length;i++){
-        ultimo = (detalleRubrica[i].length - 1);      
+        ultimo = (detalleRubrica[i].length - 1);
         sumaRubrica+=parseFloat(detalleRubrica[i][ultimo]['puntaje']);
         }
     $('#puntaje-total').val(sumaRubrica.toFixed(1));
@@ -460,7 +464,7 @@ function sendAspectosRubrica(){
     let newNombre=$('#new-nombre').text();
     let newDescripcion=$('#new-descripcion').text();
     let data={'idRubrica':idRubrica, 'nombre':newNombre, 'descripcion': newDescripcion};
-    
+
     data['aspectosRubrica']=detalleRubrica
     xhr.send(JSON.stringify(data));
 }

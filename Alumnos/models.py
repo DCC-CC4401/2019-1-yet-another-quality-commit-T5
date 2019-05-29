@@ -1,4 +1,5 @@
 from django.db import models
+from Cursos.models import Curso
 # Create your models here.
 
 
@@ -8,6 +9,7 @@ class Alumno(models.Model):
     apellido = models.CharField(max_length=50)
     run = models.IntegerField(primary_key=True, unique=True)
     correo = models.EmailField(max_length=50)
+    curso = models.ForeignKey(Curso, on_delete=models.CASCADE)
 
     def __str__(self):
         return str(self.nombre) + ' ' + str(self.apellido)

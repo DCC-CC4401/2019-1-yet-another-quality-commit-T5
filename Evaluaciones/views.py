@@ -68,12 +68,8 @@ def add_evaluacion(request):
         form = AddEvaluacion(request.POST)
         if form.is_valid():
             form.save()
-
-            return HttpResponseRedirect('evaluacion')
-        else:
-            form = AddEvaluacion()
-            return render(request, 'evaluacion/evaluacion_admin.html', {'form': form})
-    return post_evaluaciones(request)
+            return HttpResponseRedirect('evaluaciones')
+    return HttpResponseRedirect('evaluaciones')
 
 
 @login_required
@@ -107,7 +103,7 @@ def evaluacion_detalle(request, pk):
 
 @login_required
 def delete_evaluacion(request):
-    if request.POST:
+    if request.POST and request.user.groups.filter(name='Profesores').exists():
         id = int(request.POST.get('id'))
         deleted = Evaluacion.objects.get(pk=id).delete()
         if deleted is not None:
@@ -133,6 +129,7 @@ def bound_evaluador(request, pk):
     return HttpResponseRedirect('/evaluaciones/' + str(pk) + '/evaluacion_detalle')
 
 
+@login_required
 def unbound_evaluador(request, pk):
     """
     Retira un evaluador asignado a una evaluacion

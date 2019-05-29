@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load evaluador_privileges %}
 {% block content %}
     <!-- Portada -->
     <div class="w3-container" id="portada" style="margin-top:80px; margin-bottom:10px">
@@ -15,109 +16,143 @@
                 <th class="w3-red"> Código</th>
                 <th class="w3-red"> Semestre y año</th>
                 <th class="w3-red"> Nombre</th>
-                <th class="w3-red"></th>
+                {% if user|is_admin %}
+                    <th class="w3-red"></th>
+                {% endif %}
             </tr>
             <tr>
                 <td class="w3-light-gray"> {{ curso }}</td>
                 <td class="w3-light-gray"> {{ curso.get_date }}</td>
                 <td class="w3-light-gray"> {{ curso.get_name }} </td>
-                <td class="w3-light-gray w3-right-align">
-                    <form action="{% url 'cursos:delete_curso' %}" method="post">
-                        {% csrf_token %}
-                        <input type="hidden" name="id" value="{{ curso.pk }}">
-                        <button class="w3-button w3-round w3-red w3-small" type="submit">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </form>
-                </td>
+                {% if user|is_admin %}
+                    <td class="w3-light-gray w3-right-align">
+                        <form action="{% url 'cursos:delete_curso' %}" method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="id" value="{{ curso.pk }}">
+                            <button class="w3-button w3-round w3-red w3-small" type="submit">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </form>
+                    </td>
+                {% endif %}
             </tr>
         </table>
     </div>
 
     <!-- Evaluadores -->
-    <div class="w3-round w3-half w3-container w3-padding">
-        <div class="w3-container w3-red w3-card">
-            <h5>Evaluadores</h5>
-        </div>
-        <div id="Evaluadores" class="w3-container w3-pale-red w3-round">
-            <p>
-            <ul class="w3-ul w3-round w3-center">
-                {% for eval in evaluadores %}
-                    <li>
-                        {{ eval }}
-                        <form action="{% url 'cursos:unbound_evaluador' curso.pk %}" method="post">
+    {% if user|is_admin %}
+        <div class="w3-round w3-half w3-container w3-padding">
+            <div class="w3-container w3-red w3-card">
+                <h5>Evaluadores</h5>
+            </div>
+            <div id="Evaluadores" class="w3-container w3-pale-red w3-round">
+                <p>
+                <table class="w3-table">
+                    {% for eval in evaluadores %}
+                        <tr>
+                            <td style="vertical-align:middle">{{ eval }}</td>
+                            <td style="vertical-align:middle">
+                                <form action="{% url 'cursos:unbound_evaluador' curso.pk %}" method="post">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="id_curso" value="{{ curso.pk }}">
+                                    <input type="hidden" name="id_evaluador" value="{{ eval.pk }}">
+                                    <button class="w3-button w3-red w3-round w3-small" type="submit">
+                                        <i class="fas fa-user-minus"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    <tr>
+                        <form action="{% url 'cursos:bound_evaluador' curso.pk %}" method="post">
                             {% csrf_token %}
-                            <input type="hidden" name="id_curso" value="{{ curso.pk }}">
-                            <input type="hidden" name="id_evaluador" value="{{ eval.pk }}">
-                            <button class="w3-button w3-red w3-round w3-small" type="submit">
-                                <i class="fas fa-user-minus"></i>
-                            </button>
+                            <td class="w3-hide">{{ bound_evaluador.curso }}</td>
+                            <td colspan="2" class="w3-center">
+                                {{ bound_evaluador.evaluador }}
+                                <button class="w3-button w3-red w3-round w3-small" type="submit">+</button>
+                            </td>
                         </form>
-                    </li>
-                {% endfor %}
-                <form action="{% url 'cursos:bound_evaluador' curso.pk %}" method="post">
-                    {% csrf_token %}
-                    <li class="w3-hide">{{ bound_evaluador.curso }}</li>
-                    <li>{{ bound_evaluador.evaluador }}
-                        <button class="w3-button w3-red w3-round w3-small" type="submit">+</button>
-                    </li>
-                </form>
-            </ul>
+                    </tr>
+                </table>
+            </div>
         </div>
-    </div>
+    {% endif %}
 
 
     <!-- Evaluaciones -->
-    <div class="w3-round w3-half w3-container w3-padding">
+    <div class="w3-round {% if user|is_admin %}w3-half {% endif %}w3-container w3-padding">
         <div class="w3-container w3-red w3-card">
             <h5>Evaluaciones</h5>
         </div>
         <div id="Evaluadores" class="w3-container w3-pale-red w3-round">
             <p>
-            <ul class="w3-ul w3-round w3-center">
+            <table class="w3-table">
                 {% for eval in evaluaciones %}
-                    <li>
-                        <a href="{% url 'evaluaciones:evaluacion_detalle' eval.pk %}">{{ eval }}</a>
-                        <form action="{% url 'evaluaciones:delete_evaluacion' %}" method="post">
-                            {% csrf_token %}
-                            <input type="hidden" name="id" value="{{ eval.pk }}">
-                            <button class="w3-button w3-red w3-round w3-small" type="submit">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </form>
-                    </li>
+                    <tr>
+                        <td style="vertical-align:middle"><a
+                                href="{% url 'evaluaciones:evaluacion_detalle' eval.pk %}">{{ eval }}</a></td>
+                        <td style="vertical-align:middle">{{ eval.estado }}</td>
+                        {% if user|is_admin %}
+                            <td style="vertical-align:middle">
+                                <form action="{% url 'evaluaciones:delete_evaluacion' %}" method="post">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="id" value="{{ eval.pk }}">
+                                    <button class="w3-button w3-red w3-round w3-small" type="submit">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        {% endif %}
+                    </tr>
                 {% endfor %}
-                <li>
-                    <div class="w3-container">
-                        <button onclick="document.getElementById('agregar_evaluacion').style.display='block'"
-                                class="w3-round w3-small w3-button w3-red w3-center">
-                            <i class="fas fa-plus"></i>
-                            Agregar
-                        </button>
-                    </div>
-                </li>
-            </ul>
+                {% if user|is_admin %}
+                    <tr>
+                        <td colspan="3" class="w3-center">
+                            <button onclick="document.getElementById('agregar_evaluacion').style.display='block'"
+                                    class="w3-round w3-small w3-button w3-red w3-center">
+                                <i class="fas fa-plus"></i>
+                                Agregar
+                            </button>
+                        </td>
+                    </tr>
+                {% endif %}
+            </table>
         </div>
     </div>
 
     <!--Listado de alumnos-->
     <div class="w3-container">
-        <div class="w3-container w3-red w3-card">
-            <h5>Alumnos</h5>
-        </div>
+        <table class="w3-table w3-responsive w3-red">
+            <tr>
+                <td><h5>Alumnos</h5></td>
+                {% if user|is_admin %}
+                    <td style="vertical-align:middle">
+                        <form action="{% url 'alumnos:upload_data' %}" method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <input type="hidden" name="id_curso" id="id_curso" value="{{ curso.pk }}">
+                            <input type="file" name="csv_file" id="csv_file" required="True" class="form-control">
+                            <button class="w3-button w3-small w3-light-gray w3-round" type="submit">
+                                <i class="fas fa-file-upload"></i>
+                                Subir
+                            </button>
+                        </form>
+                    </td>
+                {% endif %}
+            </tr>
+        </table>
 
         <div id="Alumnos" class="w3-container w3-pale-red w3-round w3-center">
             <table class="w3-table">
                 <th>Grupo</th>
                 <th>Nombre</th>
                 <th>Run</th>
-            <th>Correo</th>
+                <th>Correo</th>
                 {% for alumno in alumnos %}
                     <tr>
-                    <td>Work in progress</td>
-                    <td>{{ alumno }}</td>
-                    <td>{{ alumno.run }}</td>
-                    <td>{{ alumno.correo }}</td>
+                        <td>Work in progress</td>
+                        <td>{{ alumno }}</td>
+                        <td>{{ alumno.run }}</td>
+                        <td>{{ alumno.correo }}</td>
                     </tr>
                 {% endfor %}
             </table>

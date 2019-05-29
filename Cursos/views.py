@@ -57,16 +57,16 @@ def curso_detalle(request, pk):
     # form para agregar evaluaciones al curso
     add_evaluacion = AddEvaluacion({'curso':curso_id})
     # lista de evaluadores
-    evaluadores = EvaluadoresCurso.objects.all()
+    evaluadores = EvaluadoresCurso.objects.filter(curso=curso_id)
     evaluadores_list = []
     for evaluador in evaluadores:
         evaluadores_list.append(evaluador.evaluador)
 
     # lista de evaluaciones
-    evaluaciones = Evaluacion.objects.all()
+    evaluaciones = Evaluacion.objects.filter(curso=curso_id)
 
     # lista de alumnos
-    alumnos = Alumno.objects.all()
+    alumnos = Alumno.objects.filter(curso=curso_id)
 
     return render(request, 'cursos/curso_detalle.html', context={'curso': curso_id,
                                                                  'evaluadores': evaluadores_list,
@@ -78,7 +78,7 @@ def curso_detalle(request, pk):
 
 @login_required
 def delete_curso(request):
-    if request.POST:
+    if request.POST and request.user.groups.filter(name='Profesores').exists():
         id = int(request.POST.get('id'))
         deleted = Curso.objects.get(pk=id).delete()
         if deleted is not None:
@@ -128,6 +128,7 @@ def bound_evaluador(request, pk):
     return HttpResponseRedirect('/cursos/' + str(pk) + '/curso_detalle')
 
 
+@login_required
 def unbound_evaluador(request, pk):
     """
     Retira un evaluador asignado a un curso y de todas las evaluaciones asociadas al curso.
@@ -147,6 +148,7 @@ def unbound_evaluador(request, pk):
     return HttpResponseRedirect('/cursos/' + str(pk) + '/curso_detalle')
 
 
+@login_required
 def add_evaluacion(request, pk):
     """
     Agrega una evaluacion al curso especifico
