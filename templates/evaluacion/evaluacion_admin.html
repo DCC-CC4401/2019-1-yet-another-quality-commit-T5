@@ -42,14 +42,14 @@
                 <tbody id='evaluaciones'>
                 {% for evaluacion in evaluacion_list %}
                     <tr>
-                        <td class="w3-light-gray"><a
+                        <td class="w3-light-gray" style="vertical-align:middle"><a
                                 href="{% url 'evaluaciones:evaluacion_detalle' evaluacion.pk %}">{{ evaluacion }}</a>
                         </td>
-                        <td class="w3-light-gray">{{ evaluacion.get_course }}</td>
-                        <td class="w3-light-gray"> {{ evaluacion.get_state }} </td>
-                        <td class="w3-light-gray"> {{ evaluacion.get_startdate }} </td>
-                        <td class="w3-light-gray"> {{ evaluacion.get_enddate }} </td>
-                        <td class="w3-light-gray"> {{ evaluacion.get_rank }} </td>
+                        <td class="w3-light-gray" style="vertical-align:middle">{{ evaluacion.get_course }}</td>
+                        <td class="w3-light-gray" style="vertical-align:middle"> {{ evaluacion.get_state }} </td>
+                        <td class="w3-light-gray" style="vertical-align:middle"> {{ evaluacion.get_startdate }} </td>
+                        <td class="w3-light-gray" style="vertical-align:middle"> {{ evaluacion.get_enddate }} </td>
+                        <td class="w3-light-gray" style="vertical-align:middle"> {{ evaluacion.get_rank }} </td>
                         {% if user|is_admin %}
                             <td class="w3-light-gray w3-right-align">
                                 <form action="{% url 'evaluaciones:delete_evaluacion' %}" method="post">

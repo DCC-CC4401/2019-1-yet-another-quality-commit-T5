@@ -42,7 +42,8 @@
                     <thead>
                     <tr>
                         <th class="w3-red"> Código</th>
-                        <th class="w3-red"> Semestre y año</th>
+                        <th class="w3-red"> Sección</th>
+                        <th class="w3-red"> Semestre</th>
                         <th class="w3-red"> Nombre</th>
                         <th class="w3-red"></th>
                         {% if user|is_admin %}
@@ -57,11 +58,12 @@
                     <tbody id='cursos'>
                     {% for curso in cursos_list %}
                         <tr class="w3-light-gray" id="{{ curso.get_pk }}">
-                            <td class="w3-light-gray">{{ curso }}</td>
-                            <td class="w3-light-gray">{{ curso.get_date }}</td>
-                            <td class="w3-light-gray"> {{ curso.get_name }} </td>
+                            <td class="w3-light-gray" style="vertical-align:middle">{{ curso.código }}</td>
+                            <td class="w3-light-gray" style="vertical-align:middle">{{ curso.sección }}</td>
+                            <td class="w3-light-gray" style="vertical-align:middle">{{ curso.get_date }}</td>
+                            <td class="w3-light-gray" style="vertical-align:middle"> {{ curso.get_name }} </td>
                             <!-- Boton de detalles -->
-                            <td class="w3-light-gray">
+                            <td class="w3-light-gray" style="vertical-align:middle">
                                 <form action="{% url 'cursos:curso_detalle' pk=curso.get_pk %}" method="post">
                                     {% csrf_token %}
                                     <input type="hidden" name="id" value="{{ curso.pk }}">
@@ -73,7 +75,7 @@
                             </td>
                             <!-- Boton eliminar -->
                             {% if user|is_admin %}
-                                <td class="w3-light-gray w3-right-align">
+                                <td class="w3-light-gray w3-right-align" style="vertical-align:middle">
                                     <form action="{% url 'cursos:delete_curso' %}" method="post">
                                         {% csrf_token %}
                                         <input type="hidden" name="id" value="{{ curso.pk }}">

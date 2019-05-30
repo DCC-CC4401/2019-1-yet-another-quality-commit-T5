@@ -322,7 +322,7 @@ function jsonToTable(data){
             }
             html +='<td id="'+i+'__'+j+'" class="w3-display-container {% if user|is_admin %} w3-hover-gray  {% endif %} w3-tiny tabla-elemento-rubrica"  >'+
                     ' <div id="'+i+'__'+j+'-descripcion" {% if user|is_admin %} contenteditable="true" {% endif %}>' +data[i][j]['descripcion'] +
-                        '</div><div id="'+i+'__'+j+'-puntaje" style="width: 50px" class="w3-display-topleft w3-container w3-green w3-medium" {% if user|is_admin %} contenteditable="true" {% endif %}>'
+                        '</div><div id="'+i+'__'+j+'-puntaje" style="width: 60px" class="w3-display-topleft w3-container w3-green w3-medium" {% if user|is_admin %} contenteditable="true" {% endif %}>'
                             +data[i][j]['puntaje']+'</div>';
 
             if(j!=(data[i].length-1)){

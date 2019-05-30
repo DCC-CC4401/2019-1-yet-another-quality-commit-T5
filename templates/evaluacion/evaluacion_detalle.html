@@ -27,76 +27,90 @@
 
                 <th class="w3-red"> Duración esperada</th>
                 {% if user|is_admin %}
-                <th class="w3-red"></th>
+                    <th class="w3-red"></th>
                 {% endif %}
             </tr>
             <tr>
-                <td class="w3-light-gray"> {{ evaluacion }}</td>
-                <td class="w3-light-gray"> {{ evaluacion.get_course }}</td>
-                <td class="w3-light-gray"> {{ evaluacion.get_state }} </td>
-                <td class="w3-light-gray"> {{ evaluacion.get_startdate }} </td>
-                <td class="w3-light-gray"> {{ evaluacion.get_enddate }} </td>
-                <td class="w3-light-gray"> {{ evaluacion.get_rank }} </td>
+                <td class="w3-light-gray" style="vertical-align:middle"> {{ evaluacion }}</td>
+                <td class="w3-light-gray" style="vertical-align:middle"> {{ evaluacion.get_course }}</td>
+                <td class="w3-light-gray" style="vertical-align:middle"> {{ evaluacion.get_state }} </td>
+                <td class="w3-light-gray" style="vertical-align:middle"> {{ evaluacion.get_startdate }} </td>
+                <td class="w3-light-gray" style="vertical-align:middle"> {{ evaluacion.get_enddate }} </td>
+                <td class="w3-light-gray" style="vertical-align:middle"> {{ evaluacion.get_rank }} </td>
                 {% if user|is_admin %}
-                <td class="w3-light-gray w3-right-align">
-                    <form action="{% url 'evaluaciones:delete_evaluacion' %}" method="post">
-                        {% csrf_token %}
-                        <input type="hidden" name="id" value="{{ evaluacion.pk }}">
-                        <button class="w3-button w3-round w3-red w3-small" type="submit">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </form>
-                </td>
+                    <td class="w3-light-gray w3-right-align">
+                        <form action="{% url 'evaluaciones:delete_evaluacion' %}" method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="id" value="{{ evaluacion.pk }}">
+                            <button class="w3-button w3-round w3-red w3-small" type="submit">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </form>
+                    </td>
                 {% endif %}
             </tr>
         </table>
     </div>
 
-    <!-- Evaluadores -->
-    <div class="w3-round w3-half w3-container w3-padding">
-        <div class="w3-container w3-red w3-card">
-            <h5>Evaluadores</h5>
-        </div>
-        <div id="Evaluadores" class="w3-container w3-pale-red w3-round">
-            <p>
-            <ul class="w3-ul w3-round w3-center">
-                {% for eval in evaluadores %}
-                    <li>
-                        {{ eval }}
+
+    <div class="w3-container w3-padding">
+        <!-- Evaluadores -->
+        <div class="w3-half">
+            <div class="w3-card-4 w3-margin-right">
+                <div class="w3-container w3-red ">
+                    <h5><b>Evaluadores</b></h5>
+                </div>
+                <div id="Evaluadores" class="w3-container w3-light-gray w3-round">
+                    <p>
+                    <table class="w3-table">
+                        {% for eval in evaluadores %}
+                            <tr>
+                                <td style="vertical-align:middle">{{ eval }}</td>
+                                {% if user|is_admin %}
+                                    <td>
+                                        <form action="{% url 'evaluaciones:unbound_evaluador' evaluacion.pk %}"
+                                              method="post">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="id_evaluacion" value="{{ evaluacion.pk }}">
+                                            <input type="hidden" name="id_evaluador" value="{{ eval.pk }}">
+                                            <button class="w3-button w3-red w3-round w3-small" type="submit">
+                                                <i class="fas fa-user-minus"></i>
+                                            </button>
+                                        </form>
+                                    </td>
+                                {% endif %}
+                            </tr>
+                        {% endfor %}
                         {% if user|is_admin %}
-                        <form action="{% url 'evaluaciones:unbound_evaluador' evaluacion.pk %}" method="post">
-                            {% csrf_token %}
-                            <input type="hidden" name="id_evaluacion" value="{{ evaluacion.pk }}">
-                            <input type="hidden" name="id_evaluador" value="{{ eval.pk }}">
-                            <button class="w3-button w3-red w3-round w3-small" type="submit">
-                                <i class="fas fa-user-minus"></i>
-                            </button>
-                        </form>
+                            <tr>
+                                <td class="w3-center" colspan="2">
+                                    <form action="{% url 'evaluaciones:bound_evaluador' evaluacion.pk %}" method="post">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="id_evaluacion" value="{{ evaluacion.pk }}">
+                                        {{ evaluador_form.evaluador }}
+                                        <button class="w3-button w3-red w3-round w3-small" type="submit">+</button>
+                                    </form>
+                                </td>
+                            </tr>
                         {% endif %}
-                    </li>
-                {% endfor %}
-                {% if user|is_admin %}
-                <form action="{% url 'evaluaciones:bound_evaluador' evaluacion.pk %}" method="post">
-                    {% csrf_token %}
-                    <li class="w3-hide">{{ evaluador_form.evaluacion }}</li>
-                    <li>{{ evaluador_form.evaluador }}
-                        <button class="w3-button w3-red w3-round w3-small" type="submit">+</button>
-                    </li>
-                </form>
-                {% endif %}
-            </ul>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Grupos pendientes de evaluar -->
+        <div class="w3-half">
+            <div class="w3-card-4 w3-margin-left">
+                <div class="w3-container w3-red">
+                    <h5><b>Grupos pendientes</b></h5>
+                </div>
+                <div id="Grupos" class="w3-container w3-light-gray w3-round">
+                    This is a work in progress.
+                </div>
+            </div>
         </div>
     </div>
 
-    <!-- Grupos pendientes de evaluar -->
-    <div class="w3-round w3-half w3-container w3-padding">
-        <div class="w3-container w3-red w3-card">
-            <h5>Grupos pendientes</h5>
-        </div>
-        <div id="Grupos" class="w3-container w3-pale-red w3-round">
-            This is a work in progress.
-        </div>
-    </div>
 
 
 {% endblock %}
