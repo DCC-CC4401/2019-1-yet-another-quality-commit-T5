@@ -1,6 +1,8 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
+from django.urls import reverse
+
 from Evaluaciones.forms import *
 from django.template import Context, Template
 
@@ -13,12 +15,9 @@ def post_evaluaciones(request):
     """
     form = AddEvaluacion()
     evaluaciones = Evaluacion.objects.all().order_by('fecha_fin')
-    evaluacion_list = []
-
-    for evaluacion in evaluaciones:
-        evaluacion_list.append(evaluacion)
-
-    return render(request, 'evaluacion/evaluacion_admin.html', {'form': form, 'evaluacion_list': evaluacion_list})
+    # mostrar solo las 10 ultimas
+    evaluaciones = evaluaciones[:10]
+    return render(request, 'evaluacion/evaluacion_admin.html', {'form': form, 'evaluacion_list': evaluaciones})
 
 
 @login_required
@@ -92,6 +91,12 @@ def all_evaluaciones(request):
 
 @login_required
 def evaluacion_detalle(request, pk):
+    """
+    Muestra el detalle de la evaluacion pk
+    :param request:
+    :param pk:
+    :return:
+    """
     evaluacion_id=Evaluacion.objects.get(pk=pk)
     evaluadores_raw = EvaluadoresEvaluacion.objects.filter(evaluacion=evaluacion_id)
     evaluadores = []
@@ -103,12 +108,17 @@ def evaluacion_detalle(request, pk):
 
 @login_required
 def delete_evaluacion(request):
+    """
+    Elimina una evaluacion
+    :param request:
+    :return:
+    """
     if request.POST and request.user.groups.filter(name='Profesores').exists():
         id = int(request.POST.get('id'))
         deleted = Evaluacion.objects.get(pk=id).delete()
         if deleted is not None:
-            return HttpResponseRedirect('evaluacion')
-    return post_evaluaciones(request)
+            return HttpResponseRedirect('evaluaciones')
+    return HttpResponseRedirect('evaluaciones')
 
 
 @login_required
