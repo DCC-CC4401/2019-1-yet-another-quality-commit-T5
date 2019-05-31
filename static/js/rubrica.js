@@ -122,7 +122,7 @@ function jsonToTable(data){
             }else{
                 if(is_admin){
                 html+='<div id="prueba" style="height:50px; width: 20%;" class="w3-container w3-display-right w3-display-container">'+
-                                    '<i id="mas-'+i+'" class="fas fa-plus-circle w3-text-blue-gray zoom w3-medium" style="margin-top:5px"></i>'+
+                                    '<i id="mas-'+i+'" class="fas fa-plus-circle w3-text-blue-gray zoom w3-medium" style="margin-top:5px"></i> <br>'+
                                     '<i id="menos-'+i+'" class="fas fa-minus-circle w3-text-red zoom w3-medium" style="margin-top:5px"></i>'+
                             '</div>';
                 }

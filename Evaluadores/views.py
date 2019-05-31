@@ -99,7 +99,7 @@ def delete_evaluador(request):
         updateForm = UpdateEvaluador()
         id = int(request.POST['ID'])
         user = Evaluador.objects.get(pk=id)
-        username = str(user.nombre).lower() + '.' + str(user.apellido).lower()
+        username = user.correo
         User.objects.get(username=username).delete()
         deleted = Evaluador.objects.get(pk=id).delete()
         if(deleted!=None):

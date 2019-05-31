@@ -48,7 +48,12 @@ class Evaluador(models.Model):
         evaluadores.user_set.add(user)
         # Guarda usuario
         user.save()
-        send_mail('Bienvenido!', 'Tu usuario es: ' + user.username + '\n Tu contraseña es: ' + password, 'djangotesting052@gmail.com',  [self.correo,])
+        send_mail('Bienvenido!',
+                  'Bienvenido a la plataforma de evaluación.'
+                  '\nTu usuario es: ' + user.username
+                  + '\nTu contraseña es: ' + password,
+                  'djangotesting052@gmail.com',
+                  [self.correo,])
 
     def update(self, *args, **kwargs):
         """

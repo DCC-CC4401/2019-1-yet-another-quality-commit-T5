@@ -1,3 +1,4 @@
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
@@ -102,7 +103,7 @@ def evaluacion_detalle(request, pk):
     evaluadores = []
     for eval in evaluadores_raw:
         evaluadores.append(eval.evaluador)
-    evaluador_form = BondEvaluador({'evaluacion' : evaluacion_id})
+    evaluador_form = BoundEvaluador({'evaluacion' : evaluacion_id})
     return render(request, 'evaluacion/evaluacion_detalle.html', context={'evaluacion':evaluacion_id, 'evaluador_form' : evaluador_form, 'evaluadores' : evaluadores})
 
 
@@ -129,13 +130,14 @@ def bound_evaluador(request, pk):
     :return:
     """
     if request.POST and request.user.groups.filter(name='Profesores').exists():
-        form = BondEvaluador(request.POST)
+        evaluacion = request.POST['id_evaluacion']
+        evaluador = request.POST['evaluador']
+        form = BoundEvaluador({'evaluacion':evaluacion, 'evaluador':evaluador})
         if form.is_valid():
             form.save()
+            messages.success(request, 'Se ha vinculado al evaluador correctamente')
             return HttpResponseRedirect('/evaluaciones/' + str(pk) + '/evaluacion_detalle')
-        else:
-            form = AddEvaluacion()
-            return HttpResponseRedirect('/evaluaciones/' + str(pk) + '/evaluacion_detalle')
+    messages.warning(request, 'No se pudo vincular al evaluador')
     return HttpResponseRedirect('/evaluaciones/' + str(pk) + '/evaluacion_detalle')
 
 

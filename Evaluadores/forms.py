@@ -22,7 +22,7 @@ class UpdateEvaluador(forms.ModelForm):
         id = int(self.cleaned_data['ID'])
         evaluador = Evaluador.objects.get(pk=id)
         # obtener su perfil de usuario
-        username = str(evaluador.nombre).lower() + "." + str(evaluador.apellido).lower()
+        username = evaluador.correo
         user = User.objects.get(username=username)
 
         # actualizar informacion database
@@ -32,7 +32,7 @@ class UpdateEvaluador(forms.ModelForm):
         evaluador.update()
 
         # actualizar informacion de usuario
-        user.username = str(evaluador.nombre).lower() + "." + str(evaluador.apellido).lower()
+        user.username = evaluador.correo
         user.first_name = evaluador.nombre
         user.last_name = evaluador.apellido
         user.email = evaluador.correo

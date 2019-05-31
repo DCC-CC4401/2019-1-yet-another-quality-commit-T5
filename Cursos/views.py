@@ -166,7 +166,7 @@ def add_evaluacion(request, pk):
         add_evaluacion = AddEvaluacion(request.POST)
         if add_evaluacion.is_valid():
             add_evaluacion.save()
-            messages.success('La evaluación fue agregada correctamente')
+            messages.success(request, 'La evaluación fue agregada correctamente')
             return HttpResponseRedirect('/cursos/' + str(pk) + '/curso_detalle')
-    messages.warning('La evaluación no pudo ser agregada')
+    messages.warning(request, 'La evaluación no pudo ser agregada')
     return HttpResponseRedirect('/cursos/' + str(pk) + '/curso_detalle')

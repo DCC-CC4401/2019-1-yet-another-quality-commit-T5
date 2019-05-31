@@ -1,4 +1,4 @@
-from django.db import models
+from django.db import models, IntegrityError
 
 from Evaluadores.models import Evaluador
 
@@ -58,6 +58,9 @@ class EvaluadoresCurso(models.Model):
         evaluaciones = Evaluacion.objects.filter(curso=self.curso)
         for eval in evaluaciones:
             from Evaluaciones.models import EvaluadoresEvaluacion
-            eval_evaluacion = EvaluadoresEvaluacion(evaluacion=eval, evaluador=self.evaluador)
-            eval_evaluacion.save()
+            try:
+                eval_evaluacion = EvaluadoresEvaluacion(evaluacion=eval, evaluador=self.evaluador)
+                eval_evaluacion.save()
+            except IntegrityError as e:
+                pass
 

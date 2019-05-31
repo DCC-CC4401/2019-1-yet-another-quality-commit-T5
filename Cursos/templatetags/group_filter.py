@@ -14,6 +14,6 @@ def group_filter(grupos, alumno):
     """
     try:
         grupo = grupos.get(integrante=alumno, activo=True)
-        return grupo
+        return grupo.numero
     except Exception as e:
-        return 'No asignado'
+        return 'N/A'
