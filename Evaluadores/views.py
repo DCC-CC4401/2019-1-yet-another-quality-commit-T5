@@ -75,15 +75,14 @@ def update_evaluador(request):
     :param request:
     :return:
     """
-    if request.POST and request.user.groups.filter(name='Profesores').exists():
+    if request.POST:
         addForm = AddEvaluador()
         form = UpdateEvaluador(request.POST)
         if form.is_valid():
             form.save()
             return HttpResponseRedirect('evaluadores')
-        else:
-            form = UpdateEvaluador()
-
+    addForm = AddEvaluador()
+    form = UpdateEvaluador()
     return render(request, 'evaluadores/evaluadores_admin.html', {'addForm': addForm, 'updateForm': form})
 
 
