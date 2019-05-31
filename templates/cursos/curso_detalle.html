@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load evaluador_privileges %}
+{% load group_filter %}
 {% block content %}
     <!-- Portada -->
     <div class="w3-container" id="portada" style="margin-top:80px; margin-bottom:10px">
@@ -167,7 +168,7 @@
                 <th>Correo</th>
                 {% for alumno in alumnos %}
                     <tr>
-                        <td>Work in progress</td>
+                        <td>{{ grupos|group_filter:alumno }}</td>
                         <td>{{ alumno }}</td>
                         <td>{{ alumno.run }}</td>
                         <td>{{ alumno.correo }}</td>

@@ -7,9 +7,12 @@ class Alumno(models.Model):
 
     nombre = models.CharField(max_length=50)
     apellido = models.CharField(max_length=50)
-    run = models.IntegerField(primary_key=True, unique=True)
+    run = models.IntegerField()
     correo = models.EmailField(max_length=50)
     curso = models.ForeignKey(Curso, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ['run', 'curso']
 
     def __str__(self):
         return str(self.nombre) + ' ' + str(self.apellido)
@@ -17,13 +20,13 @@ class Alumno(models.Model):
 
 class Grupo(models.Model):
 
-    nombre = models.CharField(max_length=30)
+    numero = models.IntegerField(default=0)
+    nombre = models.CharField(max_length=30, blank=True)
+    curso = models.ForeignKey(Curso, on_delete=models.CASCADE)
     integrante = models.ForeignKey(Alumno, on_delete=models.CASCADE)
+    activo = models.BooleanField(default=True)
 
-
-class HistoricoGrupo(models.Model):
-    """
-    Usar para guardar informacion de los grupos NO activos.
-    """
-    nombre = models.CharField(max_length=30)
-    integrante = models.ForeignKey(Alumno, on_delete=models.CASCADE)
+    def __str__(self):
+        if self.nombre:
+            return str(self.numero) + ' - ' + str(self.nombre)
+        return str(self.numero)

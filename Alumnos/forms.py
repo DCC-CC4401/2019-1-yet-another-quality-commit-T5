@@ -10,7 +10,7 @@ class AlumnoForm(forms.ModelForm):
         fields = '__all__'
 
 
-class GrupoFrom(forms.ModelForm):
+class GrupoForm(forms.ModelForm):
 
     class Meta:
         model = Grupo

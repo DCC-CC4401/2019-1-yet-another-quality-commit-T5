@@ -16,12 +16,8 @@ from Alumnos.models import Alumno, Grupo
 def post_cursos(request):
     form = AddCurso()
     cursos = Curso.objects.all()
-    cursos_list = []
 
-    for curso in cursos:
-        cursos_list.append(curso)
-
-    return render(request, 'cursos/cursos_admin.html', {'form': form, 'cursos_list': cursos_list})
+    return render(request, 'cursos/cursos_admin.html', {'form': form, 'cursos_list': cursos})
 
 
 @login_required
@@ -69,11 +65,14 @@ def curso_detalle(request, pk):
 
     # lista de alumnos
     alumnos = Alumno.objects.filter(curso=curso_id)
+    # lista de grupos
+    grupos = Grupo.objects.filter(curso=curso_id)
 
     return render(request, 'cursos/curso_detalle.html', context={'curso': curso_id,
                                                                  'evaluadores': evaluadores_list,
                                                                  'evaluaciones': evaluaciones,
                                                                  'alumnos': alumnos,
+                                                                 'grupos': grupos,
                                                                  'bound_evaluador': bound_evaluador,
                                                                  'add_evaluacion': add_evaluacion})
 
