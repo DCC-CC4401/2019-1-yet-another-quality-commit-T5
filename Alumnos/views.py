@@ -56,6 +56,7 @@ def upload_data(request):
             data_dict['run'] = fields[2]
             data_dict['correo'] = fields[3]
             data_dict['curso'] = request.POST['id_curso']
+            print(data_dict)
             alumno = AlumnoForm(data_dict)
             alumno.save()
     return HttpResponseRedirect('cursos')

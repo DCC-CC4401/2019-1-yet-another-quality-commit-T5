@@ -36,7 +36,7 @@ class Evaluador(models.Model):
         super(Evaluador, self).save(*args, **kwargs)
 
         # Genera un User para cada evaluador
-        user = str(self.nombre).lower() + "." + str(self.apellido).lower()
+        user = str(self.correo)
         password = User.objects.make_random_password()
         user = User.objects.create_user(username=user,
                                         email=self.correo,

@@ -11,7 +11,7 @@ class AddEvaluador(forms.ModelForm):
 
 class UpdateEvaluador(forms.ModelForm):
 
-    ID = forms.CharField(widget=forms.TextInput(attrs={'readonly':'', 'size':'4'}),required=True)
+    ID = forms.CharField(widget=forms.TextInput(attrs={'readonly':'', 'size':'4','style':'display:none'}),required=True)
     
     class Meta:
         model = Evaluador
