@@ -1,3 +1,4 @@
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
@@ -29,11 +30,12 @@ def add_curso(request):
         form = AddCurso(request.POST)
         if form.is_valid():
             form.save()
+            messages.success(request, 'Se creo el curso correctamente')
             return HttpResponseRedirect('cursos')
         else:
             form = AddCurso()
-
-    return post_cursos(request)
+    messages.success(request, 'No se pudo crear el curso')
+    return HttpResponseRedirect('cursos')
 
 
 @login_required
@@ -82,8 +84,10 @@ def delete_curso(request):
         id = int(request.POST.get('id'))
         deleted = Curso.objects.get(pk=id).delete()
         if deleted is not None:
+            messages.success(request, 'Curso eliminado correctamente')
             return HttpResponseRedirect('cursos')
-    return post_cursos(request)
+    messages.warning(request, 'No se pudo eliminar el curso.')
+    return HttpResponseRedirect('cursos')
 
 
 @login_required
@@ -106,10 +110,9 @@ def add_grupo(request,pk):
     form = AddGrupo(request.POST)
     if form.is_valid():
            form.save()
-           return HttpResponseRedirect('cursos')
-    else:
-           form = AddGrupo()
-
+           messages.success(request, 'Grupo creado correctamente')
+           return render(request, 'cursos/curso_detalle.html', context={'curso': curso_id})
+    messages.warning('El grupo no pudo ser creado')
     return render(request, 'cursos/curso_detalle.html', context={'curso': curso_id})
 
 
@@ -124,7 +127,9 @@ def bound_evaluador(request, pk):
         form = BoundEvaluador(request.POST)
         if form.is_valid():
             form.save()
+            messages.success(request, 'Evaluador asignado correctamente')
             return HttpResponseRedirect('/cursos/' + str(pk) + '/curso_detalle')
+    messages.warning('El evaluador no pudo ser asignado')
     return HttpResponseRedirect('/cursos/' + str(pk) + '/curso_detalle')
 
 
@@ -144,7 +149,9 @@ def unbound_evaluador(request, pk):
         for eval in evaluaciones_curso:
             EvaluadoresEvaluacion.objects.filter(evaluacion=eval, evaluador=id_evaluador).delete()
         if deleted is not None:
+            messages.success(request, 'Evaluador eliminado correctamente')
             return HttpResponseRedirect('/cursos/' + str(pk) + '/curso_detalle')
+    messages.warning('El evaluador no pudo ser eliminado')
     return HttpResponseRedirect('/cursos/' + str(pk) + '/curso_detalle')
 
 
@@ -160,5 +167,7 @@ def add_evaluacion(request, pk):
         add_evaluacion = AddEvaluacion(request.POST)
         if add_evaluacion.is_valid():
             add_evaluacion.save()
+            messages.success('La evaluación fue agregada correctamente')
             return HttpResponseRedirect('/cursos/' + str(pk) + '/curso_detalle')
+    messages.warning('La evaluación no pudo ser agregada')
     return HttpResponseRedirect('/cursos/' + str(pk) + '/curso_detalle')
