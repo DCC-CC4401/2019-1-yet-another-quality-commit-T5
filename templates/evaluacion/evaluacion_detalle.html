@@ -111,10 +111,11 @@
                         {% for grupo in grupos %}
                             <tr>
                                 <td class="w3-center" style="vertical-align:middle">{{grupo.numero}}
+                                <td class="w3-center"style="vertical-align:middle">{{ grupo.nombre }}</td>
                                     {% if evaluacion.is_active%}
                                     <td class="w3-light-gray w3-center">
-                                        <a href="{% url 'evaluaciones:evaluar' grupo.get_pk %}" class="w3-button w3-red w3-round">
-                                    <strong>Evaluar</strong></a>
+                                        <a href="{% url 'evaluaciones:evaluar' grupo.get_pk evaluacion.get_pk %}" class="w3-button w3-red w3-round">
+                                    <strong>Seleccionar</strong></a>
                                     </td>
                                     {% endif %}
                                 </td>

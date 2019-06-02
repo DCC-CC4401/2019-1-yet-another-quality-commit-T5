@@ -2,28 +2,58 @@
 {% extends 'base.html' %}
 {% block content %}
     <!-- Evaluacion -->
-    
+
     <div class="w3-container" id="designers" style="margin-top:50px">
         <h1 class="w3-xxxlarge w3-text-red"><b>Evaluación <i class="w3-text-green">en curso</i> </b></h1>
         <hr style="width:50px;border:5px solid red" class="w3-round">
         <div class="w3-container w3-center">
-            <p><b>{{ grupo.nombre }}</b> Nombre evaluacion <i>/ {{ grupo.curso }}</i></p>
+            <p><b>{{ grupo.nombre }}</b> {{evaluacion.nombre}} <i>/ {{ grupo.curso }}</i></p>
             </div>
+    </div>
+<!-- Evaluadores -->
+       <div class="w3-half">
+            <div class="w3-container">
+                <div class="w3-container w3-dark-gray w3-xlarge w3-center w3-round">
+                    <p><h3><b>Evaluadores</b></h3></p>
+                </div>
+                <div id="Evaluadores" class="w3-container w3-light-gray w3-round">
+                    <p>
+                    <table class="w3-table">
+                        {% for eval in evaluadores %}
+                            <tr>
+                                <td style="vertical-align:middle">{{ eval }}</td>
 
-        <div id='evaluadores' class="w3-panel  w3-margin-bottom">
-        <ul class="w3-ul w3-light-grey w3-center w3-card-4">
-            <li class="w3-dark-grey w3-xlarge w3-padding-32">Evaluadores <i class="fas fa-user-tie"></i> </li>
-            <li class="w3-padding-16"> Evaluador 1 <i style="margin-left: 10px" class="w3-large fas fa-times"></i>
-            </li>
-            <li class=" w3-padding-16 presentado"> Evaluador 2 <i style="margin-left: 10px" class="far fa-check-circle"><i class="w3-small"> ya evaluó</i></i>
-            </li>
-            <li class="w3-padding-16"> Evaluador 3  <i style="margin-left: 10px" class="w3-large fas fa-times"></i></li>
-            <li class="opcion w3-padding-16"> Agregar otro <i style="margin-left: 10px" class="fas fa-user-plus"></i>
-            </li>
-         </ul>
+                                    <td>
+                                        <form action="{% url 'evaluaciones:unbound_evaluador' evaluacion.pk %}"
+                                              method="post">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="id_evaluacion" value="{{ evaluacion.pk }}">
+                                            <input type="hidden" name="id_evaluador" value="{{ eval.pk }}">
+                                            <button class="w3-button w3-red w3-round w3-small" type="submit">
+                                                <i class="fas fa-user-minus"></i>
+                                            </button>
+                                        </form>
+                                    </td>
+
+                            </tr>
+                        {% endfor %}
+
+                            <tr>
+                                <td class="w3-center" colspan="2">
+                                    <form action="{% url 'evaluaciones:bound_evaluador' evaluacion.pk %}" method="post">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="id_evaluacion" value="{{ evaluacion.pk }}">
+                                        {{ evaluador_form.evaluador }}
+                                        <button class="w3-button w3-red w3-round w3-small" type="submit">+</button>
+                                    </form>
+                                </td>
+                            </tr>
+
+                    </table>
+                </div>
+            </div>
         </div>
-
-        <div class="w3-row-padding" style="margin-top:30px">
+  {% comment %}      <div class="w3-row-padding" style="margin-top:30px">
         <div class="w3-half w3-margin-bottom ">
           <ul class="w3-ul w3-light-grey w3-center w3-card-4">
             <li class="w3-dark-grey w3-xlarge w3-padding-32">Miembros del equipo <i class="fas fa-user-friends"></i></li>
@@ -43,14 +73,14 @@
           </ul>
         </div>
         </div>
-      
+
 
         <p>Seleccione el nivel de logro alcanzado por el grupo en cada ámbito</p>
         <div id='paneles'>
-        
+
         </div>
             <div class="w3-panel w3-margin-bottom w3-card-4 w3-padding-16 w3-half w3-right" style="margin-right: 1.8%">
-                <span style="margin-left:21%"><i class="far fa-clock"></i> Hora final 
+                <span style="margin-left:21%"><i class="far fa-clock"></i> Hora final
                 <input id='hora' class="w3-input w3-border w3-round" type="number" size="1" placeholder="15" style="width:15%; display:inline; margin-left: 10px"> : <input id='minuto' class="w3-input w3-border w3-round" style="width:15%; display:inline" type="number" placeholder="35"></span>
             </div>
         <div class="w3-panel w3-right w3-half">
@@ -59,15 +89,15 @@
                 evaluación
             </button>
         </div>
-        
 
-    </div>
+
+    </div>{% endcomment %}
 
     <script>
     var idEvaluacion='{{idEvaluacion}}';
     var detalleRubrica=JSON.parse('{{detalleRubrica | escapejs}}');
     var seleccion=new Array(detalleRubrica.length);
-        
+
     $(document).ready(()=>{
         let html="";
         for(let i=0;i<detalleRubrica.length;i++){
@@ -79,7 +109,7 @@
                     html+='</ul></div>'
                 }
             }
-            
+
         }
         $('#paneles').html(html);
         for(let i=0;i<detalleRubrica.length;i++){
@@ -88,9 +118,9 @@
             }
         }
 
-        
-        
-    })   
+
+
+    })
 
     function seleccionarOpcion(){
         let id=$(this).attr('id');
@@ -99,7 +129,7 @@
         let fila=filacolumna[0];
         let columna=filacolumna[1];
 
-        
+
         for(let j=0;j<detalleRubrica[fila].length;j++){
             if(j==columna){
                 if(!$(this).hasClass('selected')){
@@ -109,7 +139,7 @@
             else{
                 if($('#'+fila+'__'+j+'-opcion').hasClass('selected')){
                     $('#'+fila+'__'+j+'-opcion').removeClass('selected');
-                }            
+                }
             }
         }
         if($('#'+fila+'-iconWarning').css('display') != 'none'){
@@ -139,12 +169,12 @@
         if(!allPresent)
         alert('Porfavor complete la evaluación antes de realizar la entrega');
         return allPresent;
-    }     
-            
-    
-            
-            
-            
+    }
+
+
+
+
+
         </script>
 
 

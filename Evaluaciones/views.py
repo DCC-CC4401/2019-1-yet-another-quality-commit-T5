@@ -143,6 +143,7 @@ def evaluacion_detalle(request, pk):
     evaluadores = []
     curso_id= Evaluacion.objects.get(pk=pk).curso.get_pk()
     grupos = Grupo.objects.filter(curso=curso_id).order_by('?')
+    rubrica_id=Evaluacion.objects.get(pk=pk).rubrica
     for eval in evaluadores_raw:
         evaluadores.append(eval.evaluador)
     evaluador_form = BoundEvaluador({'evaluacion' : evaluacion_id})
@@ -199,10 +200,17 @@ def unbound_evaluador(request, pk):
             return HttpResponseRedirect('/evaluaciones/' + str(pk) + '/evaluacion_detalle')
     return HttpResponseRedirect('/evaluaciones/' + str(pk) + '/evaluacion_detalle')
 
-def evaluar(request,pk):
-    grupo_id=Grupo.objects.get(pk=pk)
-    curso_id=Grupo.objects.get(pk=pk).curso.get_pk()
-    evaluadores=EvaluadoresCurso.objects.filter(curso=curso_id)
-    return render(request, 'evaluacion/evaluacion_evaluar.html',
+def evaluar(request,grupopk,evalpk):
+    grupo_id=Grupo.objects.get(pk=grupopk)
+    curso_id=Grupo.objects.get(pk=grupopk).curso.get_pk()
+    evaluacion_id=Evaluacion.objects.get(pk=evalpk)
+    evaluadores_raw = EvaluadoresEvaluacion.objects.filter(evaluacion=evaluacion_id)
+    evaluadores = []
+    for eval in evaluadores_raw:
+        evaluadores.append(eval.evaluador)
+    evaluador_form = BoundEvaluador({'evaluacion': evaluacion_id})
+    return render(request, 'evaluacion/evaluacion_grupo.html',
                   context={'grupo': grupo_id, 'curso': curso_id,
-                           'evaluadores':evaluadores})
+                           'evaluacion':evaluacion_id,
+                           'evaluadores': evaluadores,
+                           'evaluador_form':evaluador_form})
