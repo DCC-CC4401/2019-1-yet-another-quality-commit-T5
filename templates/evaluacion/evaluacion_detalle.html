@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load evaluador_privileges %}
 {% block content %}
+    {% load static %}
     <!-- Portada -->
     <div class="w3-container" id="portada" style="margin-top:80px; margin-bottom:10px">
         <h1 class="w3-xxxlarge w3-text-red"><b>Evaluaciones</b></h1>
@@ -127,18 +128,71 @@
             </div>
         </div>
     </div>
+    <!-- Var to check if user is admin -->
+    <script> var is_admin = ('True'=='{{ user|is_admin }}'); </script>
 
     <!--Rubrica asociada-->
-    <div class="w3-container w3-padding">
-    {% for r in rubrica_aspecto %}
-        <table class="w3-table">
-        <tr>
-            <td>{{ r }}</td>
-        </tr>
-        </table>
-    {% endfor %}
+    <div id="rubrica-detalle" class="w3-modal">
+        <div class="w3-modal-content w3-round-large w3-card-4 w3-animate-zoom" style="width:80%">
+            <div class="w3-center w3-container">
+                <div class="w3-display-container">
+                <div class="w3-container w3-xlarge {% if user|is_admin %} opcion {% endif %}" style="font-weight: bold" {% if user|is_admin %} contenteditable="true" {% endif %}   id='new-nombre'></div>
+                <div id='new-descripcion' class="w3-container {% if user|is_admin %} opcion {% endif %}" style="font-style: italic;" {% if user|is_admin %} contenteditable="true" {% endif %} class="w3-medium "></div>
+                {% if user|is_admin %}
+                <i class="fas fa-edit w3-xxlarge w3-text-red w3-display-left " style="margin-left:20%"></i>
+                {% else %}
+                <i class="fas fa-align-center w3-xxlarge w3-text-red w3-display-left " style="margin-left:20%"></i>
+                {% endif %}
+                </div>
+
+                <table id="tabla-rubrica" class="w3-card-4 w3-margin-top" style="width: 100%"  >
+
+                </table>
+                <div >
+
+
+                    <div class="w3-row w3-margin-top w3-margin-bottom w3-center " >
+                        {% if user|is_admin %}
+                        <div  class="w3-col s6 w3-large">
+                                <div id="mas-menos-filas">
+                                        <i id="mas-filas" class="fas fa-plus-square w3-text-blue-gray zoom"></i>
+
+                                        <i id="menos-filas" class="fas fa-minus-square w3-text-red zoom" style="margin-left:5px"> </i>
+                                </div>
+
+                        </div>
+                        {% else %}
+                        <div class="w3-col s6">
+                            <p></p>
+                        </div>
+                        {% endif %}
+                        <div class="w3-col s6 " >
+                        Puntaje total :  <input style="width: 4ch" id="puntaje-total" type="text" readonly=""></input>
+                        </div>
+                    </div>
+
+
+                </div>
+
+                    {% if user|is_admin %}
+                    <div class="w3-row w3-margin-top w3-margin-bottom">
+                    <div class="w3-col s6 w3-center" >
+                        <p></p>
+                    </div>
+                    <div class="w3-col s6 w3-center">
+                        <button class="w3-round w3-button  w3-red" style="width:100%" onclick="sendAspectosRubrica()"><i class="far fa-save"></i> Guardar cambios</button>
+                    </div>
+                </div>
+                    {% endif %}
+
+        </div>
+      </div>
+    <script src="{% static 'js/rubrica.js' %}"></script>
+
+<script>
+traerRubrica('{{ rubrica }}', '{{ rubrica_nombre }}', '{{ rubrica_descripcion }}')
+</script>
+
     </div>
-
-
 
 {% endblock %}

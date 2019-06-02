@@ -129,7 +129,7 @@ def all_evaluaciones(request):
 
     return render(request, 'evaluacion/evaluacion_admin.html', {'evaluacion': evaluacion_list, 'form':form})
 
-
+import json
 @login_required
 def evaluacion_detalle(request, pk):
     """
@@ -143,18 +143,28 @@ def evaluacion_detalle(request, pk):
     evaluadores = []
     curso_id= Evaluacion.objects.get(pk=pk).curso.get_pk()
     grupos = Grupo.objects.filter(curso=curso_id).order_by('?')
-    rubrica_id=Evaluacion.objects.get(pk=pk).rubrica
+    rubrica_id=Evaluacion.objects.get(pk=pk).rubrica.pk
+    rubrica_nombre=Rubrica.objects.get(pk=rubrica_id).nombre
+    rubrica_descripcion=Rubrica.objects.get(pk=rubrica_id).descripcion
     rubrica_aspecto=[]
     rubricas=AspectoRubrica.objects.filter(rubrica=rubrica_id)
+    rubricas=rubricas.order_by('fila','columna')
     for r in rubricas:
-        rubrica_aspecto.append(r)
+        if (len(rubrica_aspecto) - 1 < r.fila):
+            rubrica_aspecto.append([])
+        rubrica_aspecto[r.fila].append(aspectoRubrica_serializer(r))
     for eval in evaluadores_raw:
         evaluadores.append(eval.evaluador)
     evaluador_form = BoundEvaluador({'evaluacion' : evaluacion_id})
     return render(request, 'evaluacion/evaluacion_detalle.html', context={'evaluacion':evaluacion_id, 'evaluador_form' : evaluador_form, 'evaluadores' : evaluadores, 'grupos':grupos,
                                                                           'rubrica':rubrica_id,
-                                                                          'rubrica_aspecto':rubrica_aspecto})
-
+                                                                          'rubrica_aspecto':rubrica_aspecto,
+                                                                          'rubrica_nombre': rubrica_nombre,
+                                                                          'rubrica_descripcion': rubrica_descripcion})
+def aspectoRubrica_serializer(aspectoRubrica):
+    return {'fila': aspectoRubrica.fila, 'columna' : aspectoRubrica.columna,
+                'puntaje': str(aspectoRubrica.puntaje), 'nombreFila':aspectoRubrica.nombreFila,
+                    'descripcion': aspectoRubrica.descripcion}
 
 @login_required
 def delete_evaluacion(request):
