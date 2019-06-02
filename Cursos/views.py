@@ -7,9 +7,11 @@ from django.http import HttpResponseRedirect
 from .forms import AddCurso, AddGrupo, BoundEvaluador
 from Evaluaciones.forms import AddEvaluacion
 from .models import Curso, EvaluadoresCurso
+
 from Evaluaciones.models import Evaluacion, EvaluadoresEvaluacion
 
 from Alumnos.models import Alumno, Grupo
+
 
 
 @login_required
@@ -54,6 +56,8 @@ def curso_detalle(request, pk):
     bound_evaluador = BoundEvaluador({'curso':curso_id})
     # form para agregar evaluaciones al curso
     add_evaluacion = AddEvaluacion({'curso':curso_id})
+    #
+    add_grupo = AddGrupo({'curso':curso_id})
     # lista de evaluadores
     evaluadores = EvaluadoresCurso.objects.filter(curso=curso_id)
     evaluadores_list = []
@@ -74,7 +78,8 @@ def curso_detalle(request, pk):
                                                                  'alumnos': alumnos,
                                                                  'grupos': grupos,
                                                                  'bound_evaluador': bound_evaluador,
-                                                                 'add_evaluacion': add_evaluacion})
+                                                                 'add_evaluacion': add_evaluacion,
+                                                                 'add_grupo': add_grupo})
 
 
 @login_required
@@ -105,14 +110,31 @@ def all_grupos(request):
 
 @login_required
 def add_grupo(request,pk):
-    curso_id=Curso.objects.get(pk=pk)
-    form = AddGrupo(request.POST)
-    if form.is_valid():
-           form.save()
-           messages.success(request, 'Grupo creado correctamente')
-           return render(request, 'cursos/curso_detalle.html', context={'curso': curso_id})
-    messages.warning('El grupo no pudo ser creado')
-    return render(request, 'cursos/curso_detalle.html', context={'curso': curso_id})
+    if request.POST and request.user.groups.filter(name='Profesores').exists():
+        curso_id=Curso.objects.get(pk=pk)
+        form = AddGrupo(request.POST, pk)
+        if form.is_valid():
+               form.save()
+               messages.success(request, 'Grupo creado correctamente')
+               return HttpResponseRedirect('/cursos/' + str(pk) + '/curso_detalle')
+        messages.warning('El grupo no pudo ser creado')
+        return HttpResponseRedirect('/cursos/' + str(pk) + '/curso_detalle')
+
+@login_required
+def delete_grupo(request, pk):
+    """
+    Elimina un grupo
+    :param request:
+    :return:
+    """
+    if request.POST and request.user.groups.filter(name='Profesores').exists():
+        id = int(request.POST.get('id'))
+        deleted = Grupo.objects.get(pk=id).delete()
+        if deleted is not None:
+            messages.success(request, 'Grupo eliminado correctamente')
+            return HttpResponseRedirect('/cursos/' + str(pk) + '/curso_detalle')
+    messages.warning('El grupo no pudo ser eliminado')
+    return HttpResponseRedirect('/cursos/' + str(pk) + '/curso_detalle')
 
 
 @login_required
