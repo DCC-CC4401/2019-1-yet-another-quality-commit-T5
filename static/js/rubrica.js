@@ -35,6 +35,24 @@ function traerRubrica(){
     });
 
 }
+
+function traerRubrica(id,nombre,descripcion){
+
+    idRubrica = id;
+    $('#new-nombre').html(nombre);
+    $('#new-descripcion').html(descripcion);
+
+    $.ajax({
+        data : {'id' : idRubrica},
+        url : 'busqueda_rubrica_ajax',
+        type : 'get',
+        success: (data)=>{jsonToTable(data);
+                            window.location.href = '#rubrica-detalle';}
+        ,
+    });
+
+}
+
 //añadir un fila a la rubrica
 function añadirFila(){
     let ultimaFila=detalleRubrica.length;
