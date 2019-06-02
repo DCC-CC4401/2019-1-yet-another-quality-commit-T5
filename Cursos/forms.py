@@ -64,6 +64,28 @@ class AddGrupo(forms.Form):
         grupo.save()
 
 
+class UpdateGrupo(forms.Form):
+
+    ID = forms.CharField(widget=forms.TextInput(attrs={'readonly': '', 'size': '4'}), required=True)
+
+    Nombre = forms.CharField(max_length=50,
+                             widget=forms.TextInput(attrs={'class': 'form-control'}),
+                             required=True)
+    Activo = forms.ChoiceField(choices=(("Activo", "Sí"), ("No activo", "No")),
+                               widget=forms.Select({'class': 'form-control'}),
+                               required=True)
+
+    def save(self, *args, **kwargs):
+        # obtener grupo
+        id = int(self.cleaned_data['ID'])
+        grupo = Grupo.objects.get(pk=id)
+
+        # actualizar informacion database
+        grupo.nombre = self.cleaned_data['Nombre']
+        grupo.activo = self.cleaned_data['Activo']
+        grupo.update()
+
+
 class BoundEvaluador(forms.ModelForm):
 
     class Meta:
