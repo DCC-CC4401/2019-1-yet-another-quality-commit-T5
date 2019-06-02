@@ -214,3 +214,25 @@ def evaluar(request,grupopk,evalpk):
                            'evaluacion':evaluacion_id,
                            'evaluadores': evaluadores,
                            'evaluador_form':evaluador_form})
+
+def curso_unbound_evaluador(request,evalpk, grupopk):
+    if request.POST:
+        id_evaluacion = int(request.POST.get('id_evaluacion'))
+        id_evaluador = int(request.POST.get('id_evaluador'))
+        deleted = EvaluadoresEvaluacion.objects.get(evaluacion=id_evaluacion,
+                                                    evaluador=id_evaluador).delete()
+        if deleted is not None:
+            return HttpResponseRedirect('/evaluaciones/' + str(evalpk) +'/'+ str(grupopk)+'/evaluacion_evaluar')
+    return HttpResponseRedirect('/evaluaciones/' + str(evalpk)+'/'+str(grupopk) + '/evaluacion_evaluar')
+
+def curso_bound_evaluador(request, evalpk, grupopk):
+    if request.POST:
+        evaluacion = request.POST['id_evaluacion']
+        evaluador = request.POST['evaluador']
+        form = BoundEvaluador({'evaluacion':evaluacion, 'evaluador':evaluador})
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Se ha vinculado al evaluador correctamente')
+            return HttpResponseRedirect('/evaluaciones/' + str(evalpk) +'/'+ str(grupopk)+ '/evaluacion_evaluar')
+    messages.warning(request, 'No se pudo vincular al evaluador')
+    return HttpResponseRedirect('/evaluaciones/' + str(evalpk) +'/'+ str(grupopk)+ '/evaluacion_evaluar')

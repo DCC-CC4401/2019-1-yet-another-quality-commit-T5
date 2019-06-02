@@ -10,49 +10,39 @@
             <p><b>{{ grupo.nombre }}</b> {{evaluacion.nombre}} <i>/ {{ grupo.curso }}</i></p>
             </div>
     </div>
-<!-- Evaluadores -->
-       <div class="w3-half">
-            <div class="w3-container">
-                <div class="w3-container w3-dark-gray w3-xlarge w3-center w3-round">
-                    <p><h3><b>Evaluadores</b></h3></p>
-                </div>
-                <div id="Evaluadores" class="w3-container w3-light-gray w3-round">
-                    <p>
-                    <table class="w3-table">
-                        {% for eval in evaluadores %}
-                            <tr>
-                                <td style="vertical-align:middle">{{ eval }}</td>
 
-                                    <td>
-                                        <form action="{% url 'evaluaciones:unbound_evaluador' evaluacion.pk %}"
-                                              method="post">
-                                            {% csrf_token %}
-                                            <input type="hidden" name="id_evaluacion" value="{{ evaluacion.pk }}">
-                                            <input type="hidden" name="id_evaluador" value="{{ eval.pk }}">
-                                            <button class="w3-button w3-red w3-round w3-small" type="submit">
-                                                <i class="fas fa-user-minus"></i>
-                                            </button>
-                                        </form>
-                                    </td>
-
-                            </tr>
-                        {% endfor %}
-
-                            <tr>
-                                <td class="w3-center" colspan="2">
-                                    <form action="{% url 'evaluaciones:bound_evaluador' evaluacion.pk %}" method="post">
-                                        {% csrf_token %}
-                                        <input type="hidden" name="id_evaluacion" value="{{ evaluacion.pk }}">
-                                        {{ evaluador_form.evaluador }}
-                                        <button class="w3-button w3-red w3-round w3-small" type="submit">+</button>
-                                    </form>
-                                </td>
-                            </tr>
-
-                    </table>
-                </div>
-            </div>
-        </div>
+    <!--Evaluadores-->
+    <div class="w3-card-4 w3-xlarge w3-half w3-center w3-round w3-margin-right w3-dark-gray">
+    <p><b><h3>Evaluadores</h3></b></p>
+    <table class="w3-table w3-light-gray w3-large w3-centered">
+        {% for eval in evaluadores %}
+            <tr>
+            <td style="vertical-align:middle">{{ eval }}</td>
+            <td>
+                <form action="{% url 'evaluaciones:curso_unbound_evaluador' evaluacion.pk grupo.pk %}"
+                      method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="id_evaluacion" value="{{ evaluacion.pk }}">
+                    <input type="hidden" name="id_evaluador" value="{{ eval.pk }}">
+                    <button class="w3-button w3-red w3-round w3-small" type="submit">
+                        <i class="fas fa-user-minus"></i>
+                    </button>
+                </form>
+            </td>
+            </tr>
+        {% endfor %}
+    <tr>
+        <td class="w3-center" colspan="2">
+            <form action="{% url 'evaluaciones:curso_bound_evaluador' evaluacion.pk grupo.pk%}" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="id_evaluacion" value="{{ evaluacion.pk }}">
+                {{ evaluador_form.evaluador }}
+                <button class="w3-button w3-red w3-round w3-small" type="submit">+</button>
+            </form>
+        </td>
+    </tr>
+    </table>
+    </div>
   {% comment %}      <div class="w3-row-padding" style="margin-top:30px">
         <div class="w3-half w3-margin-bottom ">
           <ul class="w3-ul w3-light-grey w3-center w3-card-4">
