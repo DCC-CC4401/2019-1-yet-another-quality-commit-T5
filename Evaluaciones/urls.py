@@ -3,7 +3,7 @@ from Evaluaciones import views
 
 urlpatterns = [
     path('evaluaciones', views.post_evaluaciones, name='evaluaciones'),
-    path('evaluacion', views.post_evaluacion, name="evaluacion"),
+    path('evaluar', views.post_evaluacion, name="evaluar"),
     path('postevaluacion', views.post_postevaluacion, name="post-evaluacion"),
     path('add_evaluacion',views.add_evaluacion, name='add_evaluacion'),
     path('delete_evaluacion', views.delete_evaluacion, name='delete_evaluacion'),

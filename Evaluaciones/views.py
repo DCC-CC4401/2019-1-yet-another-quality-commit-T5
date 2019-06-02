@@ -47,7 +47,7 @@ def post_evaluacion(request):
             evaluadores = EvaluadoresEvaluacion.objects.filter(evaluacion=evaluacion)
             yaEvaluaron = []
             for evaluadorAux in evaluadores:
-                if(FichaEvaluacion.objects.filter(evaluador=evaluadorAux, evaluacion=evaluacion).exists()):
+                if(FichaEvaluacion.objects.filter(evaluador=evaluadorAux.evaluador, evaluacion=evaluacion).exists()):
                     yaEvaluaron.append(evaluadorAux)
                     break
             
@@ -55,8 +55,10 @@ def post_evaluacion(request):
             
 
             ##luego revisar que alumnos del grupo ya ha presentado
-            alumnos = Alumno.objects.filter(grupo=grupo)
-            evaluaciones = Evaluacion.objects.filter(curso_pk=idCurso)
+
+            ##TODO filtro temporal puesto que aun no se hace lo de grupos
+            alumnos = Alumno.objects.filter(curso_id=idCurso)
+            evaluaciones = Evaluacion.objects.filter(curso_id=idCurso)
             presentadores = []
             for alumno in alumnos:
                 for evaluacionAux in evaluaciones:

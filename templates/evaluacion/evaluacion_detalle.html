@@ -28,7 +28,7 @@
 
                 <th class="w3-red"> Duración esperada</th>
 
-                <th class="w3-red"></th>
+                
                 {% if user|is_admin %}
                     <th class="w3-red"></th>
                 {% endif %}
@@ -61,7 +61,9 @@
         <div class="w3-half">
             <div class="w3-card-4 w3-margin-right">
                 <div class="w3-container w3-red ">
+                    <div class="w3-container">
                     <h5><b>Evaluadores</b></h5>
+                    </div>
                 </div>
                 <div id="Evaluadores" class="w3-container w3-light-gray w3-round">
                     <p>
@@ -115,8 +117,15 @@
                                 <td class="w3-center"style="vertical-align:middle">{{ grupo.nombre }}</td>
                                     {% if evaluacion.is_active%}
                                     <td class="w3-light-gray w3-center">
-                                        <a href="{% url 'evaluaciones:evaluar' grupo.get_pk evaluacion.get_pk %}" class="w3-button w3-red w3-round">
-                                    <strong>Seleccionar</strong></a>
+                                        <form action="{% url 'evaluaciones:evaluar' %}" method="post">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="idEvaluacion" value="{{ evaluacion.pk }}">
+                                        <input type="hidden" name="idGrupo" value="{{ grupo.pk }}">
+                                        <input type="hidden" name="idCurso" value="{{ evaluacion.curso.id }}">
+
+                                        <button class="w3-button w3-red w3-round w3-small" type="submit">Evaluar</button>
+                                    </form>
+            
                                     </td>
                                     {% endif %}
                                 </td>
@@ -133,9 +142,11 @@
 
     <!--Rubrica asociada-->
     <div id="rubrica-detalle" class="w3-margin-top w3-center">
-        <div class="w3-center w3-card-4">
-            <div class="w3-center w3-container">
-                <div class="w3-display-container">
+        <div class="w3-container">
+        <div class="w3-center w3-card-4 w3-light-gray">
+        
+            <div class=" w3-center w3-container ">
+                <div class="w3-display-container w3-margin-top">
                 <div class="w3-container w3-xlarge {% if user|is_admin %} opcion {% endif %}" style="font-weight: bold" {% if user|is_admin %} contenteditable="true" {% endif %}   id='new-nombre'></div>
                 <div id='new-descripcion' class="w3-container {% if user|is_admin %} opcion {% endif %}" style="font-style: italic;" {% if user|is_admin %} contenteditable="true" {% endif %} class="w3-medium "></div>
                 {% if user|is_admin %}
@@ -184,13 +195,14 @@
                     </div>
                 </div>
                     {% endif %}
-
+        
+        </div>
         </div>
       </div>
     <script src="{% static 'js/rubrica.js' %}"></script>
 
 <script>
-traerRubrica('{{ rubrica }}', '{{ rubrica_nombre }}', '{{ rubrica_descripcion }}')
+traerRubrica2('{{ rubrica }}', '{{ rubrica_nombre }}', '{{ rubrica_descripcion }}')
 </script>
 
     </div>

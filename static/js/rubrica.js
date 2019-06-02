@@ -36,7 +36,7 @@ function traerRubrica(){
 
 }
 
-function traerRubrica(id,nombre,descripcion){
+function traerRubrica2(id,nombre,descripcion){
 
     idRubrica = id;
     $('#new-nombre').html(nombre);
