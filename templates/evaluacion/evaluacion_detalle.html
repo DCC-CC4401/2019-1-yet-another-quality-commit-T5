@@ -39,12 +39,6 @@
                 <td class="w3-light-gray" style="vertical-align:middle"> {{ evaluacion.get_startdate }} </td>
                 <td class="w3-light-gray" style="vertical-align:middle"> {{ evaluacion.get_enddate }} </td>
                 <td class="w3-light-gray" style="vertical-align:middle"> {{ evaluacion.get_rank }} </td>
-            {% if evaluacion.is_active%}
-                <td class="w3-light-gray">
-                <a href="{% url 'evaluaciones:evaluar' evaluacion.get_pk %}" class="w3-button w3-red w3-round">
-                    <strong>Evaluar</strong></a>
-                </td>
-            {% endif %}
                 {% if user|is_admin %}
                     <td class="w3-light-gray w3-right-align">
                         <form action="{% url 'evaluaciones:delete_evaluacion' %}" method="post">
@@ -107,17 +101,34 @@
         </div>
 
         <!-- Grupos pendientes de evaluar -->
-        <div class="w3-half">
+        <div class="w3-half w3-center">
             <div class="w3-card-4 w3-margin-left">
                 <div class="w3-container w3-red">
                     <h5><b>Grupos pendientes</b></h5>
                 </div>
-                <div id="Grupos" class="w3-container w3-light-gray w3-round">
-                    This is a work in progress.
+                <div id="Grupos" class="w3-container w3-light-gray w3-round w3-center">
+                    <table class="w3-table">
+                        {% for grupo in grupos %}
+                            <tr>
+                                <td class="w3-center" style="vertical-align:middle">{{grupo.numero}}
+                                    {% if evaluacion.is_active%}
+                                    <td class="w3-light-gray w3-center">
+                                        <a href="{% url 'evaluaciones:evaluar' grupo.get_pk %}" class="w3-button w3-red w3-round">
+                                    <strong>Evaluar</strong></a>
+                                    </td>
+                                    {% endif %}
+                                </td>
+
+                            </tr>
+                        {% endfor %}
+                    </table>
                 </div>
             </div>
         </div>
     </div>
+
+    <!--Rubrica asociada-->
+    <div class="w3-container"></div>
 
 
 

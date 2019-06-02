@@ -7,10 +7,9 @@
         <h1 class="w3-xxxlarge w3-text-red"><b>Evaluación <i class="w3-text-green">en curso</i> </b></h1>
         <hr style="width:50px;border:5px solid red" class="w3-round">
         <div class="w3-container w3-center">
-            <p><b>Lambda-Ideas</b> Presentación Tarea 2 <i>CC4401-1/Otoño/2019</i></p>
+            <p><b>{{ grupo.nombre }}</b> Nombre evaluacion <i>/ {{ grupo.curso }}</i></p>
             </div>
-
-        {% if user|is_admin %}
+    
         <div id='evaluadores' class="w3-panel  w3-margin-bottom">
         <ul class="w3-ul w3-light-grey w3-center w3-card-4">
             <li class="w3-dark-grey w3-xlarge w3-padding-32">Evaluadores <i class="fas fa-user-tie"></i> </li>
@@ -18,8 +17,8 @@
             </li>
             <li class=" w3-padding-16 presentado"> Evaluador 2 <i style="margin-left: 10px" class="far fa-check-circle"><i class="w3-small"> ya evaluó</i></i>
             </li>
-            <li class="w3-padding-16"> Evaluador 3  <i style="margin-left: 10px" class="w3-large fas fa-times"></i></li> 
-            <li class="opcion w3-padding-16"> Agregar otro <i style="margin-left: 10px" class="fas fa-user-plus"></i> 
+            <li class="w3-padding-16"> Evaluador 3  <i style="margin-left: 10px" class="w3-large fas fa-times"></i></li>
+            <li class="opcion w3-padding-16"> Agregar otro <i style="margin-left: 10px" class="fas fa-user-plus"></i>
             </li>
          </ul>
         </div>
@@ -34,29 +33,26 @@
             <li class=" w3-padding-16">Andrea Park</li>
           </ul>
         </div>
-            
+
         <div class="w3-half w3-margin-bottom ">
           <ul class="w3-ul w3-light-grey w3-center w3-card-4">
             <li class="w3-dark-grey w3-xlarge w3-padding-32">Miembros que presentan <i class="fas fa-chalkboard-teacher"></i></li>
             <li class="w3-padding-16">Andrea Park <i style="margin-left: 10px" class="w3-large fas fa-times"></i></li>
             <li class=" opcion w3-padding-16" id="mas"> Agregar otro <i style="margin-left: 10px"  class="fas fa-user-plus"></i></li>
-            
+
           </ul>
         </div>
         </div>
       
 
-        {% endif %}
         <p>Seleccione el nivel de logro alcanzado por el grupo en cada ámbito</p>
         <div id='paneles'>
         
         </div>
-        {% if user|is_admin %}
             <div class="w3-panel w3-margin-bottom w3-card-4 w3-padding-16 w3-half w3-right" style="margin-right: 1.8%">
                 <span style="margin-left:21%"><i class="far fa-clock"></i> Hora final 
                 <input id='hora' class="w3-input w3-border w3-round" type="number" size="1" placeholder="15" style="width:15%; display:inline; margin-left: 10px"> : <input id='minuto' class="w3-input w3-border w3-round" style="width:15%; display:inline" type="number" placeholder="35"></span>
             </div>
-        {% elif %}
         <div class="w3-panel w3-right w3-half">
             <button class="w3-button w3-xlarge w3-red" style="margin-left: 15%"
                     onclick="checkBeforeSend()"><i class="fas fa-envelope-open-text"></i> Entregar

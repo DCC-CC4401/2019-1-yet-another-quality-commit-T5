@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.urls import reverse
+from random import shuffle
 
 from Evaluaciones.forms import *
 from django.template import Context, Template
@@ -140,10 +141,12 @@ def evaluacion_detalle(request, pk):
     evaluacion_id=Evaluacion.objects.get(pk=pk)
     evaluadores_raw = EvaluadoresEvaluacion.objects.filter(evaluacion=evaluacion_id)
     evaluadores = []
+    curso_id= Evaluacion.objects.get(pk=pk).curso.get_pk()
+    grupos = Grupo.objects.filter(curso=curso_id).order_by('?')
     for eval in evaluadores_raw:
         evaluadores.append(eval.evaluador)
     evaluador_form = BoundEvaluador({'evaluacion' : evaluacion_id})
-    return render(request, 'evaluacion/evaluacion_detalle.html', context={'evaluacion':evaluacion_id, 'evaluador_form' : evaluador_form, 'evaluadores' : evaluadores})
+    return render(request, 'evaluacion/evaluacion_detalle.html', context={'evaluacion':evaluacion_id, 'evaluador_form' : evaluador_form, 'evaluadores' : evaluadores, 'grupos':grupos})
 
 
 @login_required
@@ -197,6 +200,9 @@ def unbound_evaluador(request, pk):
     return HttpResponseRedirect('/evaluaciones/' + str(pk) + '/evaluacion_detalle')
 
 def evaluar(request,pk):
-    evaluacion_id = Evaluacion.objects.get(pk=pk)
+    grupo_id=Grupo.objects.get(pk=pk)
+    curso_id=Grupo.objects.get(pk=pk).curso.get_pk()
+    evaluadores=EvaluadoresCurso.objects.filter(curso=curso_id)
     return render(request, 'evaluacion/evaluacion_evaluar.html',
-                  context={'evaluacion': evaluacion_id})
+                  context={'grupo': grupo_id, 'curso': curso_id,
+                           'evaluadores':evaluadores})

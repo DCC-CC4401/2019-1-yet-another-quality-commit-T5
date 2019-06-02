@@ -30,3 +30,6 @@ class Grupo(models.Model):
         if self.nombre:
             return str(self.numero) + ' - ' + str(self.nombre)
         return str(self.numero)
+
+    def get_pk(self):
+        return str(self.pk)
