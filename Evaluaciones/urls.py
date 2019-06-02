@@ -10,4 +10,5 @@ urlpatterns = [
     path('evaluaciones/<int:pk>/bound_evaluador/', views.bound_evaluador, name='bound_evaluador'),
     path('evaluaciones/<int:pk>/unbound_evaluador/', views.unbound_evaluador, name='unbound_evaluador'),
     path(r'evaluaciones/<int:pk>/evaluacion_detalle/', views.evaluacion_detalle, name='evaluacion_detalle'),
+    path(r'evaluaciones/<int:pk>/evaluacion_evaluar/', views.evaluar, name='evaluar'),
 ]

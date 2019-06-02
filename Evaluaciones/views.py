@@ -156,3 +156,8 @@ def unbound_evaluador(request, pk):
         if deleted is not None:
             return HttpResponseRedirect('/evaluaciones/' + str(pk) + '/evaluacion_detalle')
     return HttpResponseRedirect('/evaluaciones/' + str(pk) + '/evaluacion_detalle')
+
+def evaluar(request,pk):
+    evaluacion_id = Evaluacion.objects.get(pk=pk)
+    return render(request, 'evaluacion/evaluacion_evaluar.html',
+                  context={'evaluacion': evaluacion_id})
