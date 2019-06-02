@@ -242,7 +242,17 @@
                                 <td style="vertical-align:middle">{{ grupo.numero }}</td>
                                 <td style="vertical-align:middle">{{ grupo.nombre }}</td>
                                 <td style="vertical-align: middle">{{ grupo.activo }}</td>
-
+                                {% if user|is_admin %}
+                                    <td style="vertical-align:middle">
+                                        <form action="{% url 'cursos:delete_grupo' curso.pk %}" method="post">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="id" value="{{ grupo.pk }}">
+                                            <button class="w3-button w3-red w3-round w3-small" type="submit">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </form>
+                                    </td>
+                                {% endif %}
                             </tr>
                         {% endfor %}
                         {% if user|is_admin %}

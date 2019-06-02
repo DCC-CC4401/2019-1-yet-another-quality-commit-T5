@@ -56,7 +56,7 @@ def curso_detalle(request, pk):
     bound_evaluador = BoundEvaluador({'curso':curso_id})
     # form para agregar evaluaciones al curso
     add_evaluacion = AddEvaluacion({'curso':curso_id})
-    #
+    #form para agregar grupos al curso
     add_grupo = AddGrupo({'curso':curso_id})
     # lista de evaluadores
     evaluadores = EvaluadoresCurso.objects.filter(curso=curso_id)
