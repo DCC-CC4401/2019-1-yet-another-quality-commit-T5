@@ -129,7 +129,15 @@
     </div>
 
     <!--Rubrica asociada-->
-    <div class="w3-container"></div>
+    <div class="w3-container w3-padding">
+    {% for r in rubrica_aspecto %}
+        <table class="w3-table">
+        <tr>
+            <td>{{ r }}</td>
+        </tr>
+        </table>
+    {% endfor %}
+    </div>
 
 
 

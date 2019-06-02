@@ -22,6 +22,8 @@
 
                     <th class="w3-red"> Curso asociado</th>
 
+                    <th class="w3-red">Rúbrica asociada</th>
+
                     <th class="w3-red"> Estado</th>
 
                     <th class="w3-red"> Fecha inicio</th>
@@ -46,6 +48,7 @@
                                 href="{% url 'evaluaciones:evaluacion_detalle' evaluacion.pk %}">{{ evaluacion }}</a>
                         </td>
                         <td class="w3-light-gray" style="vertical-align:middle">{{ evaluacion.get_course }}</td>
+                        <td class="w3-light-gray" style="vertical-align:middle">{{ evaluacion.get_rubrica }}</td>
                         <td class="w3-light-gray" style="vertical-align:middle"> {{ evaluacion.get_state }} </td>
                         <td class="w3-light-gray" style="vertical-align:middle"> {{ evaluacion.get_startdate }} </td>
                         <td class="w3-light-gray" style="vertical-align:middle"> {{ evaluacion.get_enddate }} </td>

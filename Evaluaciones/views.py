@@ -144,10 +144,16 @@ def evaluacion_detalle(request, pk):
     curso_id= Evaluacion.objects.get(pk=pk).curso.get_pk()
     grupos = Grupo.objects.filter(curso=curso_id).order_by('?')
     rubrica_id=Evaluacion.objects.get(pk=pk).rubrica
+    rubrica_aspecto=[]
+    rubricas=AspectoRubrica.objects.filter(rubrica=rubrica_id)
+    for r in rubricas:
+        rubrica_aspecto.append(r)
     for eval in evaluadores_raw:
         evaluadores.append(eval.evaluador)
     evaluador_form = BoundEvaluador({'evaluacion' : evaluacion_id})
-    return render(request, 'evaluacion/evaluacion_detalle.html', context={'evaluacion':evaluacion_id, 'evaluador_form' : evaluador_form, 'evaluadores' : evaluadores, 'grupos':grupos})
+    return render(request, 'evaluacion/evaluacion_detalle.html', context={'evaluacion':evaluacion_id, 'evaluador_form' : evaluador_form, 'evaluadores' : evaluadores, 'grupos':grupos,
+                                                                          'rubrica':rubrica_id,
+                                                                          'rubrica_aspecto':rubrica_aspecto})
 
 
 @login_required

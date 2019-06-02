@@ -42,6 +42,9 @@ class Evaluacion(models.Model):
     def is_active(self):
         return self.get_state()=="Abierta"
 
+    def get_rubrica(self):
+        return str(self.rubrica)
+
     def save(self, *args, **kwargs):
         """
         Guarda el modelo y asigna todos los evaluadores del curso

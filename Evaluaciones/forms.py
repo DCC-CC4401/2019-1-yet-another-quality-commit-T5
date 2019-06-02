@@ -35,7 +35,7 @@ class AddEvaluacion(forms.Form):
     def save(self, *args, **kwargs):
         evaluacion = Evaluacion(tiempo_min=self.cleaned_data['tiempo_min'],
                       tiempo_max=self.cleaned_data['tiempo_max'],
-                      #rubrica=self.cleaned_data['rubrica'],
+                      rubrica=self.cleaned_data['rubrica'],
                       fecha_inicio=self.cleaned_data['fecha_inicio'],
                       fecha_fin=self.cleaned_data['fecha_fin'],
                         curso=self.cleaned_data['curso'],
