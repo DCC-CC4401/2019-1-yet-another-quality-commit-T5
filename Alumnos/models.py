@@ -33,3 +33,12 @@ class Grupo(models.Model):
 
     def get_pk(self):
         return str(self.pk)
+
+    def update(self, *args, **kwargs):
+        """
+        Actualiza los datos del grupo en la base de datos del modelo
+        :param args:
+        :param kwargs:
+        :return:
+        """
+        super(Grupo, self).save(*args, **kwargs)

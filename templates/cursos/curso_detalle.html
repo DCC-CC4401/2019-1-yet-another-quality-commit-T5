@@ -228,7 +228,7 @@
     </div>
 
     <!-- Grupos -->
-    <div class="w3-half">
+    <div class="w3-half w3-container">
             <div class="w3-card-4 w3-margin-left">
                 <div class="w3-container w3-red">
                     <h5><b>Grupos</b></h5>
@@ -236,13 +236,22 @@
                 <div id="Grupos" class="w3-container w3-light-gray w3-round">
                     <p>
                     <table class="w3-table">
-
+                        <script>
+                            var gruposJs = new Array();
+                            var grupoJs = new Array();
+                        </script>
                         {% for grupo in grupos %}
                             <tr>
                                 <td style="vertical-align:middle">{{ grupo.numero }}</td>
                                 <td style="vertical-align:middle">{{ grupo.nombre }}</td>
                                 <td style="vertical-align: middle">{{ grupo.activo }}</td>
                                 {% if user|is_admin %}
+                                    <td class="w3-light-gray" style="vertical-align:middle">
+                                        <a id='{{grupo.pk}}' class="w3-button w3-red w3-small w3-round">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                    </td>
+
                                     <td style="vertical-align:middle">
                                         <form action="{% url 'cursos:delete_grupo' curso.pk %}" method="post">
                                             {% csrf_token %}
@@ -253,6 +262,15 @@
                                         </form>
                                     </td>
                                 {% endif %}
+                                <script>
+                                    grupoJs = [];
+                                    grupoJs.push('{{ grupo.pk }}');
+                                    grupoJs.push('{{ grupo.numero }}');
+                                    grupoJs.push('{{ grupo.nombre }}');
+                                    grupoJs.push('{{ grupo.curso }}');
+                                    grupoJs.push('{{ grupo.activo }}');
+                                    gruposJs.push(grupoJs);
+                                </script>
                             </tr>
                         {% endfor %}
                         {% if user|is_admin %}
@@ -306,5 +324,62 @@
             </div>
         </div>
     </div>
+
+<!-- Formulario de modificar un grupo -->
+    <div id="modificar_grupo" class="w3-modal">
+        <div class="w3-modal-content w3-card-4 w3-animate-zoom" style="max-width:600px">
+            <div class="w3-center"><br>
+                <span onclick="document.getElementById('modificar_grupo').style.display='none'"
+                      class="w3-button w3-xlarge w3-transparent w3-display-topright" title="Close Modal">×</span>
+
+                <form class="w3-container" action="{% url 'cursos:update_grupo' curso.pk %}" method="post">
+                    {% csrf_token %}
+                    <table class="w3-table">
+                        <tr>
+                            <td><b>Nombre del grupo:</b></td>
+                            <td>{{ update_grupo.Nombre}}</td>
+                        </tr>
+                        <tr>
+                            <td><b>Activo:</b></td>
+                            <td>{{ update_grupo.Activo }}</td>
+                        </tr>
+                    </table>
+
+                    <button class="w3-button w3-block w3-round w3-red w3-section w3-padding w3-hover-light-green"
+                            type="submit">Guardar cambios
+                    </button>
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+    {% if request.user|is_admin %}
+                function showEditar(id) {
+                    console.log(id);
+                    return () => {
+                        let modificar = document.getElementById('modificar_grupo')
+                        GetElementInsideContainer('modificar_grupo', 'id_ID').value = id;
+                        let filtered = gruposJs.filter((x) => {
+                            return id == x[0];
+                        });
+                        let grupo = filtered[0];
+                        GetElementInsideContainer('modificar_grupo', 'id_nombre').value = grupo[2];
+                        GetElementInsideContainer('modificar_grupo', 'id_activo').value = grupo[4];
+                        modificar.style.display = 'block';
+                    };
+                }
+
+
+
+                //prepare document for editar evaluador
+                let idPrepare = "";
+                for (let i = 0; i < gruposJs.length; i++) {
+                    idPrepare = gruposJs[i][0];
+                    document.getElementById(idPrepare).addEventListener("click", showEditar(idPrepare));
+                }
+            {% endif %}
+    </script>
 
 {% endblock %}

@@ -4,7 +4,7 @@ from django.shortcuts import render
 from django.http import HttpResponseRedirect
 # from django.views.generic.edit import UpdateView
 
-from .forms import AddCurso, AddGrupo, BoundEvaluador
+from .forms import AddCurso, AddGrupo, BoundEvaluador, UpdateGrupo
 from Evaluaciones.forms import AddEvaluacion
 from .models import Curso, EvaluadoresCurso
 
@@ -58,6 +58,8 @@ def curso_detalle(request, pk):
     add_evaluacion = AddEvaluacion({'curso':curso_id})
     #form para agregar grupos al curso
     add_grupo = AddGrupo({'curso':curso_id})
+    #form para modificar un grupo
+    update_grupo = UpdateGrupo({'curso': curso_id})
     # lista de evaluadores
     evaluadores = EvaluadoresCurso.objects.filter(curso=curso_id)
     evaluadores_list = []
@@ -79,7 +81,8 @@ def curso_detalle(request, pk):
                                                                  'grupos': grupos,
                                                                  'bound_evaluador': bound_evaluador,
                                                                  'add_evaluacion': add_evaluacion,
-                                                                 'add_grupo': add_grupo})
+                                                                 'add_grupo': add_grupo,
+                                                                 'update_grupo': update_grupo})
 
 
 @login_required
@@ -111,7 +114,6 @@ def all_grupos(request):
 @login_required
 def add_grupo(request,pk):
     if request.POST and request.user.groups.filter(name='Profesores').exists():
-        curso_id=Curso.objects.get(pk=pk)
         form = AddGrupo(request.POST, pk)
         if form.is_valid():
                form.save()
@@ -134,6 +136,22 @@ def delete_grupo(request, pk):
             messages.success(request, 'Grupo eliminado correctamente')
             return HttpResponseRedirect('/cursos/' + str(pk) + '/curso_detalle')
     messages.warning('El grupo no pudo ser eliminado')
+    return HttpResponseRedirect('/cursos/' + str(pk) + '/curso_detalle')
+
+@login_required
+def update_grupo(request, pk):
+    """
+    Actualiza los datos de un grupo, en caso de que la request sea de un Profesor.
+    :param request:
+    :return:
+    """
+    if request.POST and request.user.groups.filter(name='Profesores').exists():
+        form = UpdateGrupo(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Grupo modificado correctamente')
+            return HttpResponseRedirect('/cursos/' + str(pk) + '/curso_detalle')
+    messages.warning('El grupo no pudo ser modificado')
     return HttpResponseRedirect('/cursos/' + str(pk) + '/curso_detalle')
 
 
