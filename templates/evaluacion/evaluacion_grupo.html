@@ -10,16 +10,19 @@
             <p><b>{{ grupo.nombre }}</b> {{evaluacion.nombre}} <i>/ {{ grupo.curso }}</i></p>
             </div>
     </div>
-
+<div class="w3-container w3-padding">
     <!--Evaluadores-->
-    <div class="w3-card-4 w3-xlarge w3-half w3-center w3-round w3-margin-right w3-dark-gray">
-    <p><b><h3>Evaluadores</h3></b></p>
-    <table class="w3-table w3-light-gray w3-large w3-centered">
-        {% for eval in evaluadores %}
-            <tr>
-            <td style="vertical-align:middle">{{ eval }}</td>
-            <td>
-                <form action="{% url 'evaluaciones:curso_unbound_evaluador' evaluacion.pk grupo.pk %}"
+<div class="w3-half">
+    <div class="w3-card-4 w3-margin-right">
+        <div class="w3-container w3-dark-gray w3-center w3-round w3-xlarge">
+            <p><b><h3>Evaluadores <i class="fas fa-user-tie"></i></h3></b></p>
+        </div>
+            <table class="w3-table w3-light-gray w3-large w3-centered w3-round">
+                {% for eval in evaluadores %}
+                <tr>
+                    <td style="vertical-align: middle">{{ eval }}</td>
+                <td>
+                    <form action="{% url 'evaluaciones:curso_unbound_evaluador' evaluacion.pk grupo.pk %}"
                       method="post">
                     {% csrf_token %}
                     <input type="hidden" name="id_evaluacion" value="{{ evaluacion.pk }}">
@@ -27,12 +30,12 @@
                     <button class="w3-button w3-red w3-round w3-small" type="submit">
                         <i class="fas fa-user-minus"></i>
                     </button>
-                </form>
-            </td>
-            </tr>
-        {% endfor %}
-    <tr>
-        <td class="w3-center" colspan="2">
+                    </form>
+                </td>
+                </tr>
+                {% endfor %}
+            <tr>
+                <td class="w3-center" colspan="2">
             <form action="{% url 'evaluaciones:curso_bound_evaluador' evaluacion.pk grupo.pk%}" method="post">
                 {% csrf_token %}
                 <input type="hidden" name="id_evaluacion" value="{{ evaluacion.pk }}">
@@ -40,10 +43,34 @@
                 <button class="w3-button w3-red w3-round w3-small" type="submit">+</button>
             </form>
         </td>
-    </tr>
-    </table>
+            </tr>
+            </table>
     </div>
-  {% comment %}      <div class="w3-row-padding" style="margin-top:30px">
+</div>
+
+    <!--Integrantes-->
+<div class="w3-half">
+    <div class="w3-card-4 w3-margin-right">
+        <div class="w3-container w3-dark-gray w3-center w3-round w3-xlarge">
+        <p><b><h3>Integrantes del grupo <i class="fas fa-user-friends"></i></h3></b></p>
+        </div>
+        <table class="w3-table w3-light-gray w3-centered">
+            <tr>
+                <td>Acá van los integrantes para seleccionar el que presenta</td>
+            </tr>
+        </table>
+    </div>
+</div>
+</div>
+    <!--Boton para comerzar la evaluacion-->
+<div class="w3-container w3-padding w3-margin w3-right">
+<a href="{% url 'evaluaciones:comenzar_evaluacion' grupo.pk evaluacion.pk %}" class="w3-button w3-red w3-xlarge w3-round">
+                                   Comenzar evaluación
+</a>
+</div>
+
+
+     {% comment %}<div class="w3-row-padding" style="margin-top:30px">
         <div class="w3-half w3-margin-bottom ">
           <ul class="w3-ul w3-light-grey w3-center w3-card-4">
             <li class="w3-dark-grey w3-xlarge w3-padding-32">Miembros del equipo <i class="fas fa-user-friends"></i></li>
@@ -53,35 +80,36 @@
             <li class=" w3-padding-16">Andrea Park</li>
           </ul>
         </div>
+     </div>{% endcomment %}
 
-        <div class="w3-half w3-margin-bottom ">
-          <ul class="w3-ul w3-light-grey w3-center w3-card-4">
-            <li class="w3-dark-grey w3-xlarge w3-padding-32">Miembros que presentan <i class="fas fa-chalkboard-teacher"></i></li>
-            <li class="w3-padding-16">Andrea Park <i style="margin-left: 10px" class="w3-large fas fa-times"></i></li>
-            <li class=" opcion w3-padding-16" id="mas"> Agregar otro <i style="margin-left: 10px"  class="fas fa-user-plus"></i></li>
-
-          </ul>
-        </div>
-        </div>
-
-
-        <p>Seleccione el nivel de logro alcanzado por el grupo en cada ámbito</p>
-        <div id='paneles'>
-
-        </div>
-            <div class="w3-panel w3-margin-bottom w3-card-4 w3-padding-16 w3-half w3-right" style="margin-right: 1.8%">
-                <span style="margin-left:21%"><i class="far fa-clock"></i> Hora final
-                <input id='hora' class="w3-input w3-border w3-round" type="number" size="1" placeholder="15" style="width:15%; display:inline; margin-left: 10px"> : <input id='minuto' class="w3-input w3-border w3-round" style="width:15%; display:inline" type="number" placeholder="35"></span>
-            </div>
-        <div class="w3-panel w3-right w3-half">
-            <button class="w3-button w3-xlarge w3-red" style="margin-left: 15%"
-                    onclick="checkBeforeSend()"><i class="fas fa-envelope-open-text"></i> Entregar
-                evaluación
-            </button>
-        </div>
-
-
-    </div>{% endcomment %}
+{#        <div class="w3-half w3-margin-bottom ">#}
+{#          <ul class="w3-ul w3-light-grey w3-center w3-card-4">#}
+{#            <li class="w3-dark-grey w3-xlarge w3-padding-32">Miembros que presentan <i class="fas fa-chalkboard-teacher"></i></li>#}
+{#            <li class="w3-padding-16">Andrea Park <i style="margin-left: 10px" class="w3-large fas fa-times"></i></li>#}
+{#            <li class=" opcion w3-padding-16" id="mas"> Agregar otro <i style="margin-left: 10px"  class="fas fa-user-plus"></i></li>#}
+{##}
+{#          </ul>#}
+{#        </div>#}
+{#        </div>#}
+{##}
+{##}
+{#        <p>Seleccione el nivel de logro alcanzado por el grupo en cada ámbito</p>#}
+{#        <div id='paneles'>#}
+{##}
+{#        </div>#}
+{#            <div class="w3-panel w3-margin-bottom w3-card-4 w3-padding-16 w3-half w3-right" style="margin-right: 1.8%">#}
+{#                <span style="margin-left:21%"><i class="far fa-clock"></i> Hora final#}
+{#                <input id='hora' class="w3-input w3-border w3-round" type="number" size="1" placeholder="15" style="width:15%; display:inline; margin-left: 10px"> : <input id='minuto' class="w3-input w3-border w3-round" style="width:15%; display:inline" type="number" placeholder="35"></span>#}
+{#            </div>#}
+{#        <div class="w3-panel w3-right w3-half">#}
+{#            <button class="w3-button w3-xlarge w3-red" style="margin-left: 15%"#}
+{#                    onclick="checkBeforeSend()"><i class="fas fa-envelope-open-text"></i> Entregar#}
+{#                evaluación#}
+{#            </button>#}
+{#        </div>#}
+{##}
+{##}
+{#    </div>#}
 
     <script>
     var idEvaluacion='{{idEvaluacion}}';

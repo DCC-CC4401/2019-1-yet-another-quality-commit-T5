@@ -236,3 +236,11 @@ def curso_bound_evaluador(request, evalpk, grupopk):
             return HttpResponseRedirect('/evaluaciones/' + str(evalpk) +'/'+ str(grupopk)+ '/evaluacion_evaluar')
     messages.warning(request, 'No se pudo vincular al evaluador')
     return HttpResponseRedirect('/evaluaciones/' + str(evalpk) +'/'+ str(grupopk)+ '/evaluacion_evaluar')
+
+def comenzar_evaluacion(request, grupopk, evalpk):
+     id_grupo=Grupo.objects.get(pk=grupopk)
+     id_evaluacion=Evaluacion.objects.get(pk=evalpk)
+     return render(request, 'evaluacion/evaluacion_evaluar.html',
+                   context={'grupo':id_grupo,
+                            'evaluacion':id_evaluacion})
+
