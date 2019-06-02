@@ -31,23 +31,62 @@ import json
 def post_evaluacion(request):
     if request.POST:
         idEvaluacion=int(request.POST['idEvaluacion'])
-        print(idEvaluacion)
-        rubrica = Evaluacion.objects.get(pk=idEvaluacion).rubrica
+        idGrupo = int(request.POST['idGrupo'])
+        idCurso = int(request.POST['idCurso'])
+        grupo = Grupo.objects.get(pk=idGrupo)
+        evaluador= Evaluador.objects.get(correo=request.user.username)
+        evaluacion=Evaluacion.objects.get(pk=idEvaluacion)
+        rubrica = evaluacion.rubrica
         aspectos = AspectoRubrica.objects.filter(rubrica=rubrica)
         aspectos = aspectos.order_by('fila','columna')
         grouped = []
+        ##en caso de ser admin se obtienen los otros evaluadores y se revisa si ya entregaron alguna evaluacion
+        if request.user.groups.filter(name='Profesores').exists():
+            evaluadores = EvaluadoresEvaluacion.objects.filter(evaluacion=evaluacion)
+            yaEvaluaron = []
+            for evaluadorAux in evaluadores:
+                if(FichaEvaluacion.objects.filter(evaluador=evaluadorAux, evaluacion=evaluacion).exists()):
+                    yaEvaluaron.append(evaluadorAux)
+                    break
+            
+
+            
+
+            ##luego revisar que alumnos del grupo ya ha presentado
+            alumnos = Alumno.objects.filter(grupo=grupo)
+            evaluaciones = Evaluacion.objects.filter(curso_pk=idCurso)
+            presentadores = []
+            for alumno in alumnos:
+                for evaluacionAux in evaluaciones:
+                    if(FichaEvaluacion.objects.filter(evaluacion=evaluacionAux, presentador=alumno).exists()):
+                        presentadores.append(alumno)
+                        break
+
+
+
         ##ahora agrupamos por fila, la salida es [[aspectosfila1][aspectosfila2][...]]
         for aspecto in aspectos:
             if (len(grouped)-1 < aspecto.fila):
                 grouped.append([])
             grouped[aspecto.fila].append(aspectoRubrica_serializer(aspecto))
 
-        data={'idEvaluacion':idEvaluacion, 'detalleRubrica':json.dumps(grouped)}
-    
+        ##esto es para obtener las respuestas anteriores del evaluador
+        ficha = FichaEvaluacion.objects.get(evaluacion=evaluacion, grupo=grupo, evaluador=evaluador )
+        presentador = ficha.presentador
+        groupedRespuestas = []
+        if(ficha != None):
+            respuestasBDD = EvaluacionAspectos.objects.filter(fichaEvaluacion=ficha)
+            respuestasBDD = respuestasBDD.order_by('aspectoRubrica_fila','aspectoRubrica_columna')
+            for respuesta in respuestasBDD:
+                groupedRespuestas.append(respuesta_serializer(respuesta))
+
+        data={'idEvaluacion':idEvaluacion, 'detalleRubrica':json.dumps(grouped), 'respuestas': json.dumps(groupedRespuestas), 'presentador':presentador, 'evaluadores':evaluadores, 'yaPresentaron':presentadores, 'yaEvaluaron':yaEvaluaron}
+        
         
         return render(request, 'evaluacion/evaluacion_evaluar.html', data)
 
-
+def respuesta_serializer(evaluacionAspecto):
+    return {'fila':evaluacionAspecto.aspectoRubrica.fila, 'columna':evaluacionAspecto.aspectoRubrica.columna}
 
 def aspectoRubrica_serializer(aspectoRubrica):
     return {'fila': aspectoRubrica.fila, 'columna' : aspectoRubrica.columna,
