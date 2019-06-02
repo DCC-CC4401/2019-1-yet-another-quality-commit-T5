@@ -29,9 +29,9 @@
         <table class="w3-table w3-card-4 w3-bordered w3-border-black">
             <thead>
                 <tr>
-                    <th class="w3-center w3-red"> ID </th>
                     <th class="w3-red"> Nombre </th>
                     <th class="w3-red"> Descripción </th>
+                    <th class="w3-red"></th>
                     {% if user|is_admin %}
                     <th class="w3-red"></th>
                     {% endif %}
@@ -43,10 +43,16 @@
             </script>
             <tbody id='rubricas'>
             {% for rubrica in rubricas_list %}
-            <tr class='w3-light-gray opcion' id='{{rubrica.pk}}'>
-                <td class='w3-center'>{{rubrica.pk}} </td>
+            <tr class='w3-light-gray ' id='fila-{{rubrica.pk}}' >
                 <td>{{rubrica.nombre}}</td>
                 <td> {{ rubrica.descripcion }} </td>
+                <!-- Boton de detalles -->
+                <td class="w3-light-gray" style="vertical-align:middle">
+                    <a id='{{rubrica.pk}}' class="w3-button w3-red w3-small w3-round">
+                        <i class="fas fa-search"></i>
+                        Ver
+                    </a>
+                </td>
                 {% if user|is_admin %}
                 <td class="w3-light-gray w3-right-align">
                                 <form action="{% url 'rubricas:delete_rubrica' %}" method="post">
@@ -206,11 +212,11 @@ function buscarRubrica(){
     return false;
     });
     for(i=0;i<rubricasJs.length;i++){
-        document.getElementById(rubricasJs[i][0]).style.display='none';
+        document.getElementById('fila-'+rubricasJs[i][0]).style.display='none';
 
     }
     for(i=0;i<filtered.length;i++){
-        document.getElementById(filtered[i][0]).style.display='';
+        document.getElementById('fila-'+filtered[i][0]).style.display='';
     }
 }
 

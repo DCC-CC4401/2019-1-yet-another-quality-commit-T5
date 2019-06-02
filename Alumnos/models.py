@@ -23,8 +23,8 @@ class Grupo(models.Model):
     numero = models.IntegerField(default=0)
     nombre = models.CharField(max_length=30, blank=True)
     curso = models.ForeignKey(Curso, on_delete=models.CASCADE)
-    integrante = models.ForeignKey(Alumno, on_delete=models.CASCADE)
-    activo = models.BooleanField(default=True)
+    #integrante = models.ForeignKey(Alumno, on_delete=models.CASCADE, blank=True)
+    activo = models.CharField(max_length=2)
 
     def __str__(self):
         if self.nombre:

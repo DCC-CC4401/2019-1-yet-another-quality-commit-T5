@@ -94,9 +94,11 @@
                                 cursoJs.push('{{curso.get_pk}}');
                                 cursoJs.push('{{curso.get_code}}');
                                 cursoJs.push('{{curso.get_section}}');
-                                cursoJs.push('{{curso.get_name}}');
                                 cursoJs.push('{{curso.get_semester}}');
                                 cursoJs.push('{{curso.get_year}}');
+                                cursoJs.push('{{curso.get_name}}');
+                                
+                                
 
                                 cursosJs.push(cursoJs);
                             </script>
@@ -108,6 +110,7 @@
 
 
                     <script>
+                        var is_admin= ('True'=='{{user|is_admin}}')
                         function buscar() {
                             let buscarNombre = document.getElementById('buscarNombre').value;
                             let buscarSemestre = document.getElementById('buscarSemestre').value;
@@ -118,7 +121,7 @@
                                 if (buscarNombre == "") {
                                     return true;
                                 } else {
-                                    let palabras = x[2].split(" ");
+                                    let palabras = x[5].split(" ");
                                     for (let i = 0; i < palabras.length; i++) {
                                         if (palabras[i].toLowerCase() == buscarNombre.toLowerCase()) {
                                             return true;
@@ -141,7 +144,7 @@
                                 if (buscarSeccion == "None") {
                                     return true;
                                 } else {
-                                    return buscarSeccion == x[1];
+                                    return buscarSeccion == x[2];
                                 }
 
                             });
@@ -154,20 +157,15 @@
                                 }
 
                             });
+                            for(i=0;i<cursosJs.length;i++){
+                                document.getElementById(cursosJs[i][0]).style.display='none';
 
-
-                            texto = "";
-                            for (i = 0; i < filtered.length; i++) {
-                                texto += "<tr>";
-                                texto += ("<td class='w3-light-gray tabla-elemento'>" + filtered[i][0] + "-");
-                                texto += (filtered[i][1] + "</td>");
-                                texto += ("<td class='w3-light-gray tabla-elemento'>" + filtered[i][3] + " " + filtered[i][4] + "</td>");
-                                texto += ("<td class='w3-small w3-light-gray tabla-elemento'>" + filtered[i][2] + "</td>");
-
-                                texto += "</tr>";
+                                }
+                            for(i=0;i<filtered.length;i++){
+                                document.getElementById(filtered[i][0]).style.display='';
                             }
 
-                            document.getElementById('cursos').innerHTML = texto;
+                            
                         }
 
 

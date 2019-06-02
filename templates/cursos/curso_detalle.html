@@ -227,4 +227,74 @@
         </div>
     </div>
 
+    <!-- Grupos -->
+    <div class="w3-half">
+            <div class="w3-card-4 w3-margin-left">
+                <div class="w3-container w3-red">
+                    <h5><b>Grupos</b></h5>
+                </div>
+                <div id="Grupos" class="w3-container w3-light-gray w3-round">
+                    <p>
+                    <table class="w3-table">
+
+                        {% for grupo in grupos %}
+                            <tr>
+                                <td style="vertical-align:middle">{{ grupo.numero }}</td>
+                                <td style="vertical-align:middle">{{ grupo.nombre }}</td>
+                                <td style="vertical-align: middle">{{ grupo.activo }}</td>
+
+                            </tr>
+                        {% endfor %}
+                        {% if user|is_admin %}
+                            <tr>
+                                <td colspan="3" class="w3-center">
+                                    <button onclick="document.getElementById('agregar_grupo').style.display='block'"
+                                            class="w3-round w3-small w3-button w3-red w3-center">
+                                        <i class="fas fa-plus"></i>
+                                        Agregar
+                                    </button>
+                                </td>
+                            </tr>
+
+                        {% endif %}
+                    </table>
+                </div>
+            </div>
+        </div>
+
+<!-- Formulario de agregar grupo-->
+    <div id="agregar_grupo" class="w3-modal">
+        <div class="w3-modal-content w3-card-4 w3-animate-zoom" style="max-width:600px">
+            <div class="w3-center"><br>
+                <span onclick="document.getElementById('agregar_grupo').style.display='none'"
+                      class="w3-button w3-xlarge w3-transparent w3-display-topright"
+                      title="Close Modal">×</span>
+                <form class="w3-container" action="{% url 'cursos:add_grupo' pk=curso.get_pk %}" method="post">
+                    {% csrf_token %}
+                    <table class="w3-table">
+                        <tr>
+                            <td><b>Número del grupo:</b></td>
+                            <td>{{ add_grupo.Número}}</td>
+                        </tr>
+                        <tr>
+                            <td><b>Nombre del grupo:</b></td>
+                            <td>{{ add_grupo.Nombre }}</td>
+                        </tr>
+                        <tr>
+                            <td><b>Curso:</b></td>
+                            <td>{{ add_grupo.Curso }}</td>
+                        </tr>
+                        <tr>
+                            <td><b>Activo:</b></td>
+                            <td>{{ add_grupo.Activo }}</td>
+                        </tr>
+                    </table>
+                    <button class="w3-button w3-block w3-round w3-red w3-section w3-padding" type="submit">
+                        Agregar
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
 {% endblock %}

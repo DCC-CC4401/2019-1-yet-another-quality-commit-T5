@@ -1,5 +1,6 @@
 from django import forms
 from Cursos.models import *
+from Alumnos.models import Grupo, Alumno
 
 class AddCurso(forms.Form):
 
@@ -34,16 +35,31 @@ class AddCurso(forms.Form):
         curso.save()
 
 class AddGrupo(forms.Form):
-    Lista_alumnos=("Alumno1", "Alumno2", "Alumno3", "Alumno4")
-    Nombre = forms.CharField(max_length=40,
+    Número = forms.IntegerField(min_value=1, max_value=20,
+                                widget=forms.NumberInput(attrs={'class': 'form-control'}),
+                                required=True)
+    Nombre = forms.CharField(max_length=50,
                              widget=forms.TextInput(attrs={'class': 'form-control'}),
-                             required=True)
+                             required=False)
+    Curso = forms.ModelChoiceField(queryset=Curso.objects,
+                                   widget=forms.Select(attrs={'class':'form-control'}),
+                                   label='Curso')
+    #Integrante = forms.ModelChoiceField(queryset=Alumno.objects,
+                                   #widget=forms.Select(attrs={'class':'form-control'}),
+                                   #label='Integrante')
+    Activo = forms.ChoiceField(choices=(("Activo", "Sí"), ("No activo", "No")),
+                               widget=forms.Select({'class': 'form-control'}),
+                               required=True)
 
     def is_valid(self):
         return super(AddGrupo,self).is_valid()
 
     def save(self, *args, **kwargs):
-        grupo=Grupo(nombre=self.cleaned_data['Nombre'])
+        grupo=Grupo(numero=self.cleaned_data['Número'],
+                    nombre=self.cleaned_data['Nombre'],
+                    curso=self.cleaned_data['Curso'],
+                    #integrante=self.cleaned_data['Integrante'],
+                    activo=self.cleaned_data['Activo'])
 
         grupo.save()
 

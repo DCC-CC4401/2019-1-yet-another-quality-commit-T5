@@ -64,8 +64,8 @@ class FichaEvaluacion(models.Model):
     estado_grupo = models.CharField(max_length=15)
     estado_evaluacion = models.CharField(max_length=15)
     tiempo = models.IntegerField(default=0)
-    presentador = models.ForeignKey(Alumno, on_delete=models.CASCADE)
-    aspectoRubrica = models.ForeignKey(AspectoRubrica, on_delete=models.CASCADE)
+    presentador = models.ForeignKey(Alumno, on_delete=models.CASCADE, null=True, blank=True)
+    
 
     def get_evaluation(self):
         return str(self.evaluacion)
@@ -95,3 +95,18 @@ class EvaluadoresEvaluacion(models.Model):
 
     class Meta:
         unique_together = ('evaluacion', 'evaluador')
+
+class EvaluacionAspectos(models.Model):
+    fichaEvaluacion = models.ForeignKey(FichaEvaluacion, on_delete=models.CASCADE)
+    aspectoRubrica = models.ForeignKey(AspectoRubrica, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ('fichaEvaluacion', 'aspectoRubrica')
+    
+class GrupoEvaluacion(models.Model):
+    grupo= models.ForeignKey(Grupo, on_delete=models.CASCADE)
+    evaluacion = models.ForeignKey(Evaluacion, on_delete=models.CASCADE)
+    abierto=models.BooleanField(default=False)
+    
+    class Meta:
+        unique_together = ('grupo', 'evaluacion')
