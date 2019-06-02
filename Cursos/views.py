@@ -119,7 +119,7 @@ def add_grupo(request,pk):
                form.save()
                messages.success(request, 'Grupo creado correctamente')
                return HttpResponseRedirect('/cursos/' + str(pk) + '/curso_detalle')
-        messages.warning('El grupo no pudo ser creado')
+        messages.warning(request, 'El grupo no pudo ser creado')
         return HttpResponseRedirect('/cursos/' + str(pk) + '/curso_detalle')
 
 @login_required
@@ -135,7 +135,7 @@ def delete_grupo(request, pk):
         if deleted is not None:
             messages.success(request, 'Grupo eliminado correctamente')
             return HttpResponseRedirect('/cursos/' + str(pk) + '/curso_detalle')
-    messages.warning('El grupo no pudo ser eliminado')
+    messages.warning(request, 'El grupo no pudo ser eliminado')
     return HttpResponseRedirect('/cursos/' + str(pk) + '/curso_detalle')
 
 @login_required
@@ -151,7 +151,7 @@ def update_grupo(request, pk):
             form.save()
             messages.success(request, 'Grupo modificado correctamente')
             return HttpResponseRedirect('/cursos/' + str(pk) + '/curso_detalle')
-    messages.warning('El grupo no pudo ser modificado')
+    messages.warning(request, 'El grupo no pudo ser modificado')
     return HttpResponseRedirect('/cursos/' + str(pk) + '/curso_detalle')
 
 
