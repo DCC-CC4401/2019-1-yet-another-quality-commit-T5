@@ -2,6 +2,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
+from django.http import HttpResponse
 from django.urls import reverse
 from random import shuffle
 
@@ -161,6 +162,25 @@ def evaluacion_detalle(request, pk):
                                                                           'rubrica_aspecto':rubrica_aspecto,
                                                                           'rubrica_nombre': rubrica_nombre,
                                                                           'rubrica_descripcion': rubrica_descripcion})
+
+
+import json
+
+
+def busqueda_rubrica_ajax(request,pk):
+    if request.GET:
+        id_rubrica = request.GET['id']
+        aspectos = AspectoRubrica.objects.filter(rubrica__id=id_rubrica)
+        aspectos = aspectos.order_by('fila', 'columna')
+        grouped = []
+        ##ahora agrupamos por fila, la salida es [[aspectosfila1][aspectosfila2][...]]
+        for aspecto in aspectos:
+            if (len(grouped) - 1 < aspecto.fila):
+                grouped.append([])
+            grouped[aspecto.fila].append(aspectoRubrica_serializer(aspecto))
+
+        return HttpResponse(json.dumps(grouped), content_type='application/json')
+
 def aspectoRubrica_serializer(aspectoRubrica):
     return {'fila': aspectoRubrica.fila, 'columna' : aspectoRubrica.columna,
                 'puntaje': str(aspectoRubrica.puntaje), 'nombreFila':aspectoRubrica.nombreFila,
@@ -259,4 +279,40 @@ def comenzar_evaluacion(request, grupopk, evalpk):
      return render(request, 'evaluacion/evaluacion_evaluar.html',
                    context={'grupo':id_grupo,
                             'evaluacion':id_evaluacion})
+
+
+def updateAspectosRubrica(request,pk):
+    if request.method == "POST":
+        received_json_data = json.loads(request.body)
+        idRubrica = int(received_json_data['idRubrica'])
+        newNombre = forms.CharField(max_length=50).clean(received_json_data['nombre'])
+        newDescripcion = forms.CharField(max_length=50).clean(received_json_data['descripcion'])
+        newRubrica = Rubrica.objects.get(pk=idRubrica)
+        newRubrica.nombre = newNombre
+        newRubrica.descripcion = newDescripcion
+        newRubrica.save()
+
+        ##asegurarse que no existen aspectosRubrica asociados
+        ##DUDA A FUTURO: ¿porque si elimino primero lso aspectos y despues actualizo la rubrica ,
+        ##los aspectos anteriores no se borran?
+        AspectoRubrica.objects.filter(rubrica__id=idRubrica).delete()
+
+        for i in received_json_data['aspectosRubrica']:
+            for elemento in i:
+                print(elemento)
+                puntaje = float(elemento['puntaje'])
+                descripcion = forms.CharField(max_length=50).clean(elemento['descripcion'])
+                nombreFila = forms.CharField(max_length=30).clean(elemento['nombreFila'])
+                fila = int(elemento['fila'])
+                columna = int(elemento['columna'])
+                aspectoRubrica = AspectoRubrica(rubrica=newRubrica,
+                                                fila=fila,
+                                                columna=columna,
+                                                puntaje=puntaje,
+                                                descripcion=descripcion,
+                                                nombreFila=nombreFila)
+
+                aspectoRubrica.save()
+
+        return HttpResponse('')
 

@@ -1,5 +1,5 @@
 from django.urls import path
-from . import views
+from Evaluaciones import views
 
 urlpatterns = [
     path('evaluaciones', views.post_evaluaciones, name='evaluaciones'),
@@ -14,4 +14,6 @@ urlpatterns = [
     path(r'evaluaciones/<int:grupopk>/<int:evalpk>/unbond_evaluador', views.curso_unbound_evaluador, name='curso_unbound_evaluador'),
     path(r'evaluaciones/<int:grupopk>/<int:evalpk>/bond_evaluador', views.curso_bound_evaluador, name='curso_bound_evaluador'),
     path(r'evaluaciones/<int:grupopk>/<int:evalpk>/evaluar', views.comenzar_evaluacion, name='comenzar_evaluacion'),
+    path(r'evaluaciones/<int:pk>/evaluacion_detalle/busqueda_rubrica_ajax', views.busqueda_rubrica_ajax),
+    path(r'evaluaciones/<int:pk>/evaluacion_detalle/update_aspectos_rubrica',views.updateAspectosRubrica, name='update_aspectos_rubrica'),
 ]

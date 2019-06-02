@@ -7,4 +7,5 @@ urlpatterns = [
     path('delete_rubrica', views.delete_rubrica, name='delete_rubrica'),
     path('busqueda_rubrica_ajax', views.busqueda_rubrica_ajax),
     path('update_aspectos_rubrica',views.updateAspectosRubrica, name='update_aspectos_rubrica'),
+
 ]
