@@ -45,6 +45,7 @@ class Evaluacion(models.Model):
     def get_rubrica(self):
         return str(self.rubrica)
 
+   
     def save(self, *args, **kwargs):
         """
         Guarda el modelo y asigna todos los evaluadores del curso

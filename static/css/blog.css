@@ -2,9 +2,7 @@
 h1 a {
     color: #FCA205;
 }
-li{
-    cursor:pointer;
-}
+
 .opcion{
     cursor:pointer;
 }
@@ -40,4 +38,8 @@ body {font-size:16px;}
 .zoom:hover {
     transform: scale(1.5); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
     cursor:pointer;
+}
+
+.presentado{
+    color: green;
 }

@@ -109,6 +109,7 @@ def aspectoRubrica_serializer(aspectoRubrica):
                     'descripcion': aspectoRubrica.descripcion}
 
 
+@login_required
 def updateAspectosRubrica(request):
     if request.method == "POST":
         received_json_data=json.loads(request.body)

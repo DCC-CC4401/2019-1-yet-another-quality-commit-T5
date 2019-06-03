@@ -1,25 +1,33 @@
 <!-- Start Content for Django -->
 {% extends 'base.html' %}
 {% block content %}
+{% load evaluador_privileges %}
     <!-- Evaluacion -->
     
     <div class="w3-container" id="designers" style="margin-top:50px">
-        <h1 class="w3-xxxlarge w3-text-red"><b>Evaluación <i class="w3-text-green">en curso</i> </b></h1>
+        <h1 class="w3-xxxlarge w3-text-red"><b>Evaluación <i {% if evaluacion.is_active %}class="w3-text-green"> en curso {% else %} class="w3-text-gray"> cerrada {% endif %}</i> </b></h1>
         <hr style="width:50px;border:5px solid red" class="w3-round">
         <div class="w3-container w3-center">
-            <h3><p><b>{{ grupo.nombre }}</b> {{ evaluacion.nombre }} <i>/ {{ grupo.curso }}</i></p></h3>
+            <p><b>{{ grupo.nombre }}</b> {{ evaluacion.nombre }} <i>/ {{ grupo.curso }}</i></p>
             </div>
 
+    {% if user|is_admin %}
       <div id='evaluadores' class="w3-panel  w3-margin-bottom">
         <ul class="w3-ul w3-light-grey w3-center w3-card-4">
             <li class="w3-dark-grey w3-xlarge w3-padding-32">Evaluadores <i class="fas fa-user-tie"></i> </li>
-            <li class="w3-padding-16"> Evaluador 1 <i style="margin-left: 10px" class="w3-large fas fa-times"></i>
+            {% for evaluador in evaluadores %}
+                {% if evaluador.evaluador in yaEvaluaron %}
+                <li class=" w3-padding-16 presentado"> {{evaluador.evaluador}} <i style="margin-left: 10px" class="far fa-check-circle"><i class="w3-small"> ya evaluó</i></i>
+                </li>
+                {% else %}
+                <li class="w3-padding-16 " id="evaluador-{{evaluador.pk}}"> {{evaluador.evaluador}} <i id="borrar-evaluador-{{evaluador.pk}}" style="margin-left: 10px" class=" zoom w3-large fas fa-times"></i>
+                </li>
+                {% endif %}
+            {% endfor %}
+            {% if evaluacion.is_active %}
+            <li id="masEvaluadores" class="opcion w3-padding-16"> Agregar otro <i style="margin-left: 10px" class="fas fa-user-plus"></i>
             </li>
-            <li class=" w3-padding-16 presentado"> Evaluador 2 <i style="margin-left: 10px" class="far fa-check-circle"><i class="w3-small"> ya evaluó</i></i>
-            </li>
-            <li class="w3-padding-16"> Evaluador 3  <i style="margin-left: 10px" class="w3-large fas fa-times"></i></li>
-            <li class="opcion w3-padding-16"> Agregar otro <i style="margin-left: 10px" class="fas fa-user-plus"></i>
-            </li>
+            {% endif %}
          </ul>
         </div>
 
@@ -27,35 +35,69 @@
         <div class="w3-half w3-margin-bottom ">
           <ul class="w3-ul w3-light-grey w3-center w3-card-4">
             <li class="w3-dark-grey w3-xlarge w3-padding-32">Miembros del equipo <i class="fas fa-user-friends"></i></li>
-            <li class="presentado w3-padding-16">Pablo Aliaga <i class="far fa-check-circle"></i> <i class="w3-small">ya presentó</i></li>
-            <li class="w3-padding-16">Bastián Matamala</li>
-            <li class="presentado w3-padding-16">Camila Quilape <i class="far fa-check-circle"></i><i class="w3-small">ya presentó</i></li>
-            <li class=" w3-padding-16">Andrea Park</li>
+            {% for alumno in alumnos %}
+                {% if alumno in yaPresentaron %}
+                    <li class="presentado w3-padding-16" id="alumno-{{alumno.pk}}">{{alumno}} <i class="far fa-check-circle"></i> <i class="w3-small">ya presentó</i></li>
+                {% else %}
+                    <li class="w3-padding-16" id="alumno-{{alumno.pk}}">{{alumno}}</li>
+                {% endif %}
+            {% endfor %}
+            
           </ul>
         </div>
 
         <div class="w3-half w3-margin-bottom ">
           <ul class="w3-ul w3-light-grey w3-center w3-card-4">
             <li class="w3-dark-grey w3-xlarge w3-padding-32">Miembros que presentan <i class="fas fa-chalkboard-teacher"></i></li>
-            <li class="w3-padding-16">Andrea Park <i style="margin-left: 10px" class="w3-large fas fa-times"></i></li>
-            <li class=" opcion w3-padding-16" id="mas"> Agregar otro <i style="margin-left: 10px"  class="fas fa-user-plus"></i></li>
-
+            <div id="presentador" class="">
+            {% if presentador %}
+            <li class="w3-padding-16 selected">{{presentador}} </li>
+            {% endif %}
+            </div>
+            <li class=" opcion w3-padding-16" id="masPresentadores"> Seleccionar evaluador <i style="margin-left: 10px"  class="fas fa-user-plus"></i></li>
+            
           </ul>
         </div>
         </div>
-      
 
+        <div id="agregarPresentador" class="w3-modal w3-center ">
+        <div class="w3-margin-bottom w3-modal-content w3-animate-zoom w3-round-large" style="width:50%">
+        <div class="w3-container">
+          <ul class="w3-ul w3-light-gray w3-center w3-card-4 w3-margin-top w3-margin-bottom">
+            <li class="w3-dark-gray w3-xlarge w3-padding-32">Seleccione un presentador <i class="fas fa-user-friends"></i></li>
+            {% for alumno in alumnos %}
+                {% if alumno in yaPresentaron %}
+                {% else %}
+                    
+                    <li class="w3-padding-16 opcion" id="presentador-{{alumno.pk}}">{{alumno}}</li>
+                {% endif %}
+            {% endfor %}
+            
+          </ul>
+          </div>
+        </div>
+        </div>
+        
+      
+      {% endif %}
+        
+        <div class="w3-container">
         <p>Seleccione el nivel de logro alcanzado por el grupo en cada ámbito</p>
+        </div>
         <div id='paneles'>
         
         </div>
+
+        {% if user|is_admin %}
             <div class="w3-panel w3-margin-bottom w3-card-4 w3-padding-16 w3-half w3-right" style="margin-right: 1.8%">
                 <span style="margin-left:21%"><i class="far fa-clock"></i> Hora final 
-                <input id='hora' class="w3-input w3-border w3-round" type="number" size="1" placeholder="15" style="width:15%; display:inline; margin-left: 10px"> : <input id='minuto' class="w3-input w3-border w3-round" style="width:15%; display:inline" type="number" placeholder="35"></span>
+                <input id='hora' class="w3-input w3-border w3-round" type="number" size="1" placeholder="15" style="width:15%; display:inline; margin-left: 10px"> : <input id='minutos' class="w3-input w3-border w3-round" style="width:15%; display:inline" type="number" placeholder="35"></span>
             </div>
+        {% endif %}
         <div class="w3-panel w3-right w3-half">
-            <button class="w3-button w3-xlarge w3-red" style="margin-left: 15%"
-                    onclick="checkBeforeSend()"><i class="fas fa-envelope-open-text"></i> Entregar
+            <div class="w3-container w3-text-red w3-margin-bottom" id="check"> </div>
+            <button class="w3-button w3-xlarge w3-red" 
+                    onclick="sendEvaluacion()"><i class="fas fa-envelope-open-text"></i> Entregar
                 evaluación
             </button>
         </div>
@@ -64,11 +106,54 @@
     </div>
 
     <script>
-    var idEvaluacion='{{idEvaluacion}}';
+    var idEvaluacion='{{evaluacion.pk}}';
+    var idGrupo='{{grupo.pk}}';
     var detalleRubrica=JSON.parse('{{detalleRubrica | escapejs}}');
+    var respuestasAnteriores=JSON.parse('{{respuestas | escapejs}}');
     var seleccion=new Array(detalleRubrica.length);
+    var equipo=[];
+    var is_admin='{{user|is_admin}}'=='True';
+    var presentador;
+    {% if presentador %}
+        presentador='{{presentador.pk}}';
+        $('#presentador-'+presentador).addClass('selected');
+    {% endif %}
+    let miembro={};
+    {% for alumno in alumnos %}
+        {% if alumno in yaPresentaron%}
+
+        {% else %}
+            miembro={};
+            miembro['id']='{{alumno.pk}}';
+            miembro['nombre']='{{alumno}}';
+            equipo.push(miembro);
+        {% endif %}
+        
+    {% endfor %}
         
     $(document).ready(()=>{
+
+        $('#masPresentadores').click(()=>$('#agregarPresentador').show())
+        
+        for(let i=0; i<equipo.length; i++){
+            $('#presentador-'+equipo[i]['id']).click(()=>{
+                $('#presentador').html('');
+                presentador=equipo[i]['id'];
+                for(let j=0; j<equipo.length; j++){
+                    if($('#presentador-'+equipo[j]['id']).hasClass('selected')){
+                        $('#presentador-'+equipo[j]['id']).removeClass('selected');
+                    }
+                }
+                if(!$('#presentador-'+equipo[i]['id']).hasClass('selected')){
+                    $('#presentador-'+equipo[i]['id']).addClass('selected');
+                }
+                $('#presentador').html('<li class="w3-padding-16 selected w3-animate-right">'+equipo[i]['nombre']+'</li>');
+                $('#agregarPresentador').hide();
+            })
+        }
+
+
+        //SETEAR OPCIONES 
         let html="";
         for(let i=0;i<detalleRubrica.length;i++){
             html+='<div class="w3-panel w3-margin-bottom"><ul class="w3-ul w3-light-grey w3-center w3-card-4">'
@@ -88,9 +173,39 @@
             }
         }
 
+        for(let i=0; i<respuestasAnteriores.length;i++){
+            seleccionarInicial(respuestasAnteriores[i]['fila'],respuestasAnteriores[i]['columna']);
+        }
+
         
         
-    })   
+    }) 
+
+    function seleccionarInicial(fila,columna){
+        
+
+        
+        for(let j=0;j<detalleRubrica[fila].length;j++){
+            if(j==columna){
+                
+                $('#'+fila+'__'+columna+'-opcion').addClass('selected');
+                
+            }
+            else{
+                if($('#'+fila+'__'+j+'-opcion').hasClass('selected')){
+                    $('#'+fila+'__'+j+'-opcion').removeClass('selected');
+                }            
+            }
+        }
+        if($('#'+fila+'-iconWarning').css('display') != 'none'){
+            $('#'+fila+'-iconWarning').hide();
+            $('#'+fila+'-nombreFila').removeClass('w3-orange');
+            $('#'+fila+'-nombreFila').addClass('w3-red');
+        }
+        seleccion[fila]=detalleRubrica[fila][columna];
+        $('#'+fila+'-iconCheck').show();
+
+    }  
 
     function seleccionarOpcion(){
         let id=$(this).attr('id');
@@ -136,12 +251,48 @@
                 }
             }
         }
-        if(!allPresent)
-        alert('Porfavor complete la evaluación antes de realizar la entrega');
+        if(is_admin){
+        allPresent=allPresent && $('#hora').val()!="" && $('#minuto').val()!="" && presentador!=null && presentador!="";
+        }
+
+        if(!allPresent){
+        $('#check').html('Complete la rúbrica antes de enviar su evaluación!');}
+        else{
+            $('#check').html('');
+        }
+        
         return allPresent;
     }     
             
+    //actualizar Rubricas
+// Sending in JSON format using POST method
+//
+function sendEvaluacion(){
+    if(!checkBeforeSend()){
+        return;
+    }
+    var xhr = new XMLHttpRequest();
+    var url = 'send_evaluacion';
+    xhr.open("POST", url, true);
+    xhr.setRequestHeader("Content-Type", "application/json");
+    xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
     
+    let hora=0;
+    let minutos=0;
+    if(is_admin){
+    hora=parseInt($('#hora').val());
+    minutos=parseInt($('#minutos').val());
+    }
+    
+    console.log(hora);
+    console.log(minutos);
+    let data={'idEvaluacion':idEvaluacion, 'idGrupo':idGrupo, 'presentador':presentador, 'respuestas': seleccion, 'hora':hora,'minutos':minutos};
+    xhr.send(JSON.stringify(data));
+    console.log(xhr);
+    
+    
+
+}
             
             
             

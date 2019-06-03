@@ -6,6 +6,8 @@ from django.http import HttpResponse
 from django.urls import reverse
 from random import shuffle
 
+from django.core.exceptions import ObjectDoesNotExist
+
 from Evaluaciones.forms import *
 from django.template import Context, Template
 
@@ -48,8 +50,9 @@ def post_evaluacion(request):
             yaEvaluaron = []
             for evaluadorAux in evaluadores:
                 if(FichaEvaluacion.objects.filter(evaluador=evaluadorAux.evaluador, evaluacion=evaluacion).exists()):
-                    yaEvaluaron.append(evaluadorAux)
-                    break
+                    yaEvaluaron.append(evaluadorAux.evaluador)
+                    
+            
             
 
             
@@ -75,16 +78,22 @@ def post_evaluacion(request):
             grouped[aspecto.fila].append(aspectoRubrica_serializer(aspecto))
 
         ##esto es para obtener las respuestas anteriores del evaluador
-        ficha = FichaEvaluacion.objects.get(evaluacion=evaluacion, grupo=grupo, evaluador=evaluador )
-        presentador = ficha.presentador
-        groupedRespuestas = []
-        if(ficha != None):
+        try:
+            ficha = FichaEvaluacion.objects.get(evaluacion=evaluacion, grupo=grupo, evaluador=evaluador )
+            presentador = ficha.presentador
+            groupedRespuestas = []
             respuestasBDD = EvaluacionAspectos.objects.filter(fichaEvaluacion=ficha)
-            respuestasBDD = respuestasBDD.order_by('aspectoRubrica_fila','aspectoRubrica_columna')
+        
             for respuesta in respuestasBDD:
                 groupedRespuestas.append(respuesta_serializer(respuesta))
+        except ObjectDoesNotExist:
+            ficha=None
+            presentador=None
+            groupedRespuestas=[]
 
-        data={'idEvaluacion':idEvaluacion, 'detalleRubrica':json.dumps(grouped), 'respuestas': json.dumps(groupedRespuestas), 'presentador':presentador, 'evaluadores':evaluadores, 'yaPresentaron':presentadores, 'yaEvaluaron':yaEvaluaron}
+
+
+        data={'alumnos':alumnos,'evaluacion':evaluacion,'grupo':grupo, 'detalleRubrica':json.dumps(grouped), 'respuestas': json.dumps(groupedRespuestas), 'presentador':presentador, 'evaluadores':evaluadores, 'yaPresentaron':presentadores, 'yaEvaluaron':yaEvaluaron}
         
         
         return render(request, 'evaluacion/evaluacion_evaluar.html', data)
@@ -98,6 +107,53 @@ def aspectoRubrica_serializer(aspectoRubrica):
                     'descripcion': aspectoRubrica.descripcion}
 
 
+
+@login_required
+def send_evaluacion(request):
+    if request.method == "POST":
+        received_json_data=json.loads(request.body)
+        print(received_json_data)
+        grupo=Grupo.objects.get(pk=int(received_json_data['idGrupo']))
+        evaluacion=Evaluacion.objects.get(pk=int(received_json_data['idEvaluacion']))
+        rubrica=evaluacion.rubrica
+        evaluador=Evaluador.objects.get(correo=request.user.username)
+        hora=None
+        minutos=None
+        presentador=None
+
+        if request.user.groups.filter(name='Profesores').exists():
+            hora=int(received_json_data['hora'])
+            minutos=int(received_json_data['minutos'])
+            presentador=Alumno.objects.get(pk=int(received_json_data['presentador']))
+        
+        fichaEvaluacion,created = FichaEvaluacion.objects.get_or_create(evaluacion=evaluacion,
+                                                                evaluador=evaluador,
+                                                                grupo=grupo,
+                                                                defaults={'estado_grupo':'N/A',
+                                                                'estado_evaluacion':'N/A',
+                                                                'tiempo':10,
+                                                                'presentador':presentador})
+        if not created:
+            fichaEvaluacion.estado_grupo='N/A'
+            fichaEvaluacion.estado_evaluacion='N/A'
+            fichaEvaluacion.tiempo=10
+            fichaEvaluacion.presentador=presentador
+        fichaEvaluacion.save()
+
+        EvaluacionAspectos.objects.filter(fichaEvaluacion=fichaEvaluacion).delete()
+        
+        for elemento in received_json_data['respuestas']:
+            print(elemento)
+            aspectoRubrica= AspectoRubrica.objects.get(fila=int(elemento['fila']), 
+                                        columna=int(elemento['columna']),
+                                            rubrica=rubrica)
+            respuesta=EvaluacionAspectos(fichaEvaluacion=fichaEvaluacion, aspectoRubrica=aspectoRubrica)
+            respuesta.save()
+        
+        return HttpResponseRedirect('postevaluacion')
+            
+            
+        
 
 
 @login_required()
@@ -183,10 +239,6 @@ def busqueda_rubrica_ajax(request,pk):
 
         return HttpResponse(json.dumps(grouped), content_type='application/json')
 
-def aspectoRubrica_serializer(aspectoRubrica):
-    return {'fila': aspectoRubrica.fila, 'columna' : aspectoRubrica.columna,
-                'puntaje': str(aspectoRubrica.puntaje), 'nombreFila':aspectoRubrica.nombreFila,
-                    'descripcion': aspectoRubrica.descripcion}
 
 @login_required
 def delete_evaluacion(request):
