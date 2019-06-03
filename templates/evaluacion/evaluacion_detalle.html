@@ -150,6 +150,7 @@
                 <div id='new-descripcion' class="w3-container {% if user|is_admin %} opcion {% endif %}" style="font-style: italic;" {% if user|is_admin %} contenteditable="true" {% endif %} class="w3-medium "></div>
                 {% if user|is_admin %}
                 <i class="fas fa-edit w3-xxlarge w3-text-red w3-display-left " style="margin-left:20%"></i>
+                <div class="w3-display-right" style="width:5px; margin-right:20%"><i id="checkRubrica-icon" class="w3-text-green  " style="display:none"><i  class="fas fa-check-double w3-xxlarge w3-animate-zoom " ></i><i class="w3-small w3-animate-opacity"> guardado</i></i></div>
                 {% else %}
                 <i class="fas fa-align-center w3-xxlarge w3-text-red w3-display-left " style="margin-left:20%"></i>
                 {% endif %}
@@ -190,7 +191,7 @@
                         <p></p>
                     </div>
                     <div class="w3-col s6 w3-center">
-                        <button class="w3-round w3-button  w3-red" style="width:100%" onclick="sendAspectosRubrica()"><i class="far fa-save"></i> Guardar cambios</button>
+                        <button class="w3-round w3-button  w3-red" style="width:100%" onclick="sendAspectosRubrica()"><i id="loading-icon" class="fa fa-cog fa-pulse " style="display:none"></i><i id="saveRubrica-icon" class="far fa-save"></i> Guardar cambios</button>
                     </div>
                 </div>
                     {% endif %}

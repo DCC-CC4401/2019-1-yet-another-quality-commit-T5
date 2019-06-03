@@ -242,6 +242,7 @@ def evaluacion_detalle(request, pk):
 
 
 import json
+from django.http import JsonResponse
 
 
 def busqueda_rubrica_ajax(request,pk):
@@ -387,5 +388,5 @@ def updateAspectosRubrica(request,pk):
 
                 aspectoRubrica.save()
 
-        return HttpResponse('')
+        return JsonResponse({'created':'success'})
 

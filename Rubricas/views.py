@@ -108,6 +108,8 @@ def aspectoRubrica_serializer(aspectoRubrica):
                 'puntaje': str(aspectoRubrica.puntaje), 'nombreFila':aspectoRubrica.nombreFila,
                     'descripcion': aspectoRubrica.descripcion}
 
+from django.http import JsonResponse
+
 
 @login_required
 def updateAspectosRubrica(request):
@@ -143,7 +145,7 @@ def updateAspectosRubrica(request):
                 
                 aspectoRubrica.save()
 
-        return HttpResponse('')
+        return JsonResponse({'created':'success'})
     
 
 

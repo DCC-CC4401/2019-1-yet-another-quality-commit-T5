@@ -263,17 +263,34 @@ function sendAspectosRubrica(){
         alert("La suma de los puntajes asociados a la rúbrica debe ser 6 puntos");
         return;
     }
-    var xhr = new XMLHttpRequest();
-    var url = 'update_aspectos_rubrica';
-    xhr.open("POST", url, true);
-    xhr.setRequestHeader("Content-Type", "application/json");
-    xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+    
     //se actualizan los valores de la tabla al objeto Rubrica (los puntajes ya estan actualizados)
 
     let newNombre=$('#new-nombre').text();
     let newDescripcion=$('#new-descripcion').text();
-    let data={'idRubrica':idRubrica, 'nombre':newNombre, 'descripcion': newDescripcion};
+    let sendInfo={'idRubrica':idRubrica, 'nombre':newNombre, 'descripcion': newDescripcion};
 
-    data['aspectosRubrica']=detalleRubrica
-    xhr.send(JSON.stringify(data));
+    sendInfo['aspectosRubrica']=detalleRubrica
+
+    $('#checkRubrica-icon').hide();
+    $('#saveRubrica-icon').hide();
+    $('#loading-icon').show();
+    
+    $.ajax({
+        type: "POST",
+        url: "update_aspectos_rubrica",
+        dataType: "json",
+        headers: {"X-CSRFToken" : getCookie('csrftoken')},
+        success: function () {
+            
+                $('#loading-icon').hide();
+                $('#checkRubrica-icon').show();
+                $('#saveRubrica-icon').show();
+                
+            
+        },
+
+        data: JSON.stringify(sendInfo)
+    });
+    
 }
