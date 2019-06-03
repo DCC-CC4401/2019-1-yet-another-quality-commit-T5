@@ -25,12 +25,21 @@ def post_evaluaciones(request):
     evaluaciones = evaluaciones[:10]
     return render(request, 'evaluacion/evaluacion_admin.html', {'form': form, 'evaluacion_list': evaluaciones})
 
+import json
 
 @login_required
-def post_postevaluacion(request, evaluacion, fichaEvaluacion, grupo):
-    return render(request, 'evaluacion/postevaluacion.html',{'evaluacion':evaluacion, 'fichaEvaluacion':fichaEvaluacion, 'grupo':grupo})
+def post_postevaluacion(request, evaluacion, fichaEvaluacion, grupo, maximos, respuestas):
+    
+    for respuesta in respuestas:
+        for maximo in maximos:
+            if maximo['fila']==respuesta['fila']:
+                respuesta['maximo']=maximo['maximo']
+    
+    respuestas=json.dumps(respuestas)
 
-import json
+    return render(request, 'evaluacion/postevaluacion.html',{'evaluacion':evaluacion, 'fichaEvaluacion':fichaEvaluacion, 'grupo':grupo, 'respuestas': respuestas})
+
+
 
 @login_required
 def post_evaluacion(request):
@@ -88,17 +97,21 @@ def post_evaluacion(request):
             presentador = ficha.presentador
             groupedRespuestas = []
             respuestasBDD = EvaluacionAspectos.objects.filter(fichaEvaluacion=ficha)
+            minutos=int(ficha.tiempo/60)
+            segundos=ficha.tiempo%60
         
             for respuesta in respuestasBDD:
                 groupedRespuestas.append(respuesta_serializer(respuesta))
         except ObjectDoesNotExist:
             ficha=None
+            segundos=None
+            minutos=None
             presentador=None
             groupedRespuestas=[]
 
 
 
-        data={'alumnos':alumnos,'evaluacion':evaluacion,'grupo':grupo, 'detalleRubrica':json.dumps(grouped), 'respuestas': json.dumps(groupedRespuestas), 'presentador':presentador, 'evaluadores':evaluadores, 'yaPresentaron':presentadores, 'yaEvaluaron':yaEvaluaron}
+        data={'minutos':minutos,'segundos':segundos,'alumnos':alumnos,'evaluacion':evaluacion,'grupo':grupo, 'detalleRubrica':json.dumps(grouped), 'respuestas': json.dumps(groupedRespuestas), 'presentador':presentador, 'evaluadores':evaluadores, 'yaPresentaron':presentadores, 'yaEvaluaron':yaEvaluaron}
         
         
         return render(request, 'evaluacion/evaluacion_evaluar.html', data)
@@ -123,23 +136,24 @@ def send_evaluacion(request):
         hora=None
         minutos=None
         presentador=None
+        tiempo=None
 
         if request.user.groups.filter(name='Profesores').exists():
             hora=int(request.POST['hora'])
             minutos=int(request.POST['minutos'])
             presentador=Alumno.objects.get(pk=int(request.POST['presentador']))
-        
+            tiempo=hora*60+minutos
         fichaEvaluacion,created = FichaEvaluacion.objects.get_or_create(evaluacion=evaluacion,
                                                                 evaluador=evaluador,
                                                                 grupo=grupo,
                                                                 defaults={'estado_grupo':'N/A',
                                                                 'estado_evaluacion':'N/A',
-                                                                'tiempo':10,
+                                                                'tiempo':tiempo,
                                                                 'presentador':presentador})
         if not created:
             fichaEvaluacion.estado_grupo='N/A'
             fichaEvaluacion.estado_evaluacion='N/A'
-            fichaEvaluacion.tiempo=10
+            fichaEvaluacion.tiempo=tiempo
             fichaEvaluacion.presentador=presentador
         fichaEvaluacion.save()
 
@@ -153,7 +167,9 @@ def send_evaluacion(request):
             respuesta=EvaluacionAspectos(fichaEvaluacion=fichaEvaluacion, aspectoRubrica=aspectoRubrica)
             respuesta.save()
         
-        return post_postevaluacion(request=request, evaluacion=evaluacion, fichaEvaluacion=fichaEvaluacion, grupo=grupo)
+        maximos=json.loads(request.POST['maximos'])
+        respuestas=json.loads(request.POST['respuestas'])
+        return post_postevaluacion(request=request, evaluacion=evaluacion, fichaEvaluacion=fichaEvaluacion, grupo=grupo, maximos=maximos, respuestas=respuestas )
             
             
         

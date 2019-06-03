@@ -73,7 +73,7 @@
                 {% endif %}
             {% endfor %}
             {% if presentador %}
-                    <li class="w3-padding-16 opcion" id="presentador-{{presentador.pk}}">{{presentador}}}</li>
+                    <li class="w3-padding-16 opcion" id="presentador-{{presentador.pk}}">{{presentador}}</li>
             {% endif %}
             
           </ul>
@@ -94,7 +94,7 @@
         {% if user|is_admin %}
             <div class="w3-panel w3-margin-bottom w3-card-4 w3-padding-16 w3-half w3-right" style="margin-right: 1.8%">
                 <span style="margin-left:21%"><i class="far fa-clock"></i> Hora final 
-                <input id='hora' class="w3-input w3-border w3-round" type="number" size="1" placeholder="15" style="width:15%; display:inline; margin-left: 10px"> : <input id='minutos' class="w3-input w3-border w3-round" style="width:15%; display:inline" type="number" placeholder="35"></span>
+                <input id='hora' class="w3-input w3-border w3-round" type="number" {% if minutos %} value="{{minutos}}" {% endif %} size="1" placeholder="15" style="width:15%; display:inline; margin-left: 10px"> : <input {% if segundos %} value="{{segundos}}" {% endif %} id='minutos' class="w3-input w3-border w3-round" style="width:15%; display:inline" type="number" placeholder="35"></span>
             </div>
         {% endif %}
         <div class="w3-panel w3-right w3-half">
@@ -109,6 +109,7 @@
                 <input type='hidden' id='send-respuestas' name='respuestas'>
                 <input type='hidden' id='send-hora' name='hora'>
                 <input type='hidden' id='send-minutos' name='minutos'>
+                <input type='hidden' id='send-maximos' name='maximos'>
                 <button class="w3-button w3-xlarge w3-red" 
                    type='button' onclick='sendEvaluacion()'><i class="fas fa-envelope-open-text"></i> Entregar
                     evaluación
@@ -127,6 +128,7 @@
     var respuestasAnteriores=JSON.parse('{{respuestas | escapejs}}');
     var seleccion=new Array(detalleRubrica.length);
     var equipo=[];
+    var maximos=[];
     var is_admin='{{user|is_admin}}'=='True';
     var presentador;
     let miembro={};
@@ -175,6 +177,7 @@
 
         //SETEAR OPCIONES 
         let html="";
+        
         for(let i=0;i<detalleRubrica.length;i++){
             html+='<div class="w3-panel w3-margin-bottom"><ul class="w3-ul w3-light-grey w3-center w3-card-4">'
             html+='<li id="'+i+'-nombreFila" class="w3-red w3-xlarge w3-padding-32">'+detalleRubrica[i][0]['nombreFila']+' <i style="display:none" class="w3-animate-zoom fas fa-exclamation-circle" id="'+i+'-iconWarning" ></i> <i style="display:none" class="w3-animate-zoom fas fa-check-circle" id="'+i+'-iconCheck" ></i></li>'
@@ -182,6 +185,8 @@
                 html+='<li id="'+i+'__'+j+'-opcion" class="opcion w3-padding-16">'+detalleRubrica[i][j]['descripcion']+'</li>'
                 if(j==detalleRubrica[i].length-1){
                     html+='</ul></div>'
+                    maximos.push({'fila':i,'maximo':detalleRubrica[i][j]['puntaje']});
+
                 }
             }
             
@@ -309,6 +314,7 @@ function sendEvaluacion(){
     $('#send-respuestas').val(JSON.stringify(seleccion));
     $('#send-hora').val(hora);
     $('#send-minutos').val(minutos);
+    $('#send-maximos').val(JSON.stringify(maximos));
     $('#formSend').submit();
     
     

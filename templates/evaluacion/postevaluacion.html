@@ -19,38 +19,22 @@
 
         <div class="w3-container">
             <h4><b>Resumen de evaluación</b></h4>
-            <p>Contenidos</p>
-            <div class="w3-grey">
-                <div class="w3-container w3-center w3-padding w3-orange" style="width:25%">25%</div>
-            </div>
-            <p>Calidad del material</p>
-            <div class="w3-grey">
-                <div class="w3-container w3-center w3-padding w3-green" style="width:75%">75%</div>
-            </div>
-            <p>Relación con requisitos funcionales</p>
-            <div class="w3-grey">
-                <div class="w3-container w3-center w3-padding w3-green" style="width:75%">75%</div>
-            </div>
-            <p>Organización de la información</p>
-            <div class="w3-grey">
-                <div class="w3-container w3-center w3-padding w3-blue" style="width:100%">100%</div>
-            </div>
-            <p>Forma</p>
-            <div class="w3-grey">
-                <div class="w3-container w3-center w3-padding w3-red" style="width:10%">0%</div>
-            </div>
-            <p>Entusiasmo</p>
-            <div class="w3-grey">
-                <div class="w3-container w3-center w3-padding w3-orange" style="width:25%">25%</div>
+
+            <div id='resumen'>
             </div>
 
-            <div class="w3-panel w3-right w3-half" style="margin-top: 50px">
-               <form action="{% url 'evaluaciones:evaluar' %}" method="post">
+            
+
+
+
+            <div class=" w3-right w3-half w3-center" style="margin-top: 50px">
+              
+                <form action="{% url 'evaluaciones:evaluar' %}" method="post">
                                         {% csrf_token %}
                                         <input type="hidden" name="idEvaluacion" value="{{ evaluacion.pk }}">
                                         <input type="hidden" name="idGrupo" value="{{ grupo.pk }}">
                                         <input type="hidden" name="idCurso" value="{{ evaluacion.curso.id }}">
-                                        <button class="w3-button w3-red w3-xlarge" type="submit">
+                                        <button  class="w3-button w3-red w3-xlarge w3-margin-top" type="submit">
                                         {% if evaluacion.is_active %}
                                             <i class="fas fa-edit"></i> Editar Evaluación    
                                         {% else %}
@@ -59,14 +43,61 @@
                                         </button>
                                         
                                     </form>
-                <button class="w3-button w3-xlarge w3-red" style="margin-left: 15%"
-                        onclick="location.href='evaluaciones'"><i class="fas fa-door-open"></i> Volver a evaluaciones
+
+
+                <button class="w3-button w3-xlarge w3-red w3-margin-top w3-margin-bottom" style=""
+                        onclick="location.href='evaluaciones'"><i class="fas fa-door-open"></i> Evaluaciones
                 </button>
 
             </div>
 
+             
+
 
         </div>
     </div>
+
+    <script>
+        var respuestas=JSON.parse('{{respuestas | escapejs}}');
+
+        function colorSelect(w){
+            if(w<15){
+                return 'w3-red';
+            }
+            if(w<25){
+                return 'w3-orange';
+            }
+            if(w<60){
+                return 'w3-yellow';
+            }
+            if(w<80){
+                return 'w3-green';
+            }
+            return 'w3-blue';
+        }
+        $(document).ready(()=>{
+            let html="";
+            /*Example 
+            <p>Entusiasmo</p>
+            <div class="w3-grey">
+                <div class="w3-container w3-center w3-padding w3-orange" style="width:25%">25%</div>
+            </div> */
+            for (let i=0; i<respuestas.length;i++){
+                let realwidth=Math.round((respuestas[i]['puntaje']*100)/respuestas[i]['maximo']);
+                let width=realwidth;
+                if(realwidth<10){
+                    //width minimo es 10
+                    width=10;
+                }
+                let color = colorSelect(realwidth);
+                html+='<div class="w3-container w3-display-container w3-margin-top">'+respuestas[i]['nombreFila']+'';
+                html+='<i class="w3-small w3-text-grey w3-display-middle">'+respuestas[i]['descripcion']+'</i></div>';
+                html+='<div class="w3-grey w3-margin-bottom"> <div class="w3-container w3-center w3-padding '+color+
+                    '" style="width:'+width+'%">'+realwidth+'%</div></div>';
+            }
+            $('#resumen').html(html);
+
+        });
+    </script>
 
 {% endblock %}
