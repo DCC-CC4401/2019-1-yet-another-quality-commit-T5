@@ -27,8 +27,8 @@ def post_evaluaciones(request):
 
 
 @login_required
-def post_postevaluacion(request):
-    return render(request, 'evaluacion/postevaluacion.html',{})
+def post_postevaluacion(request, evaluacion, fichaEvaluacion, grupo):
+    return render(request, 'evaluacion/postevaluacion.html',{'evaluacion':evaluacion, 'fichaEvaluacion':fichaEvaluacion, 'grupo':grupo})
 
 import json
 
@@ -153,7 +153,7 @@ def send_evaluacion(request):
             respuesta=EvaluacionAspectos(fichaEvaluacion=fichaEvaluacion, aspectoRubrica=aspectoRubrica)
             respuesta.save()
         
-        return post_postevaluacion(request=request)
+        return post_postevaluacion(request=request, evaluacion=evaluacion, fichaEvaluacion=fichaEvaluacion, grupo=grupo)
             
             
         
