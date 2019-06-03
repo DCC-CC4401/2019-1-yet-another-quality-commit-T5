@@ -44,8 +44,8 @@
             <tbody id='rubricas'>
             {% for rubrica in rubricas_list %}
             <tr class='w3-light-gray ' id='fila-{{rubrica.pk}}' >
-                <td>{{rubrica.nombre}}</td>
-                <td> {{ rubrica.descripcion }} </td>
+                <td style="vertical-align:middle">{{rubrica.nombre}}</td>
+                <td style="vertical-align:middle"> {{ rubrica.descripcion }} </td>
                 <!-- Boton de detalles -->
                 <td class="w3-light-gray" style="vertical-align:middle">
                     <a id='{{rubrica.pk}}' class="w3-button w3-red w3-small w3-round">

@@ -70,9 +70,11 @@
                             <td class="w3-light-gray" style="vertical-align:middle"> {{ curso.get_name }} </td>
                             <!-- Boton de detalles -->
                             <td class="w3-light-gray" style="vertical-align:middle">
-                                <a href="{% url 'cursos:curso_detalle' curso.get_pk %}" class="w3-button w3-red w3-round">
-                                    <i class="fas fa-search"></i>
-                                    Ver
+                                <a href="{% url 'cursos:curso_detalle' curso.get_pk %}">
+                                    <button class="w3-button w3-small w3-red w3-round">
+                                        <i class="fas fa-search"></i>
+                                        Ver
+                                    </button>
                                 </a>
                             </td>
                             <!-- Boton eliminar -->
@@ -97,8 +99,7 @@
                                 cursoJs.push('{{curso.get_semester}}');
                                 cursoJs.push('{{curso.get_year}}');
                                 cursoJs.push('{{curso.get_name}}');
-                                
-                                
+
 
                                 cursosJs.push(cursoJs);
                             </script>
@@ -110,7 +111,8 @@
 
 
                     <script>
-                        var is_admin= ('True'=='{{user|is_admin}}')
+                        var is_admin = ('True' == '{{user|is_admin}}')
+
                         function buscar() {
                             let buscarNombre = document.getElementById('buscarNombre').value;
                             let buscarSemestre = document.getElementById('buscarSemestre').value;
@@ -157,15 +159,15 @@
                                 }
 
                             });
-                            for(i=0;i<cursosJs.length;i++){
-                                document.getElementById(cursosJs[i][0]).style.display='none';
+                            for (i = 0; i < cursosJs.length; i++) {
+                                document.getElementById(cursosJs[i][0]).style.display = 'none';
 
-                                }
-                            for(i=0;i<filtered.length;i++){
-                                document.getElementById(filtered[i][0]).style.display='';
+                            }
+                            for (i = 0; i < filtered.length; i++) {
+                                document.getElementById(filtered[i][0]).style.display = '';
                             }
 
-                            
+
                         }
 
 
@@ -204,9 +206,6 @@
             {% endif %}
 
 
-            <!--cierre de cajas de cursos-->
-            </div>
-            <!--cierre de contenido-->
         {% else %}
             <div>
                 <a href="{% url 'login' %}?next={{ request.path }}">Entra a tu cuenta.</a>

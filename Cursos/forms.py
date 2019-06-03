@@ -1,6 +1,6 @@
 from django import forms
 from Cursos.models import *
-from Alumnos.models import Grupo, Alumno
+from Alumnos.models import Grupo, Alumno, AlumnosGrupo
 
 class AddCurso(forms.Form):
 
@@ -92,4 +92,8 @@ class BoundEvaluador(forms.ModelForm):
         model = EvaluadoresCurso
         fields = '__all__'
 
+class BoundAlumno(forms.ModelForm):
 
+    class Meta:
+        model = AlumnosGrupo
+        fields = '__all__'

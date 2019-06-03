@@ -42,8 +42,8 @@
                 {% for evaluador in evaluadores_list %}
                     <tr class='w3-light-gray ' id="fila-{{evaluador.pk}}" >
                         
-                        <td>{{ evaluador }}</td>
-                        <td> {{ evaluador.get_email }} </td>
+                        <td style="vertical-align:middle">{{ evaluador }}</td>
+                        <td style="vertical-align:middle"> {{ evaluador.get_email }} </td>
                         {% if user|is_admin %}
                             <td class="w3-light-gray" style="vertical-align:middle">
                                 <a id='{{evaluador.pk}}' class="w3-button w3-red w3-small w3-round">
@@ -52,7 +52,7 @@
                                 </a>
                             </td>
 
-                            <td class="w3-light-gray w3-right-align">
+                            <td class="w3-light-gray w3-right-align" style="vertical-align:middle">
                                 <form action="{% url 'evaluadores:delete_evaluador' %}" method="post">
                                     {% csrf_token %}
                                     <input type="hidden" name="ID" value="{{ evaluador.pk }}">

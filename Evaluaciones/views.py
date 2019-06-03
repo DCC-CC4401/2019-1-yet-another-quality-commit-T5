@@ -10,6 +10,7 @@ from django.core.exceptions import ObjectDoesNotExist
 
 from Evaluaciones.forms import *
 from django.template import Context, Template
+from Alumnos.models import AlumnosGrupo
 
 @login_required
 def post_evaluaciones(request):
@@ -60,7 +61,11 @@ def post_evaluacion(request):
             ##luego revisar que alumnos del grupo ya ha presentado
 
             ##TODO filtro temporal puesto que aun no se hace lo de grupos
-            alumnos = Alumno.objects.filter(curso_id=idCurso)
+            alumnos_grupo = AlumnosGrupo.objects.filter(grupo=grupo)
+            alumnos = []
+            for alu in alumnos_grupo:
+                alumnos.append(alu.integrante)
+
             evaluaciones = Evaluacion.objects.filter(curso_id=idCurso)
             presentadores = []
             for alumno in alumnos:
