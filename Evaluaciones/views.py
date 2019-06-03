@@ -55,6 +55,10 @@ def post_evaluacion(request):
         aspectos = aspectos.order_by('fila','columna')
         grouped = []
         ##en caso de ser admin se obtienen los otros evaluadores y se revisa si ya entregaron alguna evaluacion
+        alumnos = []
+        evaluadores = []
+        presentadores = []
+        yaEvaluaron = []
         if request.user.groups.filter(name='Profesores').exists():
             evaluadores = EvaluadoresEvaluacion.objects.filter(evaluacion=evaluacion)
             yaEvaluaron = []
@@ -71,7 +75,7 @@ def post_evaluacion(request):
 
             ##TODO filtro temporal puesto que aun no se hace lo de grupos
             alumnos_grupo = AlumnosGrupo.objects.filter(grupo=grupo)
-            alumnos = []
+
             for alu in alumnos_grupo:
                 alumnos.append(alu.integrante)
 
@@ -136,7 +140,7 @@ def send_evaluacion(request):
         hora=None
         minutos=None
         presentador=None
-        tiempo=None
+        tiempo=0
 
         if request.user.groups.filter(name='Profesores').exists():
             hora=int(request.POST['hora'])
@@ -227,6 +231,7 @@ def evaluacion_detalle(request, pk):
     rubrica_aspecto=[]
     rubricas=AspectoRubrica.objects.filter(rubrica=rubrica_id)
     rubricas=rubricas.order_by('fila','columna')
+
     for r in rubricas:
         if (len(rubrica_aspecto) - 1 < r.fila):
             rubrica_aspecto.append([])
