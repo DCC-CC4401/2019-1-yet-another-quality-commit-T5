@@ -90,6 +90,7 @@ def upload_data(request):
             return HttpResponseRedirect('cursos/' + str(request.POST['id_curso']) + '/curso_detalle')
         except Exception as e:
             # se ha levantado una excepcion, los alumnos no estan bien definidos
-            messages.warning(request, 'Ha ocurrido un error, no se pudo cargar')
+            # messages.warning(request, 'Ha ocurrido un error, no se pudo cargar')
+            pass
     return HttpResponseRedirect('cursos/' + str(request.POST['id_curso']) + '/curso_detalle')
 

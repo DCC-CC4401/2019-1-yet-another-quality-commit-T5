@@ -13,7 +13,7 @@ def group_filter(grupos, alumno):
     :return:
     """
     try:
-        grupo = grupos.get(integrante=alumno)
+        grupo = grupos.get(integrante=alumno).grupo
         return grupo.numero
-    except Exception as e:
+    except:
         return 'N/A'
