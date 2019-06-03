@@ -22,8 +22,6 @@
 
                     <th class="w3-red"> Curso asociado</th>
 
-                    <th class="w3-red">Rúbrica asociada</th>
-
                     <th class="w3-red"> Estado</th>
 
                     <th class="w3-red"> Fecha inicio</th>
@@ -31,6 +29,8 @@
                     <th class="w3-red"> Fecha fin</th>
 
                     <th class="w3-red"> Duración esperada</th>
+
+                    <th class="w3-red"></th>
 
                     {% if user|is_admin %}
                         <th class="w3-red"></th>
@@ -44,15 +44,20 @@
                 <tbody id='evaluaciones'>
                 {% for evaluacion in evaluacion_list %}
                     <tr>
-                        <td class="w3-light-gray" style="vertical-align:middle"><a
-                                href="{% url 'evaluaciones:evaluacion_detalle' evaluacion.pk %}">{{ evaluacion }}</a>
+                        <td class="w3-light-gray" style="vertical-align:middle">
+                            {{ evaluacion }}
                         </td>
                         <td class="w3-light-gray" style="vertical-align:middle">{{ evaluacion.get_course }}</td>
-                        <td class="w3-light-gray" style="vertical-align:middle">{{ evaluacion.get_rubrica }}</td>
                         <td class="w3-light-gray" style="vertical-align:middle"> {{ evaluacion.get_state }} </td>
                         <td class="w3-light-gray" style="vertical-align:middle"> {{ evaluacion.get_startdate }} </td>
                         <td class="w3-light-gray" style="vertical-align:middle"> {{ evaluacion.get_enddate }} </td>
                         <td class="w3-light-gray" style="vertical-align:middle"> {{ evaluacion.get_rank }} </td>
+                        <td class="w3-light-gray" style="vertical-align:middle">
+                            <a href="{% url 'evaluaciones:evaluacion_detalle' evaluacion.pk %}" class="w3-button w3-red w3-small w3-round">
+                                <i class="fas fa-search"></i>
+                                Ver
+                            </a>
+                        </td>
                         {% if user|is_admin %}
                             <td class="w3-light-gray w3-right-align">
                                 <form action="{% url 'evaluaciones:delete_evaluacion' %}" method="post">

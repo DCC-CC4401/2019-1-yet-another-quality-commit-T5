@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+{% load evaluador_privileges %}
+{% block content %}
+
+    <div class="w3-container" id="portada" style="margin-top:80px; margin-bottom:10px">
+        <h1 class="w3-xxxlarge w3-text-red"><b>Edicion de Grupo</b></h1>
+        <hr style="width:50px;border:5px solid red" class="w3-round">
+        <!-- Mensaje de asignacion exitosa de evaluador -->
+        {% if messages %}
+            {% for message in messages %}
+                <p {% if message.tags %} class='{{ message.tags }}' {% endif %}>{{ message }}</p>
+            {% endfor %}
+        {% endif %}
+        <p>
+        <h3><strong>{{ grupo.curso.nombre }}</strong> - Grupo {{ grupo.numero }}</h3></p>
+    </div>
+
+    <!-- Body -->
+        <!-- Informacion sobre el curso -->
+    <div class="w3-round w3-container w3-padding">
+        <table class="w3-table w3-bordered w3-border-black w3-card-4">
+            <tr>
+                <th class="w3-red"> Código</th>
+                <th class="w3-red"> Sección</th>
+                <th class="w3-red"> Semestre</th>
+                <th class="w3-red"> Nombre</th>
+                {% if user|is_admin %}
+                    <th class="w3-red"></th>
+                {% endif %}
+            </tr>
+            <tr>
+                <td class="w3-light-gray" style="vertical-align:middle">{{ grupo.curso.código }}</td>
+                <td class="w3-light-gray" style="vertical-align:middle">{{ grupo.curso.sección }}</td>
+
+                <td class="w3-light-gray" style="vertical-align:middle"> {{ grupo.curso.get_date }}</td>
+                <td class="w3-light-gray" style="vertical-align:middle"> {{ grupo.curso.get_name }} </td>
+                {% if user|is_admin %}
+                    <td class="w3-light-gray w3-right-align">
+                        <form action="{% url 'cursos:delete_curso' %}" method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="id" value="{{ grupo.curso.pk }}">
+                            <button class="w3-button w3-round w3-red w3-small" type="submit">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </form>
+                    </td>
+                {% endif %}
+            </tr>
+        </table>
+    </div>
+
+    <div class="w3-container w3-padding w3-half">
+        <div class="w3-card-4 w3-light-gray">
+            <div class="w3-container w3-red">
+                <h5><b>Nombre</b></h5>
+            </div>
+            <form class="w3-container w3-padding" action="{% url 'cursos:update_grupo' grupo.pk %}" method="post">
+                {% csrf_token %}
+                <table class="w3-table w3-centered">
+                    <input type="hidden" name="ID" value="{{ grupo.pk }}">
+                    <tr>
+                        <td>{{ update_grupo.Nombre }}</td>
+                    </tr>
+                    <tr class="w3-hide">
+                        <td>{{ update_grupo.Activo }}</td>
+                    </tr>
+                </table>
+                <button class="w3-button w3-block w3-round w3-red w3-section w3-padding w3-hover-light-green"
+                        type="submit">Modificar nombre
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <div class="w3-container w3-padding w3-half">
+        <div class="w3-card-4 w3-margin-left w3-light-gray">
+            <div class="w3-container w3-red">
+                <h5><b>Integrantes</b></h5>
+            </div>
+            <table class="w3-table">
+                {% for alumno in alumnos %}
+                    <tr>
+                        <td style="vertical-align:middle"> {{ alumno.integrante }}</td>
+
+                        {% if user|is_admin %}
+                            <td style="vertical-align:middle">
+                                <form action="{% url 'cursos:unbound_alumno' grupo.pk %}" method="post">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="id_grupo" value="{{ grupo.numero }}">
+                                    <input type="hidden" name="id_alumno" value="{{ alumno.integrante.pk }}">
+                                    <button class="w3-button w3-red w3-round w3-small" type="submit">
+                                        <i class="fas fa-user-minus"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+                {% if user|is_admin %}
+                    <tr>
+                        <form action="{% url 'cursos:bound_alumno' grupo.pk %}" method="post">
+                            {% csrf_token %}
+                            <td colspan="2" class="w3-center">
+                                <input type="hidden" name="grupo" value="{{ grupo }}">
+                                <div class="w3-hide">{{ bound_alumno.grupo }}</div>
+                                {{ bound_alumno.integrante }}
+                                <button class="w3-button w3-red w3-round w3-small" type="submit">+
+                                </button>
+                            </td>
+                        </form>
+                    </tr>
+                {% endif %}
+            </table>
+        </div>
+    </div>
+{% endblock %}

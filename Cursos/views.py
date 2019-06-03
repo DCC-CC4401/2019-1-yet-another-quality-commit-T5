@@ -163,9 +163,9 @@ def update_grupo(request, pk):
         if form.is_valid():
             form.save()
             messages.success(request, 'Grupo modificado correctamente')
-            return HttpResponseRedirect('/cursos/' + str(pk) + '/curso_detalle')
+            return HttpResponseRedirect('/cursos/' + str(pk) + '/edit_grupo')
     messages.warning(request, 'El grupo no pudo ser modificado')
-    return HttpResponseRedirect('/cursos/' + str(pk) + '/curso_detalle')
+    return HttpResponseRedirect('/cursos/' + str(pk) + '/edit_grupo')
 
 
 @login_required
@@ -236,9 +236,9 @@ def bound_alumno(request, pk):
         if form.is_valid():
             form.save()
             messages.success(request, 'Alumno asignado correctamente')
-            return HttpResponseRedirect('/cursos/' + str(pk) + '/curso_detalle')
+            return HttpResponseRedirect('/cursos/' + str(pk) + '/edit_grupo')
     messages.warning('El alumno no pudo ser asignado')
-    return HttpResponseRedirect('/cursos/' + str(pk) + '/curso_detalle')
+    return HttpResponseRedirect('/cursos/' + str(pk) + '/edit_grupo')
 
 @login_required
 def unbound_alumno(request, pk):
@@ -254,6 +254,19 @@ def unbound_alumno(request, pk):
 
         if deleted is not None:
             messages.success(request, 'Alumno eliminado correctamente')
-            return HttpResponseRedirect('/cursos/' + str(pk) + '/curso_detalle')
-    messages.warning('El alumno no pudo ser eliminado')
-    return HttpResponseRedirect('/cursos/' + str(pk) + '/curso_detalle')
+            return HttpResponseRedirect('/cursos/' + str(pk) + '/edit_grupo')
+    messages.warning(request, 'El alumno no pudo ser eliminado')
+    return HttpResponseRedirect('/cursos/' + str(pk) + '/edit_grupo')
+
+
+@login_required
+def edit_grupo(request, pk):
+
+    grupo = Grupo.objects.get(pk=pk)
+    alumnos = AlumnosGrupo.objects.filter(grupo=grupo)
+    update_grupo = UpdateGrupo({'Nombre' : grupo.nombre})
+    bound_alumno = BoundAlumno({'grupo' : grupo})
+    return render(request, 'cursos/editar_grupo.html', {'alumnos' : alumnos,
+                                                            'grupo' : grupo,
+                                                            'update_grupo' : update_grupo,
+                                                            'bound_alumno' : bound_alumno})

@@ -14,4 +14,5 @@ urlpatterns = [
     path('cursos/<int:pk>/add_evaluacion/', views.add_evaluacion, name='add_evaluacion'),
     path('cursos/<int:pk>/bound_alumno/', views.bound_alumno, name='bound_alumno'),
     path('cursos/<int:pk>/unbound_alumno/', views.unbound_alumno, name='unbound_alumno'),
+    path(r'cursos/<int:pk>/edit_grupo', views.edit_grupo, name='edit_grupo'),
 ]
