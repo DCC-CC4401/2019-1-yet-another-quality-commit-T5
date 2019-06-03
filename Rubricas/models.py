@@ -5,7 +5,7 @@ class Rubrica(models.Model):
     descripcion = models.CharField(default="", max_length=50)
 
     def __str__(self):
-        return str(self.pk) + " "+ self.nombre
+        return self.nombre
 
     def save(self, *args, **kwargs):
         """

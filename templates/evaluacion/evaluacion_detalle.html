@@ -61,13 +61,13 @@
         <div class="w3-half">
             <div class="w3-card-4 w3-margin-right">
                 <div class="w3-container w3-red ">
-                    <div class="w3-container">
+                    <div class="w3-container w3-center">
                     <h5><b>Evaluadores</b></h5>
                     </div>
                 </div>
                 <div id="Evaluadores" class="w3-container w3-light-gray w3-round">
                     <p>
-                    <table class="w3-table">
+                    <table class="w3-table w3-centered">
                         {% for eval in evaluadores %}
                             <tr>
                                 <td style="vertical-align:middle">{{ eval }}</td>
@@ -110,7 +110,7 @@
                     <h5><b>Grupos pendientes</b></h5>
                 </div>
                 <div id="Grupos" class="w3-container w3-light-gray w3-round w3-center">
-                    <table class="w3-table">
+                    <table class="w3-table w3-centered">
                         {% for grupo in grupos %}
                             <tr>
                                 <td class="w3-center" style="vertical-align:middle">{{grupo.numero}}
@@ -123,14 +123,13 @@
                                         <input type="hidden" name="idGrupo" value="{{ grupo.pk }}">
                                         <input type="hidden" name="idCurso" value="{{ evaluacion.curso.id }}">
 
-                                        <button class="w3-button w3-red w3-round w3-small" type="submit">Evaluar</button>
+                                        <button class="w3-button w3-red w3-round" type="submit">Evaluar</button>
                                     </form>
             
                                     </td>
                                     {% endif %}
                                 </td>
-
-                            </tr>
+</tr>
                         {% endfor %}
                     </table>
                 </div>

@@ -85,11 +85,14 @@ def curso_detalle(request, pk):
             alumnosGrupo_list.append(alumno.integrante)
         listaAlumnosGrupo.append(alumnosGrupo_list)
 
+    alumnos_grupo = AlumnosGrupo.objects.all()
+
     return render(request, 'cursos/curso_detalle.html', context={'curso': curso_id,
                                                                  'evaluadores': evaluadores_list,
                                                                  'evaluaciones': evaluaciones,
                                                                  'alumnos': alumnos,
                                                                  'grupos': grupos,
+                                                                 'alumnos_grupo' : alumnos_grupo,
                                                                  'listaAlumnosGrupo': listaAlumnosGrupo,
                                                                  'bound_evaluador': bound_evaluador,
                                                                  'add_evaluacion': add_evaluacion,

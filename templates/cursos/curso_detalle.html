@@ -167,7 +167,7 @@
                 <th>Run</th>
                 {% for alumno in alumnos %}
                     <tr>
-                        <td>{{ listaAlumnosGrupo|group_filter:alumno }}</td>
+                        <td>{{ alumnos_grupo|group_filter:alumno }}</td>
                         <td>{{ alumno }}</td>
                         <td>{{ alumno.run }}</td>
                     </tr>
