@@ -385,4 +385,49 @@
             {% endif %}
     </script>
 
+    <!--Prueba-->
+
+    <div class="w3-container w3-padding">
+        <div class="w3-half">
+            <div class="w3-card-4 w3-margin-right">
+                <div class="w3-container w3-red">
+                    <h5><b>Grupos-alumnos(prueba)</b></h5>
+                </div>
+                <div id="GruposAlumnos" class="w3-container w3-light-gray w3-round">
+                    <p>
+                    <table class="w3-table">
+                        {% for alumno in listaAlumnosGrupo %}
+                            <tr>
+                                <td style="vertical-align:middle">{{ alumno }}</td>
+                                {% if user|is_admin %}
+                                    <td style="vertical-align:middle">
+                                        <form action="{% url 'cursos:unbound_alumno' curso.pk %}" method="post">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="id_grupo" value="{{ grupo.pk }}">
+                                            <input type="hidden" name="id_alumno" value="{{ alumno.pk }}">
+                                            <button class="w3-button w3-red w3-round w3-small" type="submit">
+                                                <i class="fas fa-user-minus"></i>
+                                            </button>
+                                        </form>
+                                    </td>
+                                {% endif %}
+                            </tr>
+                        {% endfor %}
+                        {% if user|is_admin %}
+                                <tr>
+                                    <form action="{% url 'cursos:bound_alumno' curso.pk %}" method="post">
+                                        {% csrf_token %}
+                                        <td class="w3-hide">{{ bound_alumno.grupo }}</td>
+                                        <td colspan="2" class="w3-center">
+                                            {{ bound_alumno.integrante }}
+                                            <button class="w3-button w3-red w3-round w3-small" type="submit">+</button>
+                                        </td>
+                                    </form>
+                                </tr>
+                        {% endif %}
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}

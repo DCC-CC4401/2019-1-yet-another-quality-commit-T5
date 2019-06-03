@@ -42,3 +42,14 @@ class Grupo(models.Model):
         :return:
         """
         super(Grupo, self).save(*args, **kwargs)
+
+
+class AlumnosGrupo(models.Model):
+    grupo = models.ForeignKey(Grupo, on_delete=models.CASCADE)
+    integrante = models.ForeignKey(Alumno, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ('grupo', 'integrante')
+
+    def save(self, *args, **kwargs):
+        super(AlumnosGrupo, self).save(*args, **kwargs)

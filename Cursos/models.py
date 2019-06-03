@@ -3,6 +3,7 @@ from django.db import models, IntegrityError
 from Evaluadores.models import Evaluador
 
 
+
 class Curso(models.Model):
     nombre = models.CharField(max_length=40)
     código = models.CharField(max_length=6)
@@ -63,4 +64,5 @@ class EvaluadoresCurso(models.Model):
                 eval_evaluacion.save()
             except IntegrityError as e:
                 pass
+
 

@@ -4,13 +4,13 @@ from django.shortcuts import render
 from django.http import HttpResponseRedirect
 # from django.views.generic.edit import UpdateView
 
-from .forms import AddCurso, AddGrupo, BoundEvaluador, UpdateGrupo
+from .forms import AddCurso, AddGrupo, BoundEvaluador, UpdateGrupo, BoundAlumno
 from Evaluaciones.forms import AddEvaluacion
 from .models import Curso, EvaluadoresCurso
 
 from Evaluaciones.models import Evaluacion, EvaluadoresEvaluacion
 
-from Alumnos.models import Alumno, Grupo
+from Alumnos.models import Alumno, Grupo, AlumnosGrupo
 
 
 
@@ -60,6 +60,9 @@ def curso_detalle(request, pk):
     add_grupo = AddGrupo({'curso':curso_id})
     #form para modificar un grupo
     update_grupo = UpdateGrupo({'curso': curso_id})
+    #form para agregar alumnos a un grupo
+    bound_alumno = BoundAlumno({'curso': curso_id})
+
     # lista de evaluadores
     evaluadores = EvaluadoresCurso.objects.filter(curso=curso_id)
     evaluadores_list = []
@@ -73,16 +76,26 @@ def curso_detalle(request, pk):
     alumnos = Alumno.objects.filter(curso=curso_id)
     # lista de grupos
     grupos = Grupo.objects.filter(curso=curso_id)
+    # lista de alumnosgrupos
+    listaAlumnosGrupo = []
+    for grupo in grupos:
+        alumnosGrupo = AlumnosGrupo.objects.filter(grupo=grupo)
+        alumnosGrupo_list = []
+        for alumno in alumnosGrupo:
+            alumnosGrupo_list.append(alumno.integrante)
+        listaAlumnosGrupo.append(alumnosGrupo_list)
 
     return render(request, 'cursos/curso_detalle.html', context={'curso': curso_id,
                                                                  'evaluadores': evaluadores_list,
                                                                  'evaluaciones': evaluaciones,
                                                                  'alumnos': alumnos,
                                                                  'grupos': grupos,
+                                                                 'listaAlumnosGrupo': listaAlumnosGrupo,
                                                                  'bound_evaluador': bound_evaluador,
                                                                  'add_evaluacion': add_evaluacion,
                                                                  'add_grupo': add_grupo,
-                                                                 'update_grupo': update_grupo})
+                                                                 'update_grupo': update_grupo,
+                                                                 'bound_alumno': bound_alumno})
 
 
 @login_required
@@ -209,4 +222,38 @@ def add_evaluacion(request, pk):
             messages.success(request, 'La evaluación fue agregada correctamente')
             return HttpResponseRedirect('/cursos/' + str(pk) + '/curso_detalle')
     messages.warning(request, 'La evaluación no pudo ser agregada')
+    return HttpResponseRedirect('/cursos/' + str(pk) + '/curso_detalle')
+
+@login_required
+def bound_alumno(request, pk):
+    """
+    Asigna un alumno a un grupo
+    :param request:
+    :return:
+    """
+    if request.POST and request.user.groups.filter(name='Profesores').exists():
+        form = BoundAlumno(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Alumno asignado correctamente')
+            return HttpResponseRedirect('/cursos/' + str(pk) + '/curso_detalle')
+    messages.warning('El alumno no pudo ser asignado')
+    return HttpResponseRedirect('/cursos/' + str(pk) + '/curso_detalle')
+
+@login_required
+def unbound_alumno(request, pk):
+    """
+    Retira un alumno asignado a un grupo
+    :param request:
+    :return:
+    """
+    if request.POST and request.user.groups.filter(name='Profesores').exists():
+        id_grupo = int(request.POST.get('id_grupo'))
+        id_alumno = int(request.POST.get('id_alumno'))
+        deleted = AlumnosGrupo.objects.get(grupo=id_grupo, integrante= id_alumno).delete()
+
+        if deleted is not None:
+            messages.success(request, 'Alumno eliminado correctamente')
+            return HttpResponseRedirect('/cursos/' + str(pk) + '/curso_detalle')
+    messages.warning('El alumno no pudo ser eliminado')
     return HttpResponseRedirect('/cursos/' + str(pk) + '/curso_detalle')
