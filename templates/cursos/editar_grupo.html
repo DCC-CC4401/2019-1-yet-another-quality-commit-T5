@@ -3,7 +3,7 @@
 {% block content %}
 
     <div class="w3-container" id="portada" style="margin-top:80px; margin-bottom:10px">
-        <h1 class="w3-xxxlarge w3-text-red"><b>Edicion de Grupo</b></h1>
+        <h1 class="w3-xxxlarge w3-text-red"><b>Edición de Grupo</b></h1>
         <hr style="width:50px;border:5px solid red" class="w3-round">
         <!-- Mensaje de asignacion exitosa de evaluador -->
         {% if messages %}
@@ -52,7 +52,7 @@
     <div class="w3-container w3-padding w3-half">
         <div class="w3-card-4 w3-light-gray">
             <div class="w3-container w3-red">
-                <h5><b>Nombre</b></h5>
+                <h5><b>Nombre del grupo</b></h5>
             </div>
             <form class="w3-container w3-padding" action="{% url 'cursos:update_grupo' grupo.pk %}" method="post">
                 {% csrf_token %}
@@ -86,7 +86,7 @@
                             <td style="vertical-align:middle">
                                 <form action="{% url 'cursos:unbound_alumno' grupo.pk %}" method="post">
                                     {% csrf_token %}
-                                    <input type="hidden" name="id_grupo" value="{{ grupo.numero }}">
+                                    <input type="hidden" name="id_grupo" value="{{ grupo.pk }}">
                                     <input type="hidden" name="id_alumno" value="{{ alumno.integrante.pk }}">
                                     <button class="w3-button w3-red w3-round w3-small" type="submit">
                                         <i class="fas fa-user-minus"></i>
