@@ -6,7 +6,7 @@ urlpatterns = [
     path('evaluar', views.post_evaluacion, name="evaluar"),
     path('postevaluacion', views.post_postevaluacion, name="post-evaluacion"),
     path('add_evaluacion',views.add_evaluacion, name='add_evaluacion'),
-    path('send_evaluacion',views.send_evaluacion),
+    path('send_evaluacion',views.send_evaluacion, name='send_evaluacion'),
     path('delete_evaluacion', views.delete_evaluacion, name='delete_evaluacion'),
     path('evaluaciones/<int:pk>/bound_evaluador/', views.bound_evaluador, name='bound_evaluador'),
     path('evaluaciones/<int:pk>/unbound_evaluador/', views.unbound_evaluador, name='unbound_evaluador'),

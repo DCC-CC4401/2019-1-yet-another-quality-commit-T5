@@ -72,6 +72,9 @@
                     <li class="w3-padding-16 opcion" id="presentador-{{alumno.pk}}">{{alumno}}</li>
                 {% endif %}
             {% endfor %}
+            {% if presentador %}
+                    <li class="w3-padding-16 opcion" id="presentador-{{presentador.pk}}">{{presentador}}}</li>
+            {% endif %}
             
           </ul>
           </div>
@@ -96,10 +99,22 @@
         {% endif %}
         <div class="w3-panel w3-right w3-half">
             <div class="w3-container w3-text-red w3-margin-bottom" id="check"> </div>
-            <button class="w3-button w3-xlarge w3-red" 
-                    onclick="sendEvaluacion()"><i class="fas fa-envelope-open-text"></i> Entregar
-                evaluación
-            </button>
+            <form id='formSend' action="{% url  'evaluaciones:send_evaluacion' %}" method="post"  >
+                <!-- 'idEvaluacion':idEvaluacion, 'idGrupo':idGrupo,
+                     'presentador':presentador, 'respuestas': seleccion, 'hora':hora,'minutos':minutos-->
+                {% csrf_token %}
+                <input type='hidden' id='send-idEvaluacion' name='idEvaluacion'>
+                <input type='hidden' id='send-idGrupo' name='idGrupo'>
+                <input type='hidden' id='send-presentador' name='presentador'>
+                <input type='hidden' id='send-respuestas' name='respuestas'>
+                <input type='hidden' id='send-hora' name='hora'>
+                <input type='hidden' id='send-minutos' name='minutos'>
+                <button class="w3-button w3-xlarge w3-red" 
+                   type='button' onclick='sendEvaluacion()'><i class="fas fa-envelope-open-text"></i> Entregar
+                    evaluación
+                </button>
+            </form>
+            
         </div>
         
 
@@ -114,14 +129,19 @@
     var equipo=[];
     var is_admin='{{user|is_admin}}'=='True';
     var presentador;
+    let miembro={};
     {% if presentador %}
         presentador='{{presentador.pk}}';
         $('#presentador-'+presentador).addClass('selected');
+        miembro={};
+        miembro['id']='{{presentador.pk}}';
+        miembro['nombre']='{{presentador}}';
+        equipo.push(miembro);
+        console.log('uwu');
     {% endif %}
-    let miembro={};
+    
     {% for alumno in alumnos %}
         {% if alumno in yaPresentaron%}
-
         {% else %}
             miembro={};
             miembro['id']='{{alumno.pk}}';
@@ -271,11 +291,8 @@ function sendEvaluacion(){
     if(!checkBeforeSend()){
         return;
     }
-    var xhr = new XMLHttpRequest();
-    var url = 'send_evaluacion';
-    xhr.open("POST", url, true);
-    xhr.setRequestHeader("Content-Type", "application/json");
-    xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+    
+    
     
     let hora=0;
     let minutos=0;
@@ -284,11 +301,19 @@ function sendEvaluacion(){
     minutos=parseInt($('#minutos').val());
     }
     
-    console.log(hora);
-    console.log(minutos);
-    let data={'idEvaluacion':idEvaluacion, 'idGrupo':idGrupo, 'presentador':presentador, 'respuestas': seleccion, 'hora':hora,'minutos':minutos};
-    xhr.send(JSON.stringify(data));
-    console.log(xhr);
+    //data={'idEvaluacion':idEvaluacion, 'idGrupo':idGrupo, 'presentador':presentador, 
+    //'respuestas': seleccion, 'hora':hora,'minutos':minutos};
+    $('#send-idEvaluacion').val(idEvaluacion);
+    $('#send-idGrupo').val(idGrupo);
+    $('#send-presentador').val(presentador);
+    $('#send-respuestas').val(JSON.stringify(seleccion));
+    $('#send-hora').val(hora);
+    $('#send-minutos').val(minutos);
+    $('#formSend').submit();
+    
+    
+    
+    
     
     
 

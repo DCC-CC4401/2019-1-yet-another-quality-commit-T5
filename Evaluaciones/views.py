@@ -107,14 +107,12 @@ def aspectoRubrica_serializer(aspectoRubrica):
                     'descripcion': aspectoRubrica.descripcion}
 
 
-
 @login_required
 def send_evaluacion(request):
     if request.method == "POST":
-        received_json_data=json.loads(request.body)
-        print(received_json_data)
-        grupo=Grupo.objects.get(pk=int(received_json_data['idGrupo']))
-        evaluacion=Evaluacion.objects.get(pk=int(received_json_data['idEvaluacion']))
+
+        grupo=Grupo.objects.get(pk=int(request.POST['idGrupo']))
+        evaluacion=Evaluacion.objects.get(pk=int(request.POST['idEvaluacion']))
         rubrica=evaluacion.rubrica
         evaluador=Evaluador.objects.get(correo=request.user.username)
         hora=None
@@ -122,9 +120,9 @@ def send_evaluacion(request):
         presentador=None
 
         if request.user.groups.filter(name='Profesores').exists():
-            hora=int(received_json_data['hora'])
-            minutos=int(received_json_data['minutos'])
-            presentador=Alumno.objects.get(pk=int(received_json_data['presentador']))
+            hora=int(request.POST['hora'])
+            minutos=int(request.POST['minutos'])
+            presentador=Alumno.objects.get(pk=int(request.POST['presentador']))
         
         fichaEvaluacion,created = FichaEvaluacion.objects.get_or_create(evaluacion=evaluacion,
                                                                 evaluador=evaluador,
@@ -142,7 +140,7 @@ def send_evaluacion(request):
 
         EvaluacionAspectos.objects.filter(fichaEvaluacion=fichaEvaluacion).delete()
         
-        for elemento in received_json_data['respuestas']:
+        for elemento in json.loads(request.POST['respuestas']):
             print(elemento)
             aspectoRubrica= AspectoRubrica.objects.get(fila=int(elemento['fila']), 
                                         columna=int(elemento['columna']),
@@ -150,7 +148,7 @@ def send_evaluacion(request):
             respuesta=EvaluacionAspectos(fichaEvaluacion=fichaEvaluacion, aspectoRubrica=aspectoRubrica)
             respuesta.save()
         
-        return HttpResponseRedirect('postevaluacion')
+        return post_postevaluacion(request=request)
             
             
         
