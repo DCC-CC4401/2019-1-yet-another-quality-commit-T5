@@ -10,6 +10,7 @@ urlpatterns = [
     path('delete_evaluacion', views.delete_evaluacion, name='delete_evaluacion'),
     path('evaluaciones/<int:pk>/bound_evaluador/', views.bound_evaluador, name='bound_evaluador'),
     path('evaluaciones/<int:pk>/unbound_evaluador/', views.unbound_evaluador, name='unbound_evaluador'),
+    path('evaluaciones/<int:pk>/update_evaluacion/', views.update_evaluacion, name='update_evaluacion'),
     path(r'evaluaciones/<int:pk>/evaluacion_detalle/', views.evaluacion_detalle, name='evaluacion_detalle'),
     path(r'evaluaciones/<int:grupopk>/<int:evalpk>/evaluacion_grupo/', views.evaluar, name='evaluar'),
     path(r'evaluaciones/<int:grupopk>/<int:evalpk>/unbond_evaluador', views.curso_unbound_evaluador, name='curso_unbound_evaluador'),

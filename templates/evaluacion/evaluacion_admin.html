@@ -59,7 +59,7 @@
                             </a>
                         </td>
                         {% if user|is_admin %}
-                            <td class="w3-light-gray w3-right-align">
+                            <td class="w3-light-gray w3-right-align" style="vertical-align: middle">
                                 <form action="{% url 'evaluaciones:delete_evaluacion' %}" method="post">
                                     {% csrf_token %}
                                     <input type="hidden" name="id" value="{{ evaluacion.pk }}">
