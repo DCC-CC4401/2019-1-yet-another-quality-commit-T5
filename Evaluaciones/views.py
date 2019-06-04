@@ -193,6 +193,21 @@ def add_evaluacion(request):
             return HttpResponseRedirect('evaluaciones')
     return HttpResponseRedirect('evaluaciones')
 
+@login_required
+def update_evaluacion(request, pk):
+    """
+    Modifica una evaluacion
+    :param request:
+    :return:
+    """
+    if request.POST and request.user.groups.filter(name='Profesores').exists():
+        form = UpdateEvaluacion(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Evaluación modificada correctamente')
+            return HttpResponseRedirect('/evaluaciones/' + str(pk) + '/evaluacion_detalle')
+    messages.warning(request, 'La evaluación no pudo ser modificado')
+    return HttpResponseRedirect('/evaluaciones/' + str(pk) + '/evaluacion_detalle')
 
 @login_required
 def all_evaluaciones(request):
@@ -239,11 +254,13 @@ def evaluacion_detalle(request, pk):
     for eval in evaluadores_raw:
         evaluadores.append(eval.evaluador)
     evaluador_form = BoundEvaluador({'evaluacion' : evaluacion_id})
+    update_evaluacion = UpdateEvaluacion({'evaluacion': evaluacion_id})
     return render(request, 'evaluacion/evaluacion_detalle.html', context={'evaluacion':evaluacion_id, 'evaluador_form' : evaluador_form, 'evaluadores' : evaluadores, 'grupos':grupos,
                                                                           'rubrica':rubrica_id,
                                                                           'rubrica_aspecto':rubrica_aspecto,
                                                                           'rubrica_nombre': rubrica_nombre,
-                                                                          'rubrica_descripcion': rubrica_descripcion})
+                                                                          'rubrica_descripcion': rubrica_descripcion,
+                                                                          'update_evaluacion': update_evaluacion})
 
 
 import json

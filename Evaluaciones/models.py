@@ -60,6 +60,15 @@ class Evaluacion(models.Model):
             eval_eval = EvaluadoresEvaluacion(evaluacion=self, evaluador=eval.evaluador)
             eval_eval.save()
 
+    def update(self, *args, **kwargs):
+        """
+        Actualiza los datos de una evaluacion en la base de datos del modelo
+        :param args:
+        :param kwargs:
+        :return:
+        """
+        super(Evaluacion, self).save(*args, **kwargs)
+
 
 class FichaEvaluacion(models.Model):
     evaluacion = models.ForeignKey(Evaluacion, on_delete=models.CASCADE)

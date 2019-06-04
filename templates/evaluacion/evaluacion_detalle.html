@@ -15,6 +15,10 @@
 
     <div class="w3-round w3-container w3-padding">
         <table class="w3-table w3-bordered w3-border-black w3-card-4 w3-centered">
+            <script>
+                var evaluacionesJs = new Array();
+                var evaluacionJs = new Array();
+            </script>
             <tr>
                 <th class="w3-red"> Nombre</th>
 
@@ -31,6 +35,7 @@
                 
                 {% if user|is_admin %}
                     <th class="w3-red"></th>
+                    <th class="w3-red"></th>
                 {% endif %}
             </tr>
             <tr>
@@ -41,7 +46,12 @@
                 <td class="w3-light-gray" style="vertical-align:middle"> {{ evaluacion.get_enddate }} </td>
                 <td class="w3-light-gray" style="vertical-align:middle"> {{ evaluacion.get_rank }} </td>
                 {% if user|is_admin %}
-                    <td class="w3-light-gray w3-right-align">
+                    <td class="w3-light-gray" style="vertical-align:middle">
+                        <a id='{{evaluacion.pk}}' class="w3-button w3-red w3-small w3-round">
+                            <i class="fas fa-edit"></i>
+                        </a>
+                    </td>
+                    <td class="w3-light-gray w3-right-align"style="vertical-align: middle">
                         <form action="{% url 'evaluaciones:delete_evaluacion' %}" method="post">
                             {% csrf_token %}
                             <input type="hidden" name="id" value="{{ evaluacion.pk }}">
@@ -51,10 +61,101 @@
                         </form>
                     </td>
                 {% endif %}
+                <script>
+                    evaluacionJs = [];
+                    evaluacionJs.push('{{ evaluacion.pk }}');
+                    evaluacionJs.push('{{ evaluacion.tiempo_min }}');
+                    evaluacionJs.push('{{ evaluacion.tiempo_max }}');
+                    evaluacionJs.push('{{ evaluacion.rubrica }}');
+                    evaluacionJs.push('{{ evaluacion.fecha_inicio }}');
+                    evaluacionJs.push('{{ evaluacion.fecha_fin }}');
+                    evaluacionJs.push('{{ evaluacion.curso }}');
+                    evaluacionJs.push('{{ evaluacion.estado }}');
+                    evaluacionJs.push('{{ evaluacion.nombre }}');
+                    evaluacionesJs.push(evaluacionJs);
+                </script>
             </tr>
         </table>
     </div>
 
+   <!-- Formulario de modificar una evaluacion -->
+    <div id="modificar_evaluacion" class="w3-modal">
+        <div class="w3-modal-content w3-card-4 w3-animate-zoom" style="max-width:600px">
+            <div class="w3-center"><br>
+                <span onclick="document.getElementById('modificar_evaluacion').style.display='none'"
+                      class="w3-button w3-xlarge w3-transparent w3-display-topright" title="Close Modal">×</span>
+
+                <form class="w3-container" action="{% url 'evaluaciones:update_evaluacion' evaluacion.pk %}" method="post">
+                    {% csrf_token %}
+                    <table class="w3-table">
+                        <tr class="w3-hide">
+                            <td><b>ID:</b></td>
+                            <td>{{ update_evaluacion.ID }}</td>
+                        </tr>
+                        <tr>
+                            <td><b>Nombre:</b></td>
+                            <td>{{ update_evaluacion.nombre }}</td>
+                        </tr>
+                        <tr>
+                            <td><b>Tiempo mínimo:</b></td>
+                            <td>{{ update_evaluacion.tiempo_min }}</td>
+                        </tr>
+                        <tr>
+                            <td><b>Tiempo máximo:</b></td>
+                            <td>{{ update_evaluacion.tiempo_max }}</td>
+                        </tr>
+                        <tr>
+                            <td><b>Fecha de inicio:</b></td>
+                            <td>{{ update_evaluacion.fecha_inicio }}</td>
+                        </tr>
+                        <tr>
+                            <td><b>Fecha fin:</b></td>
+                            <td>{{ update_evaluacion.fecha_fin }}</td>
+                        </tr>
+                        <tr>
+                            <td><b>Estado:</b></td>
+                            <td>{{ update_evaluacion.estado }}</td>
+                        </tr>
+
+                    </table>
+
+                    <button class="w3-button w3-block w3-round w3-red w3-section w3-padding w3-hover-light-green"
+                            type="submit">Guardar cambios
+                    </button>
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+    {% if request.user|is_admin %}
+                function showEditar(id) {
+                    console.log(id);
+                    return () => {
+                        let modificar = document.getElementById('modificar_evaluacion')
+                        GetElementInsideContainer('modificar_evaluacion', 'id_ID').value = id;
+                        let filtered = evaluacionesJs.filter((x) => {
+                            return id == x[0];
+                        });
+                        let evaluacion = filtered[0];
+                        GetElementInsideContainer('modificar_evaluacion', 'id_nombre').value = evaluacion[8];
+                        GetElementInsideContainer('modificar_evaluacion', 'id_tiempo_min').value = evaluacion[1];
+                        GetElementInsideContainer('modificar_evaluacion', 'id_tiempo_max').value = evaluacion[2];
+                        GetElementInsideContainer('modificar_evaluacion', 'id_fecha_inicio').value = evaluacion[4];
+                        GetElementInsideContainer('modificar_evaluacion', 'id_fecha_fin').value = evaluacion[5];
+                        GetElementInsideContainer('modificar_evaluacion', 'id_estado').value = evaluacion[7];
+                        modificar.style.display = 'block';
+                    };
+                }
+                //prepare document for editar evaluacion
+                let idPrepare = "";
+                for (let i = 0; i < evaluacionesJs.length; i++) {
+                    idPrepare = evaluacionesJs[i][0];
+                    document.getElementById(idPrepare).addEventListener("click", showEditar(idPrepare));
+                }
+            {% endif %}
+    </script>
 
     <div class="w3-container w3-padding">
         <!-- Evaluadores -->

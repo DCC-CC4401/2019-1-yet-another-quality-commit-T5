@@ -45,6 +45,41 @@ class AddEvaluacion(forms.Form):
 
         evaluacion.save()
 
+class UpdateEvaluacion(forms.Form):
+
+    ID = forms.CharField(widget=forms.TextInput(attrs={'readonly': '', 'size': '4'}), required=True)
+
+    nombre = forms.CharField(max_length=40,
+                             widget=forms.TextInput(attrs={'class': 'form-control'}),
+                             required=True)
+
+    tiempo_min = forms.IntegerField(widget=forms.TextInput(attrs={'class': 'form-control'}),
+                                    required=True)
+
+    tiempo_max = forms.IntegerField(widget=forms.TextInput(attrs={'class': 'form-control'}),
+                                    required=True)
+
+    fecha_inicio = forms.DateField(widget=forms.SelectDateWidget(years=YEARS.reverse()))
+
+    fecha_fin = forms.DateField(widget=forms.SelectDateWidget(years=YEARS.reverse()))
+
+    estado = forms.ChoiceField(choices=(("Abierta", "En curso"), ("Cerrada", "Finalizada")),
+                               widget=forms.Select({'class': 'form-control'}),
+                               required=True)
+
+    def save(self, *args, **kwargs):
+        # obtener grupo
+        id = int(self.cleaned_data['ID'])
+        evaluacion = Evaluacion.objects.get(pk=id)
+
+        # actualizar informacion database
+        evaluacion.nombre = self.cleaned_data['nombre']
+        evaluacion.tiempo_min = self.cleaned_data['tiempo_min']
+        evaluacion.tiempo_max = self.cleaned_data['tiempo_max']
+        evaluacion.fecha_inicio = self.cleaned_data['fecha_inicio']
+        evaluacion.fecha_fin = self.cleaned_data['fecha_fin']
+        evaluacion.estado = self.cleaned_data['estado']
+        evaluacion.update()
 
 class BoundEvaluador(forms.ModelForm):
     class Meta:
