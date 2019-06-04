@@ -1,5 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.db import IntegrityError
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 # from django.views.generic.edit import UpdateView
@@ -24,16 +25,20 @@ def post_cursos(request):
 
 @login_required
 def add_curso(request):
-    if request.POST and request.user.groups.filter(name='Profesores').exists():
-        form = AddCurso(request.POST)
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'Se creo el curso correctamente')
-            return HttpResponseRedirect('cursos')
-        else:
-            form = AddCurso()
-    messages.success(request, 'No se pudo crear el curso')
-    return HttpResponseRedirect('cursos')
+    try:
+        if request.POST and request.user.groups.filter(name='Profesores').exists():
+            form = AddCurso(request.POST)
+            if form.is_valid():
+                form.save()
+                messages.success(request, 'Se creo el curso correctamente')
+                return HttpResponseRedirect('cursos')
+            else:
+                form = AddCurso()
+        messages.success(request, 'No se pudo crear el curso')
+        return HttpResponseRedirect('cursos')
+    except IntegrityError as e:
+        messages.warning(request, 'El curso ya existe')
+        return HttpResponseRedirect('cursos')
 
 
 @login_required
