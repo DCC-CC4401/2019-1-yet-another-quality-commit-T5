@@ -9,6 +9,7 @@ $('#menos-filas').click(()=>{quitarFila()});
 var idRubrica;
 var detalleRubrica;
 var sumaRubrica;
+var error;
 
 function traerRubrica(){
 
@@ -238,8 +239,18 @@ var observerDescripcion = new MutationObserver(observarDescripcion);
 function actualizarPuntaje(){
     sumaRubrica=0;
     let ultimo=0;
+    error=0;
+    console.log("yanocna");
     for(let i=0;i<detalleRubrica.length;i++){
         ultimo = (detalleRubrica[i].length - 1);
+        let viejo_puntaje=0;
+        for(let j=0; j<detalleRubrica[i].length;j++){
+            nuevo_puntaje=parseFloat(detalleRubrica[i][j]['puntaje']);
+            if (nuevo_puntaje<viejo_puntaje){
+                error=1;
+            }
+            viejo_puntaje=nuevo_puntaje;
+        }
         sumaRubrica+=parseFloat(detalleRubrica[i][ultimo]['puntaje']);
         }
     $('#puntaje-total').val(sumaRubrica.toFixed(1));
@@ -263,7 +274,10 @@ function sendAspectosRubrica(){
         alert("La suma de los puntajes asociados a la rúbrica debe ser 6 puntos");
         return;
     }
-    
+    if(error==1){
+        alert("Ingrese los puntajes deseados en orden creciente");
+        return;
+    }
     //se actualizan los valores de la tabla al objeto Rubrica (los puntajes ya estan actualizados)
 
     let newNombre=$('#new-nombre').text();

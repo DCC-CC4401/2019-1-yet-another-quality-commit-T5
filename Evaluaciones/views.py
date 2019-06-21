@@ -11,6 +11,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from Evaluaciones.forms import *
 from django.template import Context, Template
 from Alumnos.models import AlumnosGrupo
+from django.contrib.auth.models import Group
 
 @login_required
 def post_evaluaciones(request):
@@ -20,10 +21,21 @@ def post_evaluaciones(request):
     :return:
     """
     form = AddEvaluacion()
-    evaluaciones = Evaluacion.objects.all().order_by('fecha_fin')
+    if (request.user.groups.filter(name='Profesores').exists()):
+        evaluaciones = Evaluacion.objects.all().order_by('fecha_fin')
+    else:
+        id = request.user.id
+        evalua = EvaluadoresEvaluacion.objects.filter(evaluador=id).order_by('evaluacion__fecha_fin')
+        evaluaciones=[]
+        for e in evalua:
+            evaluaciones.append(e.evaluacion)
+
     # mostrar solo las 10 ultimas
     evaluaciones = evaluaciones[:10]
     return render(request, 'evaluacion/evaluacion_admin.html', {'form': form, 'evaluacion_list': evaluaciones})
+
+
+
 
 import json
 
