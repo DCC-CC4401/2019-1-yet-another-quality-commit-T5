@@ -123,3 +123,8 @@ class GrupoEvaluacion(models.Model):
     
     class Meta:
         unique_together = ('grupo', 'evaluacion')
+
+class GruposEstadoEvaluacion(models.Model):
+    grupo = models.ForeignKey(Grupo,on_delete=models.CASCADE)
+    evaluacion = models.ForeignKey(Evaluacion,on_delete=models.CASCADE)
+    estado = models.BooleanField(default=False)

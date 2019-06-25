@@ -83,7 +83,7 @@
                         <td style="vertical-align:middle"> {{ alumno.integrante }}</td>
 
                         {% if user|is_admin %}
-                            <td style="vertical-align:middle">
+                            <td style="vertical-align:middle; color: purple;">
                                 <form action="{% url 'cursos:unbound_alumno' grupo.pk %}" method="post">
                                     {% csrf_token %}
                                     <input type="hidden" name="id_grupo" value="{{ grupo.pk }}">

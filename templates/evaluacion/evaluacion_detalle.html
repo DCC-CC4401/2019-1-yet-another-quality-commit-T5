@@ -159,7 +159,7 @@
 
     <div class="w3-container w3-padding">
         <!-- Evaluadores -->
-        <div class="w3-half">
+        <div class="w3-third">
             <div class="w3-card-4 w3-margin-right">
                 <div class="w3-container w3-red ">
                     <div class="w3-container w3-center">
@@ -204,15 +204,37 @@
             </div>
         </div>
 
+
+    <!-- Grupos  evaluados -->
+        <div class="w3-third w3-center">
+            <div class="w3-card-4 w3-margin-left">
+                <div class="w3-container w3-red">
+                    <h5><b>Grupos evaluados</b></h5>
+                </div>
+                <div id="Grupos" class="w3-container w3-light-gray w3-round w3-center">
+                    <table class="w3-table w3-centered">
+                        {% for grupo in grupos_evaluados %}
+                            <tr>
+                                <td class="w3-center" style="vertical-align:middle">{{grupo.numero}}</td>
+                                <td class="w3-center"style="vertical-align:middle">{{ grupo.nombre }}</td>
+
+</tr>
+                        {% endfor %}
+                    </table>
+                </div>
+            </div>
+        </div>
+
+
         <!-- Grupos pendientes de evaluar -->
-        <div class="w3-half w3-center">
+        <div class="w3-third w3-center">
             <div class="w3-card-4 w3-margin-left">
                 <div class="w3-container w3-red">
                     <h5><b>Grupos pendientes</b></h5>
                 </div>
                 <div id="Grupos" class="w3-container w3-light-gray w3-round w3-center">
                     <table class="w3-table w3-centered">
-                        {% for grupo in grupos %}
+                        {% for grupo in grupos_pendientes %}
                             <tr>
                                 <td class="w3-center" style="vertical-align:middle">{{grupo.numero}}
                                 <td class="w3-center"style="vertical-align:middle">{{ grupo.nombre }}</td>
@@ -236,6 +258,17 @@
                 </div>
             </div>
         </div>
+
+
+
+
+
+
+
+
+
+
+
     </div>
     <!-- Var to check if user is admin -->
     <script> var is_admin = ('True'=='{{ user|is_admin }}'); </script>
@@ -309,3 +342,4 @@ traerRubrica2('{{ rubrica }}', '{{ rubrica_nombre }}', '{{ rubrica_descripcion }
     </div>
 
 {% endblock %}
+

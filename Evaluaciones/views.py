@@ -12,6 +12,11 @@ from Evaluaciones.forms import *
 from django.template import Context, Template
 from Alumnos.models import AlumnosGrupo
 
+
+
+from Evaluaciones.models import GruposEstadoEvaluacion
+
+
 @login_required
 def post_evaluaciones(request):
     """
@@ -50,6 +55,12 @@ def post_evaluacion(request):
         grupo = Grupo.objects.get(pk=idGrupo)
         evaluador= Evaluador.objects.get(correo=request.user.username)
         evaluacion=Evaluacion.objects.get(pk=idEvaluacion)
+
+        #registrar que el grupo ya se evaluo
+        grupo_update_ev =GruposEstadoEvaluacion(grupo=grupo, evaluacion=evaluacion, estado=True)
+        grupo_update_ev.save()
+
+
         rubrica = evaluacion.rubrica
         aspectos = AspectoRubrica.objects.filter(rubrica=rubrica)
         aspectos = aspectos.order_by('fila','columna')
@@ -141,6 +152,7 @@ def send_evaluacion(request):
         minutos=None
         presentador=None
         tiempo=0
+
 
         if request.user.groups.filter(name='Profesores').exists():
             hora=int(request.POST['hora'])
@@ -239,7 +251,18 @@ def evaluacion_detalle(request, pk):
     evaluadores_raw = EvaluadoresEvaluacion.objects.filter(evaluacion=evaluacion_id)
     evaluadores = []
     curso_id= Evaluacion.objects.get(pk=pk).curso.get_pk()
-    grupos = Grupo.objects.filter(curso=curso_id).order_by('?')
+    grupos = Grupo.objects.filter(curso=curso_id).order_by('?').all()
+
+    grupos_evaluados = GruposEstadoEvaluacion.objects.all()
+
+    grupos_pendientes = []
+    grupos_evaluados = []
+
+    for g in grupos:
+        if GruposEstadoEvaluacion.objects.filter(grupo=g, evaluacion=evaluacion_id,estado=True):
+            grupos_evaluados.append(g)
+        else: grupos_pendientes.append(g)
+
     rubrica_id=Evaluacion.objects.get(pk=pk).rubrica.pk
     rubrica_nombre=Rubrica.objects.get(pk=rubrica_id).nombre
     rubrica_descripcion=Rubrica.objects.get(pk=rubrica_id).descripcion
@@ -255,7 +278,7 @@ def evaluacion_detalle(request, pk):
         evaluadores.append(eval.evaluador)
     evaluador_form = BoundEvaluador({'evaluacion' : evaluacion_id})
     update_evaluacion = UpdateEvaluacion({'evaluacion': evaluacion_id})
-    return render(request, 'evaluacion/evaluacion_detalle.html', context={'evaluacion':evaluacion_id, 'evaluador_form' : evaluador_form, 'evaluadores' : evaluadores, 'grupos':grupos,
+    return render(request, 'evaluacion/evaluacion_detalle.html', context={'evaluacion':evaluacion_id, 'evaluador_form' : evaluador_form, 'evaluadores' : evaluadores, 'grupos_pendientes':grupos_pendientes,'grupos':grupos,'grupos_evaluados':grupos_evaluados,
                                                                           'rubrica':rubrica_id,
                                                                           'rubrica_aspecto':rubrica_aspecto,
                                                                           'rubrica_nombre': rubrica_nombre,

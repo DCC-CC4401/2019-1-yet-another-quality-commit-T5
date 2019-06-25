@@ -7,5 +7,3 @@ class AddRubrica(forms.ModelForm):
     class Meta:
         model = Rubrica
         fields = '__all__'
-
-    

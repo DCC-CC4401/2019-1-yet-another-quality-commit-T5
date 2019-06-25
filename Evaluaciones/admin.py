@@ -4,3 +4,4 @@ from Evaluaciones.models import *
 # Register your models here.
 admin.site.register(Evaluacion)
 admin.site.register(FichaEvaluacion)
+admin.site.register(GruposEstadoEvaluacion)

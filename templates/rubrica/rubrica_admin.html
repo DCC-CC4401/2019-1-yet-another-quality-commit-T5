@@ -116,7 +116,7 @@
 
                     <div class="w3-row w3-margin-top w3-margin-bottom w3-center " >
                         {% if user|is_admin %}
-                        <div  class="w3-col s6 w3-large">
+                        <div  class="w3-col s3 w3-large">
                                 <div id="mas-menos-filas">
                                         <i id="mas-filas" class="fas fa-plus-square w3-text-blue-gray zoom"></i>
 
@@ -125,13 +125,23 @@
 
                         </div>
                         {% else %}
-                        <div class="w3-col s6">
+                        <div class="w3-col s3">
                             <p></p>
                         </div>
                         {% endif %}
-                        <div class="w3-col s6 " >
+                    <div class="w3-col s2 " >
                         Puntaje total :  <input style="width: 4ch" id="puntaje-total" type="text" readonly=""></input>
                         </div>
+                    <div class="w3-col s3 " >
+                        Duración Mínima (min) :  <input style="width: 4ch" id="puntaje-total" type="text" ></input>
+                        </div>
+                    <div class="w3-col s3 " >
+                        Duración Máxima (min) :  <input style="width: 4ch" id="puntaje-total" type="text"></input>
+                        </div>
+
+
+
+
                     </div>
 
 
