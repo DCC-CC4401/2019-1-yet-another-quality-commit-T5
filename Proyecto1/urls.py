@@ -20,12 +20,12 @@ from django.conf.urls.static import static
 from django.conf import settings
 
 urlpatterns = [
-    path('', include(('Usuarios.urls', 'Usuarios'), namespace='usuarios')),
+    path('', include(('Alumnos.urls', 'Alumnos'), namespace='alumnos')),
     path('', include(('Cursos.urls', 'Cursos'), namespace='cursos')),
+    path('', include(('Evaluaciones.urls', 'Evaluaciones'), namespace='evaluaciones')),
     path('', include(('Evaluadores.urls', 'Evaluadores'), namespace='evaluadores')),
     path('', include(('Rubricas.urls', 'Rubricas'), namespace='rubricas')),
-    path('', include(('Evaluaciones.urls', 'Evaluaciones'), namespace='evaluaciones')),
-    path('', include(('Alumnos.urls', 'Alumnos'), namespace='alumnos')),
+    path('', include(('Usuarios.urls', 'Usuarios'), namespace='usuarios')),
     path('admin/', admin.site.urls),
 ]
 
